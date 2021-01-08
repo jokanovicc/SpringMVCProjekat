@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<base th:href="@{/}">
+	<link rel="stylesheet" type="text/css" href="css/StiloviTabela.css"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	
+	<title>Knjige</title>
+</head>
+<body>
+				<h1>Sve knjige</h1>
+				<hr>
+	<div th:fragment="centralniDiv">
+		<form method="get">
+			<table class="tabela">
+				<tr>
+					<th>r. br.</th>
+					<th>Omot</th>
+					<th>naziv</th>
+					<th>autor</th>
+					<th>Izdavacka kuca</th>
+					<th>kratak Opis</th>
+					<th>Godina Izdavanja</th>
+					<th>Cena</th>
+					<th>Tip Poveza</th>
+					<th></th>
+					<th><input type="search" name="naziv" th:value="${param.naziv?: null}"/></th>
+					<th><input type="submit" value="Pretraži"/></th>
+					<th></th>
+				</tr>
+
+				<tr th:each="itKnjiga, status: ${knjige}">
+					<td th:text="${status.index + 1}">1</td>
+					<td><img style="width: 150px;height: 190px" th:src="${itKnjiga.slikaKnjige}"></td> 	
+					<td><a th:href="|Knjige/Details?id=${itKnjiga.id}|" th:text="${itKnjiga.naziv}">fantazija</a></td>
+					<td><a th:href="|Zanrovi/Details?id=${itKnjiga.id}|" th:text="${itKnjiga.autor}">fantazija</a></td>
+					<td><a th:href="|Knjige/Details?id=${itKnjiga.id}|" th:text="${itKnjiga.izdavackaKuca}">fantazija</a></td>
+					<td><a th:href="|Zanrovi/Details?id=${itKnjiga.id}|" th:text="${itKnjiga.kratakOpis}">fantazija</a></td>
+					<td><a th:href="|Knjige/Details?id=${itKnjiga.id}|" th:text="${itKnjiga.godinaIzdavanja}">fantazija</a></td>
+					<td><a th:href="|Zanrovi/Details?id=${itKnjiga.id}|" th:text="${itKnjiga.cena}">fantazija</a></td>
+					<td><a th:href="|Knjige/Details?id=${itKnjiga.id}|" th:text="${itKnjiga.tipPoveza}">fantazija</a></td>			</tr>
+			</table>
+		</form>
+	</div>
+</body>
+</html>

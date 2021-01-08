@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<base th:href="@{/}">
+	<link rel="stylesheet" type="text/css" href="css/StiloviTabela.css"/>
+	    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	
+	<title>Žanrovi</title>
+</head>
+<body>
+<h1>Zanrovi</h1>
+<hr>
+	<div th:fragment="centralniDiv">
+		<form method="get">
+			<table class="tabela">
+				<caption>Žanrovi</caption>
+				<tr>
+					<th>r. br.</th>
+					<th>naziv</th>
+					<th></th>
+				</tr>
+				<tr>
+					<th></th>
+					<th><input type="search" name="naziv" th:value="${param.naziv?: null}"/></th>
+					<th><input type="submit" value="Pretraži"/></th>
+				</tr>
+				<tr th:each="itZanr, status: ${zanrovi}">
+					<td th:text="${status.index + 1}">1</td>
+					<td><a th:href="|Zanrovi/Details?id=${itZanr.id}|" th:text="${itZanr.naziv}">fantazija</a></td>
+					<td><a th:href="|Zanrovi/Details?id=${itZanr.id}|" th:text="${itZanr.opis}">fantazija</a></td>
+				</tr>
+			</table>
+		</form>
+		<ul>
+			<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}"><a href="Zanrovi/Create">dodavanje žanra</a></li>
+		</ul>
+	</div>
+</body>
+</html>
