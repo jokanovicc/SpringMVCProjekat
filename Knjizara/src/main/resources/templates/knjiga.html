@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<base th:href="@{/}">
+	<link rel="stylesheet" type="text/css" href="css/StiloviForma.css"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<link rel="stylesheet" type="text/css" href="css/navbar.css"/>
+
+	<title>Knjiga</title>
+</head>
+<body>
+<ul class="navbar">
+	<li><a href="prijava.html">prijava</a></li>
+	<li><a href="registracija.html">Registracija</a></li>
+		<li><a href="Zanrovi">žanrovi</a></li>
+		<li><a href="Knjige">Knjige</a></li>
+		<li><a>Komentari</a></li>
+</ul>
+
+	<div class="container">
+	<div th:fragment="centralniDiv">
+		<form method="post" action="Knjige/Edit" th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}">
+			<input type="hidden" name="id" th:value="${knjiga.id}"/>
+			<table class="forma">
+				<caption>Knjiga</caption>
+				<tr><th>Naziv:</th><td><input type="text" th:value="${knjiga.naziv}" name="naziv"/></td></tr>
+				<tr><th>naziv:</th><td><input type="text" th:value="${knjiga.autor}" name="autor"/></td></tr>
+				
+				<tr>
+					<th>žanr:</th>
+					<td>
+						<th:block th:each="itZanr: ${zanrovi}">
+							<input type="checkbox" name="zanrId" th:value="${itZanr.id}" th:checked="${#lists.contains(knjiga.zanrovi, itZanr)}"/><span th:text="${itZanr.naziv}"></span><br>
+						</th:block>
+					</td>
+				</tr>
+				<tr><th>cena:</th><td><input type="number" min="5" th:value="${knjige.cena}" name="cena"/></td></tr>
+				<tr><th></th><td><input type="submit" value="Izmeni"/></td></tr>
+			</table>
+		</form>
+		<form method="post" action="Knjige/Delete" th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}">
+			<input type="hidden" name="id" th:value="${knjiga.id}"/>
+			<table class="forma">
+				<tr><th></th><td><input type="submit" value="Obriši"/></td></tr>
+			</table>
+		</form>
+		
+		<h2>Informacija o Knjizi</h2>
+		<table style="margin-left: 25%; margin-top: 7%" class="forma" th:if="${session.prijavljeniKorisnik == null or not session.prijavljeniKorisnik.administrator}">
+			<tr><th>Slika:</th><td><img style="width: 200px;height: 240px; padding-left: 14%" th:src="${knjiga.slikaKnjige}"></td>
+			<tr><th>Naziv:</th><td th:text="${knjiga.naziv}"></td>
+			<tr><th>Autor:</th><td th:text="${knjiga.autor}"></td>
+			<tr><th>Izdavac:</th><td th:text="${knjiga.izdavackaKuca}"></td>
+			<tr><th>ISBN:</th><td th:text="${knjiga.ISBN}"></td>
+			<tr><th>Godina Izdavanja:</th><td th:text="${knjiga.godinaIzdavanja}"></td>
+			<tr><th>Kratak Opis:</th><td th:text="${knjiga.kratakOpis}"></td>
+			<tr><th>Broj Stranica:</th><td th:text="${knjiga.brojStrana}"></td>
+			<tr><th>Tip Poveza:</th><td th:text="${knjiga.tipPoveza}"></td>
+			<tr><th>Pismo:</th><td th:text="${knjiga.pismo}"></td>
+			<tr><th>Jezik:</th><td th:text="${knjiga.jezik}"></td>
+			<tr><th>Ocena:</th><td th:text="${knjiga.ocena}"></td>
+
+			
+			<tr>
+				<th>žanr:</th>
+				<td>
+					<ul>
+						<li th:each="itZanr: ${knjiga.zanrovi}"><a th:href="|Zanrovi/Details?id=${itZanr.id}|" th:text="${itZanr.naziv}"></a></li>
+					</ul>
+				</td>
+			</tr>
+			<tr><th>cena:</th><td th:text="${knjiga.cena}"></td>
+		</table>
+	</div>
+	</div>
+</body>
+</html>

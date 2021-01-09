@@ -17,7 +17,7 @@ table.tabela td.broj {
 
 table.tabela th {
 	color: white;
-	background-color: DodgerBlue;
+	background-color: #044855;
 }
 
 table.tabela tr:nth-child(even) {

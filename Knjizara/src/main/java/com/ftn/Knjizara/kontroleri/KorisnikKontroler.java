@@ -1,6 +1,8 @@
 package com.ftn.Knjizara.kontroleri;
 
 import java.io.IOException;
+import java.sql.Date;
+import java.time.LocalDateTime;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
@@ -74,6 +76,90 @@ public class KorisnikKontroler {
 			return rezultat;
 		}
 	}
+	
+	
+	
+	@PostMapping(value="/Register")
+	public ModelAndView register(@RequestParam String korisnickoIme, @RequestParam String lozinka,
+			@RequestParam String eMail, @RequestParam String ponovljenaLozinka,@RequestParam Date datumRodjenja,
+			
+			@RequestParam String ime, @RequestParam String prezime,@RequestParam String adresa,
+			@RequestParam String brojTelefona,
+			
+			
+			
+			HttpSession session, HttpServletResponse response) throws IOException {
+		try {
+			// validacija
+			Korisnik postojeciKorisnik = korisnikService.findOne(korisnickoIme);
+			if (postojeciKorisnik != null) {
+				throw new Exception("Korisničko ime već postoji!");
+			}
+			if (korisnickoIme.equals("") || lozinka.equals("")) {
+				throw new Exception("Korisničko ime i lozinka ne smeju biti prazni!");
+			}
+			if (!lozinka.equals(ponovljenaLozinka)) {
+				throw new Exception("Lozinke se ne podudaraju!");
+			}
+			if (eMail.equals("")) {
+				throw new Exception("E-mail ne sme biti prazan!");
+			}
+			if (adresa.equals("")) {
+				throw new Exception("E-mail ne sme biti prazan!");
+			}
+			if (brojTelefona.equals("")) {
+				throw new Exception("E-mail ne sme biti prazan!");
+			}
+			if (ponovljenaLozinka.equals("")) {
+				throw new Exception("E-mail ne sme biti prazan!");
+			}
+			if (prezime.equals("")) {
+				throw new Exception("E-mail ne sme biti prazan!");
+			}
+			if (ime.equals("")) {
+				throw new Exception("E-mail ne sme biti prazan!");
+			}
+			
+			@SuppressWarnings("deprecation")
+			Date datum = new Date(2002, 02, 30);
+			if (datumRodjenja.before(datum)) {
+				throw new Exception("Neispravan datum rodjenja!");
+			}
+
+
+			// registracija
+			Korisnik korisnik = new Korisnik(korisnickoIme, lozinka, eMail, ime, prezime, adresa, brojTelefona, datumRodjenja, LocalDateTime.now(), false);
+			korisnikService.save(korisnik);
+
+			response.sendRedirect(baseURL + "prijava.html");
+			return null;
+		} catch (Exception ex) {
+			// ispis greške
+			String poruka = ex.getMessage();
+			if (poruka == "") {
+				poruka = "Neuspešna registracija!";
+			}
+
+			// prosleđivanje
+			ModelAndView rezultat = new ModelAndView("registracija");
+			rezultat.addObject("poruka", poruka);
+
+			return rezultat;
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	@GetMapping(value="/Logout")
 	public void logout(HttpSession session, HttpServletResponse response) throws IOException {
 		// odjava	

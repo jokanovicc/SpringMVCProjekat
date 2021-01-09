@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<base th:href="@{/}">
+	<title>Prijava</title>
+	<link rel="stylesheet" type="text/css" href="css/StiloviForma.css"/>
+	  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	
+</head>
+<body>
+<div class="container">
+	<div th:fragment="centralniDiv">
+		<form method="post" action="Korisnici/Login">
+			<table class="forma">
+				<caption>Prijava</caption>
+				<tr><th>korisničko ime:</th><td><input type="text" name="korisnickoIme"/></td></tr>
+				<tr><th>lozinka:</th><td><input type="password" name="lozinka"/></td></tr>
+				<tr><th></th><td><input type="submit" value="Prijava"/></td></tr>
+			</table>
+		</form>
+		<p class="greska" th:text="${poruka}"></p>
+	</div>
+	</div>
+</body>
+</html>

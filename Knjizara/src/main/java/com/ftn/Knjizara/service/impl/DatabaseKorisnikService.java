@@ -1,5 +1,7 @@
 package com.ftn.Knjizara.service.impl;
 
+import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,17 +75,19 @@ public class DatabaseKorisnikService implements KorisnikService {
 		
 	}
 
-	@Override
-	public List<Korisnik> find(String korisnickoIme, String eMail, String pol, Boolean administrator) {
-		// TODO Auto-generated method stub
-		return korisnikDAO.find(korisnickoIme, eMail, pol, administrator);
-
-	}
 
 	@Override
 	public List<Korisnik> findByKorisnickoIme(String korisnickoIme) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<Korisnik> find(String korisnickoIme, String eMail, String ime, String prezime, String pol,
+			String adresa, String brojTelefona,Date datumRodjenja, Boolean administrator,
+			LocalDateTime datumRegistracije) {
+		// TODO Auto-generated method stub
+		return korisnikDAO.find(korisnickoIme, eMail, ime, prezime, pol, adresa, brojTelefona, datumRodjenja, administrator, datumRegistracije);
 	}
 
 }

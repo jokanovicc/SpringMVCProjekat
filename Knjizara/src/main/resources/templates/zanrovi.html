@@ -9,6 +9,7 @@
 	<title>Žanrovi</title>
 </head>
 <body>
+<div class="container">
 <h1>Zanrovi</h1>
 <hr>
 	<div th:fragment="centralniDiv">
@@ -35,6 +36,7 @@
 		<ul>
 			<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}"><a href="Zanrovi/Create">dodavanje žanra</a></li>
 		</ul>
+	</div>
 	</div>
 </body>
 </html>

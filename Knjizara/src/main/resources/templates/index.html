@@ -5,10 +5,20 @@
 	<base th:href="@{/}">
 	<link rel="stylesheet" type="text/css" href="css/StiloviKorisnik.css"/>
 			    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<link rel="stylesheet" type="text/css" href="css/navbar.css"/>
 	
 	<title>Prijava</title>	
 </head>
 <body>
+<ul class="navbar">
+	<li><a href="prijava.html">prijava</a></li>
+	<li><a href="registracija.html">Registracija</a></li>
+		<li><a href="Zanrovi">žanrovi</a></li>
+		<li><a href="Knjige">Knjige</a></li>
+		<li><a>Komentari</a></li>
+</ul>
+
+<div class="container">
 	<h2>Knjizara</h2>
 	<hr>
 	<table class="korisnik" th:unless="${session.prijavljeniKorisnik == null}">
@@ -28,18 +38,16 @@
 				<ul>
 					<li><a href="prijava.html">prijava</a></li>
 				</ul>
+				<ul>
+					<li><a href="registracija.html">Registracija</a></li>
+				</ul>
 			</td>
 		</tr>
 	</table>
 
-	<ul>
-		<li><a href="Zanrovi">žanrovi</a></li>
-		<li><a href="Knjige">Knjige</a></li>
-		<li>Komentari</a></li>
-	</ul>
 	
 	
 	
-	
+	</div>
 </body>
 </html>

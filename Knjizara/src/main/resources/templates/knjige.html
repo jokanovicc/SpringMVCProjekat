@@ -5,43 +5,68 @@
 	<base th:href="@{/}">
 	<link rel="stylesheet" type="text/css" href="css/StiloviTabela.css"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="css/navbar.css"/>
 	
 	<title>Knjige</title>
 </head>
 <body>
+<ul class="navbar">
+	<li><a href="prijava.html">prijava</a></li>
+	<li><a href="registracija.html">Registracija</a></li>
+		<li><a href="Zanrovi">žanrovi</a></li>
+		<li><a href="Knjige">Knjige</a></li>
+		<li><a>Komentari</a></li>
+</ul>
+	<div class="container">
 				<h1>Sve knjige</h1>
 				<hr>
 	<div th:fragment="centralniDiv">
 		<form method="get">
 			<table class="tabela">
+				<caption>Knjige</caption>
 				<tr>
 					<th>r. br.</th>
 					<th>Omot</th>
-					<th>naziv</th>
-					<th>autor</th>
-					<th>Izdavacka kuca</th>
-					<th>kratak Opis</th>
-					<th>Godina Izdavanja</th>
-					<th>Cena</th>
-					<th>Tip Poveza</th>
-					<th></th>
-					<th><input type="search" name="naziv" th:value="${param.naziv?: null}"/></th>
-					<th><input type="submit" value="Pretraži"/></th>
+					<th>Naziv</th>
+					<th>Ocena</th>
+					<th>cena</th>
 					<th></th>
 				</tr>
-
+				<tr>
+					<th></th>
+					<th></th>
+					<th><input placeholder="Pretraga po Nazivu" type="search" name="naziv" th:value="${param.naziv}?: null"/></th>
+					<th><input placeholder="Pretraga po Autoru" type="search" name="autor" th:value="${param.autor}?: null"/></th>
+					<th><input placeholder="Pretraga po Jeziku" type="search" name="jezik" th:value="${param.jezik}?: null"/></th>
+					
+					<th>
+						<select name="zanrId">
+							<option value="">odaberi</option>
+							<option th:each="itZanr: ${zanrovi}" th:value="${itZanr.id}" th:text="${itZanr.naziv}" th:selected="${#strings.equals(itZanr.id, param.zanrId)}"></option>
+						</select>
+					</th>
+					<th>
+						od:<input type="number" min="0" th:value="${param.cenaOd}?: '200'" name="cenaOd"/><br/>
+						do:<input type="number" min="0" th:value="${param.cenaDo}?: '3000'" name="cenaDo"/>
+					</th>
+					<th><input type="submit" value="Pretraži"/></th>
+				</tr>
 				<tr th:each="itKnjiga, status: ${knjige}">
-					<td th:text="${status.index + 1}">1</td>
-					<td><img style="width: 150px;height: 190px" th:src="${itKnjiga.slikaKnjige}"></td> 	
-					<td><a th:href="|Knjige/Details?id=${itKnjiga.id}|" th:text="${itKnjiga.naziv}">fantazija</a></td>
-					<td><a th:href="|Zanrovi/Details?id=${itKnjiga.id}|" th:text="${itKnjiga.autor}">fantazija</a></td>
-					<td><a th:href="|Knjige/Details?id=${itKnjiga.id}|" th:text="${itKnjiga.izdavackaKuca}">fantazija</a></td>
-					<td><a th:href="|Zanrovi/Details?id=${itKnjiga.id}|" th:text="${itKnjiga.kratakOpis}">fantazija</a></td>
-					<td><a th:href="|Knjige/Details?id=${itKnjiga.id}|" th:text="${itKnjiga.godinaIzdavanja}">fantazija</a></td>
-					<td><a th:href="|Zanrovi/Details?id=${itKnjiga.id}|" th:text="${itKnjiga.cena}">fantazija</a></td>
-					<td><a th:href="|Knjige/Details?id=${itKnjiga.id}|" th:text="${itKnjiga.tipPoveza}">fantazija</a></td>			</tr>
+					<td class="broj" th:text="${status.index + 1}"></td>
+					<td><img style="width: 150px;height: 190px" th:src="${itKnjiga.slikaKnjige}"></td>
+					<td><a th:href="|Knjige/Details?id=${itKnjiga.id}|" th:text="${itKnjiga.naziv}"></a></td>
+					<td><a th:href="|Knjige/Details?id=${itKnjiga.id}|" th:text="${itKnjiga.ocena}"></a></td>
+					<td><a th:href="|Knjige/Details?id=${itKnjiga.id}|" th:text="${itKnjiga.jezik}"></a></td>	
+					<td>
+					</td>
+					<td class="broj" th:text="${itKnjiga.cena}"></td>
+				</tr>
 			</table>
 		</form>
+				<ul>
+			<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}"><a href="Filmovi/Create">Dodavanje Nove Knjige</a></li>
+		</ul>
+	</div>
 	</div>
 </body>
 </html>

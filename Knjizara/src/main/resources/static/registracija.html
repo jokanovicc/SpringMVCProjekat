@@ -5,9 +5,10 @@
 	<base href="">
 	<link rel="stylesheet" type="text/css" href="css/StiloviForma.css"/>
 	<link rel="stylesheet" type="text/css" href="css/StiloviKorisnik.css"/>
+	<link rel="stylesheet" type="text/css" href="css/StiloviHorizontalniMeni.css"/>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	
-	<title>Prijava</title>
+	<title>Registracija</title>
 </head>
 <body>
 <div class="container">
@@ -28,15 +29,21 @@
 	</table>
 	<ul>
 		<li><a href="Zanrovi">žanrovi</a></li>
-		<li><a href="Filmovi">filmovi</a></li>
-		<li><a href="Projekcije">projekcije</a></li>
+		<li><a href="Knjige">knjige</a></li>
 	</ul>
-	<form method="post" action="Korisnici/Login">
+	<form method="post" action="Korisnici/Register">
 		<table class="forma">
-			<caption>Prijava</caption>
+			<caption>Registracija</caption>
 			<tr><th>korisničko ime:</th><td><input type="text" name="korisnickoIme"/></td></tr>
 			<tr><th>lozinka:</th><td><input type="password" name="lozinka"/></td></tr>
-			<tr><th></th><td><input type="submit" value="Prijava"/></td></tr>
+			<tr><th>ponovljena lozinka:</th><td><input type="password" name="ponovljenaLozinka"/></td></tr>
+			<tr><th>Ime:</th><td><input type="text" name="ime"/></td></tr>
+			<tr><th>Prezime:</th><td><input type="text" name="prezime"/></td></tr>
+			<tr><th>e-mail:</th><td><input type="text" name="eMail"/></td></tr>
+			<tr><th>Adresa:</th><td><input type="text" name="adresa"/></td></tr>
+			<tr><th>Broj Telefona:</th><td><input type="text" name="brojTelefona"/></td></tr>
+			<tr><th>Datum rodjenja:</th><td><input type="date" name="datumRodjenja"/></td></tr>
+			<tr><th></th><td><input type="submit" value="Registracija"/></td></tr>
 		</table>
 	</form>
 	<p class="greska"></p>

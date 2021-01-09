@@ -1,5 +1,7 @@
 package com.ftn.Knjizara.service;
 
+import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.ftn.Knjizara.model.Korisnik;
@@ -17,7 +19,7 @@ public interface KorisnikService {
 	List<Korisnik> update(List<Korisnik> korisnici);
 	Korisnik delete(String korisnickoIme);
 	void delete(List<String> korisnickaImena);
-	List<Korisnik> find(String korisnickoIme, String eMail, String pol, Boolean administrator);
+	List<Korisnik> find(String korisnickoIme, String eMail,String ime,String prezime, String pol, String adresa, String brojTelefona,Date datumRodjenja,Boolean administrator,LocalDateTime datumRegistracije);
 	List<Korisnik> findByKorisnickoIme(String korisnickoIme);
 
 }

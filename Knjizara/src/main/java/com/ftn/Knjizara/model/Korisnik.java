@@ -1,12 +1,13 @@
 package com.ftn.Knjizara.model;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
 
 
 public class Korisnik {
 	
 	private String korisnickoIme="", lozinka="", eMail="", ime = "",prezime = "",adresa = "",brojTelefona = "";
-	private LocalDateTime datumRodjenja;
+	private Date datumRodjenja;
 	private LocalDateTime datumRegistracije;
 	
 	private boolean administrator = false;
@@ -14,7 +15,7 @@ public class Korisnik {
 	
 
 	public Korisnik(String korisnickoIme, String lozinka, String eMail, String ime, String prezime, String adresa,
-			String brojTelefona, LocalDateTime datumRodjenja, LocalDateTime datumRegistracije, boolean administrator) {
+			String brojTelefona, Date datumRodjenja, LocalDateTime datumRegistracije, boolean administrator) {
 		super();
 		this.korisnickoIme = korisnickoIme;
 		this.lozinka = lozinka;
@@ -137,13 +138,13 @@ public class Korisnik {
 
 
 
-	public LocalDateTime getDatumRodjenja() {
+	public Date getDatumRodjenja() {
 		return datumRodjenja;
 	}
 
 
 
-	public void setDatumRodjenja(LocalDateTime datumRodjenja) {
+	public void setDatumRodjenja(Date datumRodjenja) {
 		this.datumRodjenja = datumRodjenja;
 	}
 
