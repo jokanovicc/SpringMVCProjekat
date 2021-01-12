@@ -24,8 +24,40 @@
 			<input type="hidden" name="id" th:value="${knjiga.id}"/>
 			<table class="forma">
 				<caption>Knjiga</caption>
-				<tr><th>Naziv:</th><td><input type="text" th:value="${knjiga.naziv}" name="naziv"/></td></tr>
-				<tr><th>naziv:</th><td><input type="text" th:value="${knjiga.autor}" name="autor"/></td></tr>
+				<tr><th>Naziv:</th><td><input required type="text" th:value="${knjiga.naziv}" name="naziv"/></td></tr>
+				<tr><th>Autor:</th><td><input required type="text" th:value="${knjiga.autor}" name="autor"/></td></tr>
+				<tr><th>Izdavac:</th><td><input required type="text" th:value="${knjiga.izdavackaKuca}" name="izdavac"/></td></tr>
+				<tr><th>isbn:</th><td><input readonly th:value="${knjiga.ISBN}" name="isbn"/></td></tr>
+				<tr><th>Godina Izdanja:</th><td><input required type="text" th:value="${knjiga.godinaIzdavanja}" name="godinaIzdavanja"/></td></tr>
+				<tr><th>Opis:</th><td><input type="text" required th:value="${knjiga.kratakOpis}" name="kratakOpis"/></td></tr>
+				<tr><th>Broj Stranica:</th><td><input required type="number" th:value="${knjiga.brojStrana}" name="brojStrana"/></td></tr>
+				<tr><th>Jezik:</th><td><input type="text" required th:value="${knjiga.jezik}" name="jezik"/></td></tr>
+				<tr><th>Ocena:</th><td><input type="number" required th:value="${knjiga.ocena}" name="ocena"/></td></tr>
+				<tr><th>Kolicina:</th><td><input type="number" required th:value="${knjiga.kolicina}" name="kolicina"/></td></tr>
+				
+				<tr><th>Slika:</th><td><input type="text" required th:value="${knjiga.slikaKnjige}" name="slika"/></td></tr>
+				
+				<tr>
+					<th>Pismo:</th>
+					<td>
+						<select name="pismo">
+							<option value="latinica" th:selected="${#strings.equals(knjiga.pismo, 'latinica')}">latinica</option>
+							<option value="cirilica" th:selected="${#strings.equals(knjiga.pismo, 'cirilica')}">cirilica</option>
+						</select>
+					</td>
+				</tr>
+				
+				
+				<tr>
+					<th>Tip Poveza:</th>
+					<td>
+						<select name="tipPoveza">
+							<option value="meki" th:selected="${#strings.equals(knjiga.tipPoveza, 'meki')}">meki</option>
+							<option value="tvrdi" th:selected="${#strings.equals(knjiga.tipPoveza, 'tvrde')}">tvrdi</option>
+						</select>
+					</td>
+				</tr>
+		
 				
 				<tr>
 					<th>žanr:</th>
@@ -35,20 +67,15 @@
 						</th:block>
 					</td>
 				</tr>
-				<tr><th>cena:</th><td><input type="number" min="5" th:value="${knjige.cena}" name="cena"/></td></tr>
+				<tr><th>cena:</th><td><input type="number" min="5" th:value="${knjiga.cena}" name="cena"/></td></tr>
 				<tr><th></th><td><input type="submit" value="Izmeni"/></td></tr>
 			</table>
 		</form>
-		<form method="post" action="Knjige/Delete" th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}">
-			<input type="hidden" name="id" th:value="${knjiga.id}"/>
-			<table class="forma">
-				<tr><th></th><td><input type="submit" value="Obriši"/></td></tr>
-			</table>
-		</form>
 		
-		<h2>Informacija o Knjizi</h2>
-		<table style="margin-left: 25%; margin-top: 7%" class="forma" th:if="${session.prijavljeniKorisnik == null or not session.prijavljeniKorisnik.administrator}">
-			<tr><th>Slika:</th><td><img style="width: 200px;height: 240px; padding-left: 14%" th:src="${knjiga.slikaKnjige}"></td>
+		<h2 style="text-align: center">DETALJI O KNJIZI:</h2></br> <span style="font-size: 40px; margin-left: 32%;"  th:text="${knjiga.naziv}"></span>
+		<hr>
+		<table style="margin-left: 25%; margin-top: 5%; width: 600px; font-size: 21px" class="forma" th:if="${session.prijavljeniKorisnik == null or not session.prijavljeniKorisnik.administrator}">
+			<tr><th>Slika:</th><td><img style="width: 300px;height: 340px; padding-left: 11%" th:src="${knjiga.slikaKnjige}"></td>
 			<tr><th>Naziv:</th><td th:text="${knjiga.naziv}"></td>
 			<tr><th>Autor:</th><td th:text="${knjiga.autor}"></td>
 			<tr><th>Izdavac:</th><td th:text="${knjiga.izdavackaKuca}"></td>
@@ -60,8 +87,6 @@
 			<tr><th>Pismo:</th><td th:text="${knjiga.pismo}"></td>
 			<tr><th>Jezik:</th><td th:text="${knjiga.jezik}"></td>
 			<tr><th>Ocena:</th><td th:text="${knjiga.ocena}"></td>
-
-			
 			<tr>
 				<th>žanr:</th>
 				<td>
@@ -72,6 +97,7 @@
 			</tr>
 			<tr><th>cena:</th><td th:text="${knjiga.cena}"></td>
 		</table>
+		<hr>
 	</div>
 	</div>
 </body>

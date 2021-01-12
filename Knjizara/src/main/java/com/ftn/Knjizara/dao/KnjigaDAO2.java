@@ -18,5 +18,8 @@ public interface KnjigaDAO2 {
 	public int delete(Long id);
 	
 	public List<Knjiga> find(String naziv, Long zanrId, String autor,String jezik, Integer cenaOd, Integer cenaDo);
+	
+	public List<Knjiga> sort(String sortKriterijum, String ascDesc,List<Knjiga> nesortiran);
+
 
 }

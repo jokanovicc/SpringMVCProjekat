@@ -9,7 +9,7 @@ public class Knjiga {
 	
 	private Long id;
 	private String naziv;
-	private int ISBN;
+	private String ISBN;
 	private String izdavackaKuca;
 	private String autor;
 	private int godinaIzdavanja;
@@ -21,6 +21,7 @@ public class Knjiga {
 	private String pismo;
 	private String jezik;
 	private double ocena;
+	private int kolicina;
 	
 	private List<Zanr> zanrovi = new ArrayList<>();
 	
@@ -28,9 +29,13 @@ public class Knjiga {
 	
 
 
-	public Knjiga(Long id, String naziv, int iSBN, String izdavackaKuca, String autor, int godinaIzdavanja,
+
+
+
+
+	public Knjiga(Long id, String naziv, String iSBN, String izdavackaKuca, String autor, int godinaIzdavanja,
 			String slikaKnjige, String kratakOpis, double cena, int brojStrana, String tipPoveza, String pismo,
-			String jezik, double ocena) {
+			String jezik, double ocena, int kolicina) {
 		super();
 		this.id = id;
 		this.naziv = naziv;
@@ -46,10 +51,48 @@ public class Knjiga {
 		this.pismo = pismo;
 		this.jezik = jezik;
 		this.ocena = ocena;
+		this.kolicina = kolicina;
+	}
+
+	
+	
+	
+
+
+	public Knjiga(String naziv, String iSBN, String izdavackaKuca, String autor, int godinaIzdavanja,
+			String slikaKnjige, String kratakOpis, double cena, int brojStrana, String tipPoveza, String pismo,
+			String jezik, double ocena, int kolicina) {
+		super();
+		this.naziv = naziv;
+		this.ISBN = iSBN;
+		this.izdavackaKuca = izdavackaKuca;
+		this.autor = autor;
+		this.godinaIzdavanja = godinaIzdavanja;
+		this.slikaKnjige = slikaKnjige;
+		this.kratakOpis = kratakOpis;
+		this.cena = cena;
+		this.brojStrana = brojStrana;
+		this.tipPoveza = tipPoveza;
+		this.pismo = pismo;
+		this.jezik = jezik;
+		this.ocena = ocena;
+		this.kolicina = kolicina;
 	}
 
 
 
+
+
+
+	public int getKolicina() {
+		return kolicina;
+	}
+
+
+
+	public void setKolicina(int kolicina) {
+		this.kolicina = kolicina;
+	}
 
 
 
@@ -116,11 +159,11 @@ public class Knjiga {
 		this.naziv = naziv;
 	}
 
-	public int getISBN() {
+	public String getISBN() {
 		return ISBN;
 	}
 
-	public void setISBN(int iSBN) {
+	public void setISBN(String iSBN) {
 		ISBN = iSBN;
 	}
 

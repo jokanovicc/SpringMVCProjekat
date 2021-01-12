@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<base th:href="@{/}">
+	<link rel="stylesheet" type="text/css" href="css/StiloviForma.css"/>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	
+	<title>Dodavanje knjige</title>
+</head>
+<body>
+<div class="container">
+	<div th:fragment="centralniDiv">
+		<form method="post" action="Knjige/Create">
+			<table class="forma">
+				<caption>Dodavanje knjige</caption>
+				<tr><th>naziv:</th><td><input type="text" name="naziv"/></td></tr>
+				<tr><th>Autor:</th><td><input type="text" name="autor"/></td></tr>
+				<tr><th>Izdavac:</th><td><input type="text" name="izdavac"/></td></tr>
+				<tr><th>Godina Izdavanja:</th><td><input  min="1970" max="2025" type="number" name="godinaIzdavanja"/></td></tr>
+				<tr><th>Slika Knjige:</th><td><input type="text" name="slika"/></td></tr>
+				<tr><th>Kratak opis:</th><td><input rows="2" type="text" name="kratakOpis"/></td></tr>
+				<tr><th>Broj Strana:</th><td><input type="number" name="brojStrana"/></td></tr>
+				<tr><th>Kolicina:</th><td><input type="number" name="kolicina"/></td></tr>
+				
+				<tr>
+					<th>Tip Poveza:</th>
+					<td>
+						<select name="tipPoveza">
+							<option value="tvrdi">Tvrdi</option>
+							<option value="meki">Meki</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>Pismo:</th>
+					<td>
+						<select name="pismo">
+							<option value="cirilica">Cirilica</option>
+							<option value="latinica">Latinica</option>
+						</select>
+					</td>
+				</tr>
+				<tr><th>Jezik:</th><td><input type="text" name="jezik"/></td></tr>
+				<tr>
+					<th>žanr:</th>
+					<td>
+						<th:block th:each="itZanr: ${zanrovi}">
+							<input type="checkbox" name="zanrId" th:value="${itZanr.id}"/><span th:text="${itZanr.naziv}"></span><br>
+						</th:block>
+					</td>
+				</tr>
+				<tr><th>Cena:</th><td><input type="number"  min="5" value="120" name="cena"/></td></tr>
+				<tr><th></th><td><input type="submit" value="Dodaj"/></td></tr>
+			</table>
+		</form>
+		<ul>
+			<li><a href="Knjige">povratak</a></li>
+		</ul>
+	</div>
+	</div>
+</body>
+</html>

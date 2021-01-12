@@ -25,16 +25,7 @@
 			<table class="tabela">
 				<caption>Knjige</caption>
 				<tr>
-					<th>r. br.</th>
-					<th>Omot</th>
-					<th>Naziv</th>
-					<th>Ocena</th>
-					<th>cena</th>
-					<th></th>
-				</tr>
-				<tr>
-					<th></th>
-					<th></th>
+					<th>PRETRAGE</th>
 					<th><input placeholder="Pretraga po Nazivu" type="search" name="naziv" th:value="${param.naziv}?: null"/></th>
 					<th><input placeholder="Pretraga po Autoru" type="search" name="autor" th:value="${param.autor}?: null"/></th>
 					<th><input placeholder="Pretraga po Jeziku" type="search" name="jezik" th:value="${param.jezik}?: null"/></th>
@@ -51,20 +42,27 @@
 					</th>
 					<th><input type="submit" value="Pretraži"/></th>
 				</tr>
+				<tr>
+					<th>r. br.</th>
+					<th>Omot</th>
+					<th>Naziv</th>
+					<th>Ocena</th>
+					<th>Jezik</th>
+					<th>CENA</th>
+					
+				</tr>
 				<tr th:each="itKnjiga, status: ${knjige}">
 					<td class="broj" th:text="${status.index + 1}"></td>
 					<td><img style="width: 150px;height: 190px" th:src="${itKnjiga.slikaKnjige}"></td>
 					<td><a th:href="|Knjige/Details?id=${itKnjiga.id}|" th:text="${itKnjiga.naziv}"></a></td>
-					<td><a th:href="|Knjige/Details?id=${itKnjiga.id}|" th:text="${itKnjiga.ocena}"></a></td>
-					<td><a th:href="|Knjige/Details?id=${itKnjiga.id}|" th:text="${itKnjiga.jezik}"></a></td>	
-					<td>
-					</td>
+					<td><span th:text="${itKnjiga.ocena}"></span></td>
+					<td><span th:text="${itKnjiga.jezik}"></span></td>	
 					<td class="broj" th:text="${itKnjiga.cena}"></td>
 				</tr>
 			</table>
 		</form>
 				<ul>
-			<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}"><a href="Filmovi/Create">Dodavanje Nove Knjige</a></li>
+			<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}"><a href="Knjige/Create">Dodavanje Nove Knjige</a></li>
 		</ul>
 	</div>
 	</div>

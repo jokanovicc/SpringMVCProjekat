@@ -1,6 +1,8 @@
 package com.ftn.Knjizara.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +34,8 @@ public class Databasa2KnjigaService implements Knjiga2Service {
 
 	@Override
 	public Knjiga save(Knjiga knjiga) {
-		// TODO Auto-generated method stub
-		return null;
+		knjigaDAO.save(knjiga);
+		return knjiga;
 	}
 
 	@Override
@@ -44,8 +46,8 @@ public class Databasa2KnjigaService implements Knjiga2Service {
 
 	@Override
 	public Knjiga update(Knjiga knjiga) {
-		// TODO Auto-generated method stub
-		return null;
+		knjigaDAO.update(knjiga);
+		return knjiga;
 	}
 
 	@Override
@@ -143,6 +145,20 @@ public class Databasa2KnjigaService implements Knjiga2Service {
 	public List<Knjiga> findByZanrId(Long zanrId) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<Knjiga> sort(String sortKriterijum, String ascDesc,List<Knjiga> nesortiran) {
+		if(sortKriterijum.equals("cena")) {
+			if(ascDesc.equals("asc")) {
+				Collections.sort(nesortiran, Comparator.comparingDouble(Knjiga ::getCena));
+			}
+			else {
+				Collections.sort(nesortiran, Comparator.comparingDouble(Knjiga ::getCena).reversed());
+			}
+		}
+		
+		return nesortiran;
 	}
 
 }

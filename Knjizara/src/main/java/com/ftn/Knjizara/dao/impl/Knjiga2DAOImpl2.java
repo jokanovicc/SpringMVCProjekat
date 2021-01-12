@@ -1,8 +1,13 @@
 package com.ftn.Knjizara.dao.impl;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -10,9 +15,12 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ftn.Knjizara.dao.KnjigaDAO2;
 import com.ftn.Knjizara.dao.ZanrDAO;
@@ -41,7 +49,7 @@ public class Knjiga2DAOImpl2 implements KnjigaDAO2 {
 			int index = 1;
             Long knjigaID = rs.getLong(index++);
             String naziv = rs.getString(index++);
-            int isbn = rs.getInt(index++);
+            String isbn = rs.getString((index++));
             String izdavac = rs.getString(index++);
             String autor = rs.getString(index++);
             int godinaIzdavanje = rs.getInt(index++);
@@ -50,13 +58,14 @@ public class Knjiga2DAOImpl2 implements KnjigaDAO2 {
             int brojStrana = rs.getInt(index++);
             String jezik = rs.getString(index++);
             Double ocena = rs.getDouble(index++);
-            String tipPoveza = rs.getString(index++);
             String pismo = rs.getString(index++);
+            String tipPoveza = rs.getString(index++);
             String slika = rs.getString(index++);
+            int kolicina = rs.getInt(index++);
 
 			Knjiga knjiga = knjige.get(knjigaID);
 			if (knjiga == null) {
-				knjiga = new Knjiga(knjigaID, naziv, isbn, izdavac, autor, godinaIzdavanje, slika, opis, cena, brojStrana, tipPoveza, pismo, jezik, ocena);
+				knjiga = new Knjiga(knjigaID, naziv, isbn, izdavac, autor, godinaIzdavanje, slika, opis, cena, brojStrana, tipPoveza, pismo, jezik, ocena, kolicina);
 				knjige.put(knjiga.getId(), knjiga); // dodavanje u kolekciju
 			}
 
@@ -65,6 +74,7 @@ public class Knjiga2DAOImpl2 implements KnjigaDAO2 {
 			String zanrOpis = rs.getString(index++);
 			Zanr zanr = new Zanr(zanrId, zanrNaziv,zanrOpis);
 			knjiga.getZanrovi().add(zanr);
+
 		}
 
 		public List<Knjiga> getKnjige() {
@@ -87,7 +97,7 @@ public class Knjiga2DAOImpl2 implements KnjigaDAO2 {
 	@Override
 	public Knjiga findOne(Long id) {
 		String sql = 
-				"SELECT * FROM knjige f " + 
+				"SELECT f.id,f.naziv,f.isbn,f.izdavac,f.autor,f.godinaIzdavanja,f.kratakOpis,f.cena,f.brojStrana,f.jezik,f.ocenaProsecna,f.pismo,f.tipPoveza,f.slika,f.kolicina,z.id,z.naziv,z.opis FROM knjige f  " + 
 				"LEFT JOIN knjigaZanr fz ON fz.knjigaId = f.id " + 
 				"LEFT JOIN zanrovi z ON fz.zanrId = z.id " + 
 				"WHERE f.id = ? " + 
@@ -102,7 +112,7 @@ public class Knjiga2DAOImpl2 implements KnjigaDAO2 {
 	@Override
 	public List<Knjiga> findAll() {
 		String sql = 
-				"SELECT * FROM knjige f " + 
+				"SELECT f.id,f.naziv,f.isbn,f.izdavac,f.autor,f.godinaIzdavanja,f.kratakOpis,f.cena,f.brojStrana,f.jezik,f.ocenaProsecna,f.pismo,f.tipPoveza,f.slika,f.kolicina,z.id,z.naziv,z.opis FROM knjige f " + 
 				"LEFT JOIN knjigaZanr fz ON fz.knjigaId = f.id " + 
 				"LEFT JOIN zanrovi z ON fz.zanrId = z.id " + 
 				"ORDER BY f.id";
@@ -128,17 +138,63 @@ public class Knjiga2DAOImpl2 implements KnjigaDAO2 {
 		}
 	}
 	
-
+	@Transactional
 	@Override
 	public int save(Knjiga knjiga) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+		PreparedStatementCreator preparedStatementCreator = new PreparedStatementCreator() {
+			
+			@Override
+			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+				String sql = "INSERT INTO knjige (naziv,isbn,izdavac,autor,godinaIzdavanja,kratakOpis,cena,brojStrana,jezik,ocenaProsecna,pismo,tipPoveza,slika,kolicina) VALUES (?, ?,?, ?,?, ?,?, ?,?, ?,?, ?,?,?)";
 
+				PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+				int index = 1;
+				preparedStatement.setString(index++, knjiga.getNaziv());
+				preparedStatement.setString(index++, knjiga.getISBN());
+				preparedStatement.setString(index++, knjiga.getIzdavackaKuca());
+				preparedStatement.setString(index++, knjiga.getAutor());
+				preparedStatement.setInt(index++, knjiga.getGodinaIzdavanja());
+				preparedStatement.setString(index++, knjiga.getKratakOpis());
+				preparedStatement.setDouble(index++, knjiga.getCena());
+				preparedStatement.setInt(index++, knjiga.getBrojStrana());
+				preparedStatement.setString(index++, knjiga.getJezik());
+				preparedStatement.setDouble(index++, knjiga.getOcena());
+				preparedStatement.setString(index++, knjiga.getPismo());
+				preparedStatement.setString(index++, knjiga.getTipPoveza());
+				preparedStatement.setString(index++, knjiga.getSlikaKnjige());
+				preparedStatement.setInt(index++, knjiga.getKolicina());
+
+				return preparedStatement;
+			}
+
+		};
+		GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+		boolean uspeh = jdbcTemplate.update(preparedStatementCreator, keyHolder) == 1;
+		if (uspeh) {
+			String sql = "INSERT INTO knjigaZanr (knjigaId, zanrId) VALUES (?, ?)";
+			for (Zanr itZanr: knjiga.getZanrovi()) {	
+				uspeh = uspeh && jdbcTemplate.update(sql, keyHolder.getKey(), itZanr.getId()) == 1;
+			}
+		}
+		return uspeh?1:0;
+	}
+	
+	@Transactional
 	@Override
 	public int update(Knjiga knjiga) {
-		// TODO Auto-generated method stub
-		return 0;
+		String sql = "DELETE FROM knjigaZanr WHERE knjigaId = ?";
+		jdbcTemplate.update(sql, knjiga.getId());
+	
+		boolean uspeh = true;
+		sql = "INSERT INTO knjigaZanr (knjigaId, zanrId) VALUES (?, ?)";
+		for (Zanr itZanr: knjiga.getZanrovi()) {	
+			uspeh = uspeh &&  jdbcTemplate.update(sql, knjiga.getId(), itZanr.getId()) == 1;
+		}
+
+		sql = "UPDATE knjige SET naziv = ?, izdavac = ?,autor = ?,godinaIzdavanja = ?,kratakOpis = ?,cena = ?,brojStrana = ?,jezik = ?,pismo = ?,tipPoveza = ?,slika = ?,ocenaProsecna = ?, kolicina = ? WHERE id = ?";	
+		uspeh = uspeh &&  jdbcTemplate.update(sql, knjiga.getNaziv(), knjiga.getIzdavackaKuca(),knjiga.getAutor(),knjiga.getGodinaIzdavanja(),knjiga.getKratakOpis(),knjiga.getCena(),knjiga.getBrojStrana(),knjiga.getJezik(),knjiga.getPismo(),knjiga.getTipPoveza(),knjiga.getSlikaKnjige(),knjiga.getOcena(),knjiga.getKolicina(),knjiga.getId()) == 1;
+		
+		return uspeh?1:0;
 	}
 
 	@Override
@@ -154,7 +210,7 @@ public class Knjiga2DAOImpl2 implements KnjigaDAO2 {
 			int index = 1;
             Long knjigaID = rs.getLong(index++);
             String naziv = rs.getString(index++);
-            int isbn = rs.getInt(index++);
+            String isbn = rs.getString(index++);
             String izdavac = rs.getString(index++);
             String autor = rs.getString(index++);
             int godinaIzdavanje = rs.getInt(index++);
@@ -166,8 +222,10 @@ public class Knjiga2DAOImpl2 implements KnjigaDAO2 {
             String tipPoveza = rs.getString(index++);
             String pismo = rs.getString(index++);
             String slika = rs.getString(index++);
+            int kolicina = rs.getInt(index++);
 
-            Knjiga knjiga =  new Knjiga(knjigaID, naziv, isbn, izdavac, autor, godinaIzdavanje, slika, opis, cena, brojStrana, tipPoveza, pismo, jezik, ocena);
+
+            Knjiga knjiga =  new Knjiga(knjigaID, naziv, isbn, izdavac, autor, godinaIzdavanje, slika, opis, cena, brojStrana, tipPoveza, pismo, jezik, ocena,kolicina);
             return knjiga;
 		}
 
@@ -177,7 +235,7 @@ public class Knjiga2DAOImpl2 implements KnjigaDAO2 {
 	public List<Knjiga> find(String naziv, Long zanrId, String autor, String jezik, Integer cenaOd, Integer cenaDo) {
 		ArrayList<Object> listaArgumenata = new ArrayList<Object>();
 		
-		String sql = "SELECT * FROM filmovi f "; 
+		String sql = "SELECT f.id,f.naziv,f.isbn,f.izdavac,f.autor,f.godinaIzdavanja,f.kratakOpis,f.cena,f.brojStrana,f.jezik,f.ocenaProsecna,f.pismo,f.tipPoveza,f.slika,f.kolicina,z.id,z.naziv,z.opis FROM knjige f "; 
 		
 		StringBuffer whereSql = new StringBuffer(" WHERE ");
 		boolean imaArgumenata = false;
@@ -299,6 +357,12 @@ public class Knjiga2DAOImpl2 implements KnjigaDAO2 {
 			znaroviKnjige.add(zanrDAO.findOne(fz[1]));
 		}
 		return znaroviKnjige;
+	}
+
+	@Override
+	public List<Knjiga> sort(String sortKriterijum, String ascDesc,List<Knjiga> nesortiran) {
+		return nesortiran;
+
 	}
 
 }
