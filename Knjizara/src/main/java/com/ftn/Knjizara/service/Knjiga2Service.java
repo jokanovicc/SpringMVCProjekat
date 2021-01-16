@@ -10,6 +10,8 @@ import com.ftn.Knjizara.model.Zanr;
 public interface Knjiga2Service {
 	Knjiga findOne(Long id);
 	List<Knjiga> findAll();
+	List<Knjiga> findAll2();
+
 	Knjiga save(Knjiga knjiga);
 	List<Knjiga> save(List<Knjiga> knjige);
 	Knjiga update(Knjiga knjiga);
@@ -17,9 +19,7 @@ public interface Knjiga2Service {
 	Knjiga delete(Long id);
 	List<Knjiga> deleteAll(Zanr zanr);
 	void delete(List<Long> ids);
-	List<Knjiga> find(String naziv, Long zanrId, String autor,String jezik, Integer cenaOd, Integer cenaDo);
-	List<Knjiga> sort(String sortKriterijum, String ascDesc,List<Knjiga> nesortiran);
-
+	List<Knjiga> find(String naziv, Long zanrId, String autor,String jezik, Integer cenaOd, Integer cenaDo,String isbn);
 	List<Knjiga> findByZanrId(Long zanrId);
 
 }

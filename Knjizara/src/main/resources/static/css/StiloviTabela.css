@@ -1,17 +1,18 @@
 
 table.tabela {
 	border-collapse: collapse;
+	border: 2px solid grey;
 }
 
 table.tabela caption {
-	font-size: 16pt
+	font-size: 20pt
 }
 
 table.tabela th, td {
-	border: 1px solid Gray;
-	padding: 5px;
+	padding: 8px;
 	text-align: center;
   	vertical-align: middle;
+  	
 }
 
 table.tabela td.broj {
@@ -29,5 +30,5 @@ table.tabela tr:nth-child(even) {
 }
 
 table.tabela input[type="search"] {
-	width: 100%;
+	width: 130%;
 }

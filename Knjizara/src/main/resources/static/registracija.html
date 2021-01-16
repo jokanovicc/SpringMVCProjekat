@@ -3,19 +3,17 @@
 <head>
 	<meta charset="UTF-8">
 	<base href="">
+	
 	<link rel="stylesheet" type="text/css" href="css/StiloviForma.css"/>
 	<link rel="stylesheet" type="text/css" href="css/StiloviKorisnik.css"/>
 	<link rel="stylesheet" type="text/css" href="css/StiloviHorizontalniMeni.css"/>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<link rel="stylesheet" type="text/css" href="css/glavno.css">
 	
 	<title>Registracija</title>
 </head>
 <body>
 <div class="container">
-	<h2>Bioskop</h2>
-	<ul>
-		<li><a href="">početna</a></li>
-	</ul>
 	<table class="korisnik">
 		<tr><th>Niste prijavljeni</th></tr>
 		<tr>
@@ -42,7 +40,8 @@
 			<tr><th>e-mail:</th><td><input type="text" name="eMail"/></td></tr>
 			<tr><th>Adresa:</th><td><input type="text" name="adresa"/></td></tr>
 			<tr><th>Broj Telefona:</th><td><input type="text" name="brojTelefona"/></td></tr>
-			<tr><th>Datum rodjenja:</th><td><input type="date" name="datumRodjenja"/></td></tr>
+			<tr><th>Datum rodjenja:</th><td><input type="date" id="start" name="datumRodjenja"
+       value="2000-07-22"></td></tr>
 			<tr><th></th><td><input type="submit" value="Registracija"/></td></tr>
 		</table>
 	</form>

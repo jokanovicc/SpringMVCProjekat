@@ -3,6 +3,7 @@ package com.ftn.Knjizara.kontroleri;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
@@ -52,12 +53,13 @@ public class KorisnikKontroler {
 				throw new Exception("Neispravno korisničko ime ili lozinka!");
 			}			
 			
-			
+			 
+
 			
 			// prijava
 			session.setAttribute(KorisnikKontroler.KORISNIK_KEY, korisnik);
 			
-			response.sendRedirect(baseURL);
+			response.sendRedirect(baseURL + "Knjige");
 			return null;
 		} catch (Exception ex) {
 			// ispis greške
@@ -72,6 +74,7 @@ public class KorisnikKontroler {
 			// prosleđivanje
 			ModelAndView rezultat = new ModelAndView("prijava");
 			rezultat.addObject("poruka", poruka);
+			
 
 			return rezultat;
 		}
@@ -102,27 +105,31 @@ public class KorisnikKontroler {
 				throw new Exception("Lozinke se ne podudaraju!");
 			}
 			if (eMail.equals("")) {
-				throw new Exception("E-mail ne sme biti prazan!");
+				throw new Exception("E-mail ne sme biti prazan");
 			}
 			if (adresa.equals("")) {
-				throw new Exception("E-mail ne sme biti prazan!");
+				throw new Exception("adresa ne sme biti prazna!");
 			}
 			if (brojTelefona.equals("")) {
-				throw new Exception("E-mail ne sme biti prazan!");
+				throw new Exception("Neispravan format broja telefona ili broj telefona je prazan!");
 			}
 			if (ponovljenaLozinka.equals("")) {
-				throw new Exception("E-mail ne sme biti prazan!");
+				throw new Exception("polje lozinka ne sme biti prazan!");
 			}
 			if (prezime.equals("")) {
-				throw new Exception("E-mail ne sme biti prazan!");
+				throw new Exception("prezime ne sme biti prazan!");
 			}
 			if (ime.equals("")) {
-				throw new Exception("E-mail ne sme biti prazan!");
+				throw new Exception("ime ne sme biti prazan!");
+			}
+			
+			if (datumRodjenja == null) {
+				throw new Exception("popunite datum");
 			}
 			
 			@SuppressWarnings("deprecation")
 			Date datum = new Date(2002, 02, 30);
-			if (datumRodjenja.before(datum)) {
+			if (datumRodjenja.after(datum)) {
 				throw new Exception("Neispravan datum rodjenja!");
 			}
 

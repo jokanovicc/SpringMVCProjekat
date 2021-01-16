@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+
 public class Knjiga {
 	
 	private Long id;
@@ -21,7 +22,7 @@ public class Knjiga {
 	private String pismo;
 	private String jezik;
 	private double ocena;
-	private int kolicina;
+	private Integer kolicina;
 	
 	private List<Zanr> zanrovi = new ArrayList<>();
 	
@@ -35,7 +36,7 @@ public class Knjiga {
 
 	public Knjiga(Long id, String naziv, String iSBN, String izdavackaKuca, String autor, int godinaIzdavanja,
 			String slikaKnjige, String kratakOpis, double cena, int brojStrana, String tipPoveza, String pismo,
-			String jezik, double ocena, int kolicina) {
+			String jezik, double ocena, Integer kolicina) {
 		super();
 		this.id = id;
 		this.naziv = naziv;
@@ -60,7 +61,7 @@ public class Knjiga {
 
 
 	public Knjiga(String naziv, String iSBN, String izdavackaKuca, String autor, int godinaIzdavanja,
-			String slikaKnjige, String kratakOpis, double cena, int brojStrana, String tipPoveza, String pismo,
+			String slikaKnjige, String kratakOpis, double cena, int brojStrana, String  tipPoveza, String  pismo,
 			String jezik, double ocena, int kolicina) {
 		super();
 		this.naziv = naziv;
@@ -84,13 +85,13 @@ public class Knjiga {
 
 
 
-	public int getKolicina() {
+	public Integer getKolicina() {
 		return kolicina;
 	}
 
 
 
-	public void setKolicina(int kolicina) {
+	public void setKolicina(Integer kolicina) {
 		this.kolicina = kolicina;
 	}
 
@@ -207,19 +208,19 @@ public class Knjiga {
 		this.brojStrana = brojStrana;
 	}
 
-	public String getTipPoveza() {
+	public String  getTipPoveza() {
 		return tipPoveza;
 	}
 
-	public void setTipPoveza(String tipPoveza) {
+	public void setTipPoveza(String  tipPoveza) {
 		this.tipPoveza = tipPoveza;
 	}
 
-	public String getPismo() {
+	public String  getPismo() {
 		return pismo;
 	}
 
-	public void setPismo(String pismo) {
+	public void setPismo(String  pismo) {
 		this.pismo = pismo;
 	}
 

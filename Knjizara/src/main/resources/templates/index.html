@@ -6,48 +6,58 @@
 	<link rel="stylesheet" type="text/css" href="css/StiloviKorisnik.css"/>
 			    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 		<link rel="stylesheet" type="text/css" href="css/navbar.css"/>
+			 <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+		
 	
 	<title>Prijava</title>	
+		<link rel="stylesheet" type="text/css" href="css/glavno.css">
+	
+
 </head>
 <body>
 <ul class="navbar">
-	<li><a href="prijava.html">prijava</a></li>
-	<li><a href="registracija.html">Registracija</a></li>
+		<li style="font-family: 'Pacifico', cursive;font-size: 31px;color: white; margin-left: 10px; " >Лексикограф</li>
+		<li th:if="${session.prijavljeniKorisnik == null}"><a href="prijava.html">prijava</a></li>
+		<li th:if="${session.prijavljeniKorisnik == null}" ><a href="registracija.html">Registracija</a></li>
 		<li><a href="Zanrovi">žanrovi</a></li>
 		<li><a href="Knjige">Knjige</a></li>
 		<li><a>Komentari</a></li>
 </ul>
 
 <div class="container">
-	<h2>Knjizara</h2>
-	<hr>
-	<table class="korisnik" th:unless="${session.prijavljeniKorisnik == null}">
-		<tr><th>Prijavljeni ste kao</th><td><a th:href="|Korisnici/Details?korisnickoIme=${session.prijavljeniKorisnik.korisnickoIme}|" th:text="${session.prijavljeniKorisnik.korisnickoIme}"></a>.</td></tr>
-		<tr>
-			<td colspan="2">
+		<div class="jumbotron">
+		  <h1 class="display-4">Knjižara Leksikograf</h1>
+		  <hr class="my-4">
+		<div th:unless="${session.prijavljeniKorisnik == null}">
+			<h3>Prijavljeni ste kao <a th:href="|Korisnici/Details?korisnickoIme=${session.prijavljeniKorisnik.korisnickoIme}|" th:text="${session.prijavljeniKorisnik.korisnickoIme}"></a>.
+	
 				<ul>
 					<li><a href="Korisnici/Logout">odjava</a></li>
 				</ul>
-			</td>
-		</tr>
-	</table>
-		<table class="korisnik" th:if="${session.prijavljeniKorisnik == null}">
-		<tr><th>Niste prijavljeni</th></tr>
-		<tr>
-			<td>
-				<ul>
-					<li><a href="prijava.html">prijava</a></li>
-				</ul>
+		 
+		</div>
+	
+		<div class="korisnik" th:if="${session.prijavljeniKorisnik == null}">
+			<h3>Niste prijavljeni<h3>
 				<ul>
 					<li><a href="registracija.html">Registracija</a></li>
+					<li style="margin-top: 10px;"><a href="Knjige" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Neregistrovan</a></li>
+					
 				</ul>
-			</td>
-		</tr>
-	</table>
-
-	
-	
-	
+				
+		<form method="post" action="Korisnici/Login">
+			<table class="forma">
+				<tr><th>korisničko ime:</th><td><input type="text" name="korisnickoIme"/></td></tr>
+				<tr><th>lozinka:</th><td><input type="password" name="lozinka"/></td></tr>
+				<tr><th></th><td><input type="submit" value="Prijava"/></td></tr>
+			</table>
+		</form>
+		<p class="greska" th:text="${poruka}"></p>
 	</div>
+	</div>
+	</div>	
+				
+				
+
 </body>
 </html>

@@ -61,7 +61,7 @@ public class Knjiga2DAOImpl2 implements KnjigaDAO2 {
             String pismo = rs.getString(index++);
             String tipPoveza = rs.getString(index++);
             String slika = rs.getString(index++);
-            int kolicina = rs.getInt(index++);
+            Integer kolicina = rs.getInt(index++);
 
 			Knjiga knjiga = knjige.get(knjigaID);
 			if (knjiga == null) {
@@ -112,9 +112,9 @@ public class Knjiga2DAOImpl2 implements KnjigaDAO2 {
 	@Override
 	public List<Knjiga> findAll() {
 		String sql = 
-				"SELECT f.id,f.naziv,f.isbn,f.izdavac,f.autor,f.godinaIzdavanja,f.kratakOpis,f.cena,f.brojStrana,f.jezik,f.ocenaProsecna,f.pismo,f.tipPoveza,f.slika,f.kolicina,z.id,z.naziv,z.opis FROM knjige f " + 
+				"SELECT f.id,f.naziv,f.isbn,f.izdavac,f.autor,f.godinaIzdavanja,f.kratakOpis,f.cena,f.brojStrana,f.jezik,f.ocenaProsecna,f.pismo,f.tipPoveza,f.slika,f.kolicina,z.id,z.naziv,z.opis FROM knjige f  " + 
 				"LEFT JOIN knjigaZanr fz ON fz.knjigaId = f.id " + 
-				"LEFT JOIN zanrovi z ON fz.zanrId = z.id " + 
+				"LEFT JOIN zanrovi z ON fz.zanrId = z.id where f.kolicina > 0 " + 
 				"ORDER BY f.id";
 
 		KnjigaZanrRowCallBackHandler rowCallbackHandler = new KnjigaZanrRowCallBackHandler();
@@ -222,7 +222,7 @@ public class Knjiga2DAOImpl2 implements KnjigaDAO2 {
             String tipPoveza = rs.getString(index++);
             String pismo = rs.getString(index++);
             String slika = rs.getString(index++);
-            int kolicina = rs.getInt(index++);
+            Integer kolicina = rs.getInt(index++);
 
 
             Knjiga knjiga =  new Knjiga(knjigaID, naziv, isbn, izdavac, autor, godinaIzdavanje, slika, opis, cena, brojStrana, tipPoveza, pismo, jezik, ocena,kolicina);
@@ -232,7 +232,7 @@ public class Knjiga2DAOImpl2 implements KnjigaDAO2 {
 	}
 
 	@Override
-	public List<Knjiga> find(String naziv, Long zanrId, String autor, String jezik, Integer cenaOd, Integer cenaDo) {
+	public List<Knjiga> find(String naziv, Long zanrId, String autor, String jezik, Integer cenaOd, Integer cenaDo, String isbn) {
 		ArrayList<Object> listaArgumenata = new ArrayList<Object>();
 		
 		String sql = "SELECT f.id,f.naziv,f.isbn,f.izdavac,f.autor,f.godinaIzdavanja,f.kratakOpis,f.cena,f.brojStrana,f.jezik,f.ocenaProsecna,f.pismo,f.tipPoveza,f.slika,f.kolicina,z.id,z.naziv,z.opis FROM knjige f "; 
@@ -244,7 +244,7 @@ public class Knjiga2DAOImpl2 implements KnjigaDAO2 {
 			naziv = "%" + naziv + "%";
 			if(imaArgumenata)
 				whereSql.append(" AND ");
-			whereSql.append("f.naziv LIKE ?");
+			whereSql.append("f.naziv LIKE ? AND kolicina > 0");
 			imaArgumenata = true;
 			listaArgumenata.add(naziv);
 		}
@@ -252,7 +252,7 @@ public class Knjiga2DAOImpl2 implements KnjigaDAO2 {
 		if(autor!=null) {
 			if(imaArgumenata)
 				whereSql.append(" AND ");
-			whereSql.append("f.autor LIKE ?");
+			whereSql.append("f.autor LIKE ? AND kolicina > 0");
 			imaArgumenata = true;
 			listaArgumenata.add(autor);
 		}
@@ -261,9 +261,19 @@ public class Knjiga2DAOImpl2 implements KnjigaDAO2 {
 			jezik = "%" + jezik + "%";
 			if(imaArgumenata)
 				whereSql.append(" AND ");
-			whereSql.append("f.jezik LIKE ?");
+			whereSql.append("f.jezik LIKE ? AND kolicina > 0");
 			imaArgumenata = true;
 			listaArgumenata.add(jezik);
+		}
+		
+		
+		if(isbn!=null) {
+			isbn = "%" + isbn + "%";
+			if(imaArgumenata)
+				whereSql.append(" AND ");
+			whereSql.append("f.isbn LIKE ? and kolicina > 0");
+			imaArgumenata = true;
+			listaArgumenata.add(isbn);
 		}
 		
 		
@@ -272,7 +282,7 @@ public class Knjiga2DAOImpl2 implements KnjigaDAO2 {
 		if(cenaDo != null) {
 			if(imaArgumenata)
 				whereSql.append(" AND ");
-			whereSql.append("f.cena <= ?");
+			whereSql.append("f.cena <= ? AND kolicina > 1");
 			imaArgumenata = true;
 			listaArgumenata.add(cenaDo);
 		}
@@ -280,7 +290,7 @@ public class Knjiga2DAOImpl2 implements KnjigaDAO2 {
 		if(cenaOd != null) {
 			if(imaArgumenata)
 				whereSql.append(" AND ");
-			whereSql.append("f.cena >= ?");
+			whereSql.append("f.cena >= ? AND kolicina > 1");
 			imaArgumenata = true;
 			listaArgumenata.add(cenaDo);
 		}
@@ -359,10 +369,21 @@ public class Knjiga2DAOImpl2 implements KnjigaDAO2 {
 		return znaroviKnjige;
 	}
 
-	@Override
-	public List<Knjiga> sort(String sortKriterijum, String ascDesc,List<Knjiga> nesortiran) {
-		return nesortiran;
 
+
+
+	@Override
+	public List<Knjiga> findAll2() {
+		String sql = 
+				"SELECT f.id,f.naziv,f.isbn,f.izdavac,f.autor,f.godinaIzdavanja,f.kratakOpis,f.cena,f.brojStrana,f.jezik,f.ocenaProsecna,f.pismo,f.tipPoveza,f.slika,f.kolicina,z.id,z.naziv,z.opis FROM knjige f  " + 
+				"LEFT JOIN knjigaZanr fz ON fz.knjigaId = f.id " + 
+				"LEFT JOIN zanrovi z ON fz.zanrId = z.id " + 
+				"ORDER BY f.id";
+
+		KnjigaZanrRowCallBackHandler rowCallbackHandler = new KnjigaZanrRowCallBackHandler();
+		jdbcTemplate.query(sql, rowCallbackHandler);
+
+		return rowCallbackHandler.getKnjige();
 	}
 
 }

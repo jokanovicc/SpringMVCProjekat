@@ -4,24 +4,37 @@
 	<meta charset="UTF-8">
 	<base th:href="@{/}">
 	<link rel="stylesheet" type="text/css" href="css/StiloviForma.css"/>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-	
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<link rel="stylesheet" type="text/css" href="css/navbar.css"/>
+		<link rel="stylesheet" type="text/css" href="css/glavno.css">
 	<title>Dodavanje knjige</title>
+
+
 </head>
 <body>
+<ul class="navbar">
+		<li>Leksikograf</li>
+		<li th:if="${session.prijavljeniKorisnik == null}"><a href="prijava.html">prijava</a></li>
+		<li th:if="${session.prijavljeniKorisnik == null}" ><a href="registracija.html">Registracija</a></li>
+		<li><a href="Zanrovi">žanrovi</a></li>
+		<li><a href="Knjige">Knjige</a></li>
+		<li><a>Komentari</a></li>
+</ul>
+
 <div class="container">
-	<div th:fragment="centralniDiv">
-		<form method="post" action="Knjige/Create">
+		<h1>Dodavanje Nove knjige</h1>
+		<hr>
+		<form style="margin-left: 280px; margin-top: 70px; width: 500px" method="post" action="Knjige/Create">
 			<table class="forma">
 				<caption>Dodavanje knjige</caption>
 				<tr><th>naziv:</th><td><input type="text" name="naziv"/></td></tr>
 				<tr><th>Autor:</th><td><input type="text" name="autor"/></td></tr>
 				<tr><th>Izdavac:</th><td><input type="text" name="izdavac"/></td></tr>
-				<tr><th>Godina Izdavanja:</th><td><input  min="1970" max="2025" type="number" name="godinaIzdavanja"/></td></tr>
-				<tr><th>Slika Knjige:</th><td><input type="text" name="slika"/></td></tr>
-				<tr><th>Kratak opis:</th><td><input rows="2" type="text" name="kratakOpis"/></td></tr>
-				<tr><th>Broj Strana:</th><td><input type="number" name="brojStrana"/></td></tr>
-				<tr><th>Kolicina:</th><td><input type="number" name="kolicina"/></td></tr>
+				<tr><th>Godina Izdavanja:</th><td><input value="2000" type="number" name="godinaIzdavanja"/></td></tr>
+				<tr><th>Slika Knjige:</th><td><input  type="text" name="slika"/></td></tr>
+				<tr><th>Kratak opis:</th><td><input type="text" name="kratakOpis"/></td></tr>
+				<tr><th>Broj Strana:</th><td><input type="number" value="0"  name="brojStrana"/></td></tr>
+				<tr><th>Kolicina:</th><td><input type="number" value="5" name="kolicina"/></td></tr>
 				
 				<tr>
 					<th>Tip Poveza:</th>
@@ -52,12 +65,12 @@
 				</tr>
 				<tr><th>Cena:</th><td><input type="number"  min="5" value="120" name="cena"/></td></tr>
 				<tr><th></th><td><input type="submit" value="Dodaj"/></td></tr>
+				<p class="greska" th:text="${poruka}"></p>
 			</table>
 		</form>
 		<ul>
 			<li><a href="Knjige">povratak</a></li>
 		</ul>
-	</div>
 	</div>
 </body>
 </html>

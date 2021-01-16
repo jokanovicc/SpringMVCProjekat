@@ -75,9 +75,10 @@ public class Databasa2KnjigaService implements Knjiga2Service {
 	}
 
 	@Override
-	public List<Knjiga> find(String naziv, Long zanrId, String autor,String jezik, Integer cenaOd, Integer cenaDo) {
+	public List<Knjiga> find(String naziv, Long zanrId, String autor,String jezik, Integer cenaOd, Integer cenaDo,String isbn) {
 		//NACIN 1
 		List<Knjiga> knjige = knjigaDAO.findAll();
+		List<Knjiga> knjige2 = knjigaDAO.findAll2();
 
 		// maksimalno inkluzivne vrednosti parametara ako su izostavljeni
 		// filtiranje radi u Servisnom sloju - izbegavati
@@ -95,6 +96,10 @@ public class Databasa2KnjigaService implements Knjiga2Service {
 			jezik = "";
 		}
 		
+		if (isbn == null) {
+			isbn = "";
+		}
+		
 		
 		if (cenaOd == null) {
 			cenaOd = 0;
@@ -109,6 +114,7 @@ public class Databasa2KnjigaService implements Knjiga2Service {
 			if (!itKnjiga.getNaziv().toLowerCase().contains(naziv.toLowerCase())) {
 				continue;
 			}
+			
 			
 			
 			if (!itKnjiga.getAutor().toLowerCase().contains(autor.toLowerCase())) {
@@ -137,6 +143,23 @@ public class Databasa2KnjigaService implements Knjiga2Service {
 
 			rezultat.add(itKnjiga);
 		}
+		
+	//	List<Knjiga> rezultat2 = new ArrayList<>();
+
+		if(isbn != "") {
+				for (Knjiga itKnjiga2: knjige2) {
+					// kriterijum pretrage
+		
+					
+					if (!itKnjiga2.getISBN().toLowerCase().contains(isbn.toLowerCase())) {
+						continue;
+					}
+					
+					rezultat.clear();
+					rezultat.add(itKnjiga2);
+				}
+		
+		}
 
 		return rezultat;
 	}
@@ -147,18 +170,11 @@ public class Databasa2KnjigaService implements Knjiga2Service {
 		return null;
 	}
 
+
+
 	@Override
-	public List<Knjiga> sort(String sortKriterijum, String ascDesc,List<Knjiga> nesortiran) {
-		if(sortKriterijum.equals("cena")) {
-			if(ascDesc.equals("asc")) {
-				Collections.sort(nesortiran, Comparator.comparingDouble(Knjiga ::getCena));
-			}
-			else {
-				Collections.sort(nesortiran, Comparator.comparingDouble(Knjiga ::getCena).reversed());
-			}
-		}
-		
-		return nesortiran;
+	public List<Knjiga> findAll2() {
+		return knjigaDAO.findAll2();
 	}
 
 }

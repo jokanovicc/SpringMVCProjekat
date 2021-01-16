@@ -64,13 +64,15 @@ public class KnjigaKontroler implements ServletContextAware {
 			@RequestParam(required=false) String slika,
 			@RequestParam(required=false) Integer cenaDo,
 			@RequestParam(required=false) Integer cenaOd,
-			@RequestParam(required=false) String kriterijumSortiranja,
-			@RequestParam(required=false) String ascDesc,
+			@RequestParam(required=false) String isbn,
+
 
 
 
 
 			HttpSession session)  throws IOException {
+		
+		
 		//ako je input tipa text i ništa se ne unese 
 		//a parametar metode Sting onda će vrednost parametra handeler metode biti "" što nije null
 
@@ -78,11 +80,7 @@ public class KnjigaKontroler implements ServletContextAware {
 			naziv=null;
 		
 		// čitanje
-		List<Knjiga> knjige = knjiga2Service.find(naziv, zanrId, autor, jezik, cenaOd, cenaDo);
-		if (kriterijumSortiranja != null && ascDesc != null) {
-			knjige = knjiga2Service.sort(kriterijumSortiranja, ascDesc, knjige);
-			
-		}
+		List<Knjiga> knjige = knjiga2Service.find(naziv, zanrId, autor, jezik, cenaOd, cenaDo,isbn);
 		List<Zanr> zanrovi = zanrService.findAll();
 
 		System.out.println(knjige);
@@ -137,7 +135,7 @@ public class KnjigaKontroler implements ServletContextAware {
 	
 	
 	@PostMapping(value="/Create")
-	public void create(@RequestParam String naziv, @RequestParam double cena,
+	public ModelAndView create(@RequestParam String naziv, @RequestParam(required=false) Double cena,
 			
 			@RequestParam String autor,
 			@RequestParam String izdavac,
@@ -146,25 +144,62 @@ public class KnjigaKontroler implements ServletContextAware {
 			@RequestParam String pismo,
 			@RequestParam String jezik,
 			@RequestParam String slika,
-			@RequestParam int godinaIzdavanja,
-
-			@RequestParam int brojStrana,
-			@RequestParam int kolicina,
+			@RequestParam (required=false) Integer godinaIzdavanja,
+			@RequestParam (required=false) Integer brojStrana,
+			@RequestParam(required=false) Integer kolicina,
 
 			@RequestParam(name="zanrId", required=false) Long[] zanrIds, 
-			HttpSession session, HttpServletResponse response) throws IOException {
+			HttpSession session, HttpServletResponse response) throws Exception {
+		
 		// autentikacija, autorizacija
+		
+		
+		try {
 		Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute(KorisnikKontroler.KORISNIK_KEY);
 		if (prijavljeniKorisnik == null || !prijavljeniKorisnik.isAdministrator()) {
 			response.sendRedirect(baseURL + "Knjige");
-			return;
+
 		}
 		
 		
 		long number = (long) Math.floor(Math.random() * 9000000000000L) + 1000000000000L;
 
-		
+		/*
+		 * if (naziv == null || naziv.equals("") || autor.equals("") ||
+		 * izdavac.equals("") || jezik.equals("") || zanrIds==null || cena < 5 ||
+		 * kolicina ==0 || slika.equals("") ||
+		 * String.valueOf(godinaIzdavanja).equals("") ||
+		 * String.valueOf(kolicina).equals("")|| String.valueOf(cena).equals("") ||
+		 * String.valueOf(brojStrana).equals("") || godinaIzdavanja > 2020 || brojStrana
+		 * < 50 || jezik.equals("") || kratakOpis.equals("")) {
+		 * response.sendRedirect(baseURL + "Knjige/Create");
+		 * System.out.println("Pogresan unos"); return; }
+		 */
 
+		if (naziv.equals("") || autor.equals("")) {
+			throw new Exception("Korisničko ime i autor ne smeju biti prazni!");
+		}
+		if (izdavac.equals("") || kratakOpis.equals("")) {
+			throw new Exception("Izdavac i opis ne smeju biti prazni!");
+		}
+		
+		if (pismo.equals("") || jezik.equals("")) {
+			throw new Exception("Pismo i jezik ne smeju biti prazni!");
+		}
+		
+		if (kolicina == null || godinaIzdavanja == null || cena == null) {
+			throw new Exception("Prazno polje kolicine!");
+		}
+		
+		
+		if (kolicina < 1 || brojStrana < 10 || godinaIzdavanja < 1950 || godinaIzdavanja > 2020) {
+			throw new Exception("Godina izdavanja, broj strana, kolicina ne smeju biti 0!");
+		}
+		
+		if (slika.equals("") || zanrIds==null || cena == null) {
+			throw new Exception("Niste odabrali zanrove!");
+		}
+		
 
 		Knjiga knjiga = new Knjiga(naziv,Long.toString(number), izdavac, autor, godinaIzdavanja, slika, kratakOpis, cena, brojStrana, tipPoveza, pismo, jezik, 1,kolicina);
 		System.out.println(knjiga);
@@ -172,11 +207,28 @@ public class KnjigaKontroler implements ServletContextAware {
 		knjiga2Service.save(knjiga);
 
 		response.sendRedirect(baseURL + "Knjige");
+		return null;
+		}catch (Exception ex) {
+			// ispis greške
+			String poruka = ex.getMessage();
+			if (poruka == "") {
+				poruka = "Neuspešno dodavanje knjige!";
+			}
+
+			// prosleđivanje
+			ModelAndView rezultat = new ModelAndView("dodavanjeKnjige");
+			// čitanje
+			List<Zanr> zanrovi = zanrService.findAll();
+			rezultat.addObject("zanrovi", zanrovi);
+			rezultat.addObject("poruka", poruka);
+
+			return rezultat;
+		}
 	}
 	
 	@PostMapping(value="/Edit")
 	public void edit(@RequestParam Long id, 
-			@RequestParam String naziv, @RequestParam double cena,
+			@RequestParam String naziv, @RequestParam(required=false) Double cena,
 			@RequestParam String autor,
 			@RequestParam String izdavac,
 			@RequestParam String kratakOpis,
@@ -184,10 +236,10 @@ public class KnjigaKontroler implements ServletContextAware {
 			@RequestParam String pismo,
 			@RequestParam String jezik,
 			@RequestParam String slika,
-			@RequestParam int godinaIzdavanja,
+			@RequestParam(required=false) Integer godinaIzdavanja,
 			@RequestParam String isbn,
-			@RequestParam double ocena,
-			@RequestParam int brojStrana,
+			@RequestParam(required=false) Double ocena,
+			@RequestParam(required=false) Integer brojStrana,
 		
 			@RequestParam(name="zanrId", required=false) Long[] zanrIds, 
 			HttpSession session, HttpServletResponse response) throws IOException {
@@ -204,7 +256,7 @@ public class KnjigaKontroler implements ServletContextAware {
 			response.sendRedirect(baseURL + "Knjige");
 			return;
 		}	
-		if (naziv == null || naziv.equals("") || autor.equals("") || isbn.equals("")|| izdavac.equals("") || jezik.equals("") ||   cena < 5) {
+		if (naziv == null || naziv.equals("") || autor.equals("") || isbn.equals("")|| izdavac.equals("") || jezik.equals("") || zanrIds==null || godinaIzdavanja == null || ocena == null || brojStrana == null ||  cena < 5) {
 			response.sendRedirect(baseURL + "Knjige/Details?id=" + id);
 			return;
 		}
@@ -225,7 +277,36 @@ public class KnjigaKontroler implements ServletContextAware {
 		knjiga.setZanrovi(zanrService.find(zanrIds));
 		knjiga2Service.update(knjiga);
 
-		response.sendRedirect(baseURL + "Knjige");
+		response.sendRedirect(baseURL + "Knjige/Details?id=" + id);	}
+	
+	@PostMapping(value="/EditKolicina")
+	public void editKolicina(@RequestParam Long id, 
+
+			@RequestParam(required=false) Integer kolicina,
+			HttpSession session, HttpServletResponse response) throws IOException {
+		// autentikacija, autorizacija
+		Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute(KorisnikKontroler.KORISNIK_KEY);
+		if (prijavljeniKorisnik == null || !prijavljeniKorisnik.isAdministrator()) {
+			response.sendRedirect(baseURL + "Knjige");
+			return;
+		}
+
+		// validacija
+		Knjiga knjiga = knjiga2Service.findOne(id);
+		if (knjiga == null) {
+			response.sendRedirect(baseURL + "Knjige");
+			return;
+		}	
+		if (kolicina == null || kolicina < 0) {
+			response.sendRedirect(baseURL + "Knjige/Details?id=" + id);
+			return;
+		}
+
+		// izmena
+		knjiga.setKolicina(kolicina);
+		knjiga2Service.update(knjiga);
+
+		response.sendRedirect(baseURL + "Knjige/Details?id=" + id);
 	}
 	
 	

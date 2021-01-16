@@ -4,21 +4,26 @@
 	  padding: 0;
 	  overflow: hidden;
 	  background-color: #044855;
-	  margin-bottom: 50px;
+	  margin-bottom: 20px;
+	  margin-bottom: 5px;
 	}
 	
 	.navbar li {
 	  float: left;
+	  margin-bottom: 5px;
+	  
 	}
 	
 	 .navbar li a {
 	  display: block;
 	  color: white;
 	  text-align: center;
-	  padding: 14px 16px;
+	  padding: 10px 10px;
 	  text-decoration: none;
+	  margin-bottom: 5px;
+	  
 	}
 	
 	.navbar li a:hover {
-	  background-color: #111;
+	  background-color: red;
 	}

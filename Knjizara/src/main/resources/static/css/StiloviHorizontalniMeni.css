@@ -6,6 +6,8 @@ body{
 
 table.horizontalni-meni {
 	margin-top: 20px;
+		border: 2px solid black;
+	
 }
 
 table.horizontalni-meni caption {

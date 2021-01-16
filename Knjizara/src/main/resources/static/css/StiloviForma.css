@@ -2,46 +2,49 @@
 
 table.forma {
 	border-collapse: collapse;
-	margin: 10px;
+	margin: 20px;
+	border: 2px solid black;
+	
 }
 
 table.forma caption {
-	font-size: 16pt
+	font-size: 20pt
 }
 
 table.forma th, td {
-	border: 1px solid Gray;
 	padding: 5px;
 		  text-align: center;
 	  vertical-align: middle;
+	  border: 2px solid black;
 }
 
 table.forma th {
-	  vertical-align: middle;
+	 vertical-align: middle;
 	text-align: center;
-	width: 180px;
+	width: 220px;
 	color: white;
 	background-color: #044855;
+	border: 2px solid black;
 }
 
 table.forma td {
 		  text-align: center;
 	  vertical-align: middle;
 	background-color: White;
-	min-width: 280px;
+	min-width: 300px;
 }
 
 table.forma input, textarea, select {
-	width: 280px;
+	width: 200px;
 	box-sizing: border-box;
 }
 
 table.forma input[type="checkbox"] {
-	width: 20px;
+	width: 30px;
 }
 
 table.forma input[type="radio"] {
-	width: 20px;
+	width: 30px;
 }
 
 p.greska {
