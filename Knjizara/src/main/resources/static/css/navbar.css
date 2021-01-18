@@ -4,13 +4,10 @@
 	  padding: 0;
 	  overflow: hidden;
 	  background-color: #044855;
-	  margin-bottom: 20px;
-	  margin-bottom: 5px;
 	}
 	
 	.navbar li {
 	  float: left;
-	  margin-bottom: 5px;
 	  
 	}
 	
@@ -27,3 +24,9 @@
 	.navbar li a:hover {
 	  background-color: red;
 	}
+	
+	
+.sortable tr:hover{
+	background-color: #044855;
+	color: white;
+}

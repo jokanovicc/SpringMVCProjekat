@@ -3,10 +3,14 @@
 <head>
 	<meta charset="UTF-8">
 	<base th:href="@{/}">
-	<link rel="stylesheet" type="text/css" href="css/StiloviKorisnik.css"/>
-			    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-		<link rel="stylesheet" type="text/css" href="css/navbar.css"/>
-			 <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="css/StiloviTabela.css"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="css/navbar.css"/>
+	<script src="js/sorttable.js"></script>
+	 <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+	
+	<link rel="stylesheet" type="text/css" href="css/tabela.css">
+	<link rel="stylesheet" type="text/css" href="css/glavno.css">
 		
 	
 	<title>Prijava</title>	
@@ -16,47 +20,140 @@
 </head>
 <body>
 <ul class="navbar">
-		<li style="font-family: 'Pacifico', cursive;font-size: 31px;color: white; margin-left: 10px; " >Лексикограф</li>
+		<li style="font-family: 'Pacifico', cursive;font-size: 31px;color: white; margin-left: 10px; " ><a href="/Knjizara">Лексикограф</a></li>
 		<li th:if="${session.prijavljeniKorisnik == null}"><a href="prijava.html">prijava</a></li>
 		<li th:if="${session.prijavljeniKorisnik == null}" ><a href="registracija.html">Registracija</a></li>
 		<li><a href="Zanrovi">žanrovi</a></li>
-		<li><a href="Knjige">Knjige</a></li>
 		<li><a>Komentari</a></li>
 </ul>
 
-<div class="container">
-		<div class="jumbotron">
-		  <h1 class="display-4">Knjižara Leksikograf</h1>
-		  <hr class="my-4">
+		<div  style="background-color: white;">
 		<div th:unless="${session.prijavljeniKorisnik == null}">
 			<h3>Prijavljeni ste kao <a th:href="|Korisnici/Details?korisnickoIme=${session.prijavljeniKorisnik.korisnickoIme}|" th:text="${session.prijavljeniKorisnik.korisnickoIme}"></a>.
-	
-				<ul>
-					<li><a href="Korisnici/Logout">odjava</a></li>
-				</ul>
-		 
+
+					<ul>
+						<li><a href="Korisnici/Logout">odjava</a></li>
+					</ul>
 		</div>
-	
-		<div class="korisnik" th:if="${session.prijavljeniKorisnik == null}">
-			<h3>Niste prijavljeni<h3>
-				<ul>
-					<li><a href="registracija.html">Registracija</a></li>
-					<li style="margin-top: 10px;"><a href="Knjige" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Neregistrovan</a></li>
+		
+		<div th:if="${session.prijavljeniKorisnik == null}" style="padding: 20px;">
+		<h3 th:if="${session.prijavljeniKorisnik == null}">Niste prijavljeni</h3>
+		<h5 th:if="${session.prijavljeniKorisnik == null}" ><a href="registracija.html">Registruj se </a></h5>
+		<h5 th:if="${session.prijavljeniKorisnik == null}" ><a href="prijava.html">Prijavi se</a></h5>
+		</div>
+		
+<!-- 		<div class="col-lg-6" style="height: 250px;">
+		
+					<h3>Sortiranja</h3>
+			<table class="sortable" style="height: 250px">
+				<thead>
+				<tr>
+					<th>Naziv</th>
+					<th>Ocena</th>
+					<th>Jezik</th>
+					<th>CENA</th>
 					
-				</ul>
+				</tr>
+				</thead>
+				<tbody>
+				<tr th:each="itKnjiga, status: ${knjige}">
+					<td><a th:href="|Knjige/Details?id=${itKnjiga.id}|" th:text="${itKnjiga.naziv}"></a></td>
+					<td><span th:text="${itKnjiga.ocena}"></span></td>
+					<td><span th:text="${itKnjiga.jezik}"></span></td>	
+					<td class="broj" th:text="${itKnjiga.cena}"></td>
+				</tr>
+
+				</tbody>
+				</table>
+		
+		
+		</div> -->
+
+
+
+
+				<h1 style="text-align: center; font-family: 'Pacifico', cursive;">Sve knjige</h1>
+				<hr>
 				
-		<form method="post" action="Korisnici/Login">
-			<table class="forma">
-				<tr><th>korisničko ime:</th><td><input type="text" name="korisnickoIme"/></td></tr>
-				<tr><th>lozinka:</th><td><input type="password" name="lozinka"/></td></tr>
-				<tr><th></th><td><input type="submit" value="Prijava"/></td></tr>
+
+
+	<ul>
+			<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}"><a class="btn btn-primary" style="margin-bottom: 10px;" href="Create">Dodavanje Nove Knjige</a></li>
+	</ul>
+
+		<form method="get">
+			<table class="table table-striped">
+				<tr style="background-color: #044855; color: white;">
+					<th>PRETRAGE</th>
+					<th><input placeholder="Pretraga po Nazivu" type="search" name="naziv" th:value="${param.naziv}?: null"/></th>
+					<th><input placeholder="Pretraga po Autoru" type="search" name="autor" th:value="${param.autor}?: null"/></th>
+					<th><input placeholder="Pretraga po Jeziku" type="search" name="jezik" th:value="${param.jezik}?: null"/></th>
+					<th th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}"><input placeholder="ISBN" type="search" name="isbn" th:value="${param.isbn}?: null"/></th>
+					
+					<th>
+						<select name="zanrId">
+							<option value="">odaberi</option>
+							<option th:each="itZanr: ${zanrovi}" th:value="${itZanr.id}" th:text="${itZanr.naziv}" th:selected="${#strings.equals(itZanr.id, param.zanrId)}"></option>
+						</select>
+					</th>
+					<th>
+						od:<input type="number" min="0" th:value="${param.cenaOd}?: '200'" name="cenaOd"/><br/>
+						do:<input type="number" min="0" th:value="${param.cenaDo}?: '3000'" name="cenaDo"/>
+					</th>
+					<th><input type="submit" value="Pretraži"/></th>
+				</tr>
 			</table>
 		</form>
-		<p class="greska" th:text="${poruka}"></p>
-	</div>
-	</div>
-	</div>	
+		<div class="container">
+		
+			<table class="table sortable tabela1">
+					  <thead style="background-color: #044855; color: white;">
+					    <tr>
+							<th scope="col">r. br.</th>
+							<th scope="col">Omot</th>
+							<th scope="col">Naziv</th>
+							<th scope="col">Ocena</th>
+							<th scope="col">Jezik</th>
+							<th scope="col">CENA</th>
+
+					    </tr>
+					  </thead>
+					  <tbody>
+						<tr th:each="itKnjiga, status: ${knjige}">
+							<td class="broj" th:text="${status.index + 1}"></td>
+							<td><img style="width: 200px;height: 260px" th:src="${itKnjiga.slikaKnjige}"></td>
+							<td><a th:href="|Details?id=${itKnjiga.id}|" th:text="${itKnjiga.naziv}"></a></td>
+							<td><span th:text="${itKnjiga.ocena}"></span></td>
+							<td><span th:text="${itKnjiga.autor}"></span></td>	
+							<td class="broj" th:text="${itKnjiga.cena}"></td>
+						</tr>
+
+					  </tbody>
+					</table>
+		
+		
+		
+
+<!-- 				<div class="card" th:each="itKnjiga, status: ${knjige}" style="width: 18rem; display: inline-block; padding: 10px; margin-left: 45px">
+				  <img style="width: 200px;height: 300px; margin-left: 40px" th:src="${itKnjiga.slikaKnjige}">
+				  <div class="card-body">
+				    <h5 class="card-title"><a th:href="|Knjige/Details?id=${itKnjiga.id}|" th:text="${itKnjiga.naziv}"></a></h5>
+				    <p class="card-text"><span th:text="${itKnjiga.jezik}"></span></p>
+				    <p class="card-text"><span th:text="${itKnjiga.ocena}"></span></p>
+				    <h3 class="broj" th:text="${itKnjiga.cena}"></h3>
+				    
+				   	    
+				    <a style="margin-right: 30px" th:href="|Knjige/Details?id=${itKnjiga.id}|" class="btn btn-primary">Detalji</a>
+				    <a href="#" th:if="${session.prijavljeniKorisnik == null}" class="btn btn-primary">U korpu</a>
+				    
+				  </div>
+				</div>
 				
+
+				</div>	 -->
+				
+				</div>
+					</div>
 				
 
 </body>

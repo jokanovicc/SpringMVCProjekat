@@ -10,12 +10,19 @@
 
 </head>
 <body>
+<ul class="navbar">
+		<li style="font-family: 'Pacifico', cursive;font-size: 31px;color: white; margin-left: 10px; " ><a href="/Knjizara">Лексикограф</a></li>
+		<li th:if="${session.prijavljeniKorisnik == null}"><a href="prijava.html">prijava</a></li>
+		<li th:if="${session.prijavljeniKorisnik == null}" ><a href="registracija.html">Registracija</a></li>
+		<li><a href="Zanrovi">žanrovi</a></li>
+		<li><a>Komentari</a></li>
+</ul>
 <div class="container">
 	<div th:fragment="centralniDiv">
 		<form method="post" action="Korisnici/Register">
 			<table class="forma">
 				<caption>Registracija</caption>
-			<tr><th>korisni�ko ime:</th><td><input type="text" name="korisnickoIme"/></td></tr>
+			<tr><th>korisničko ime:</th><td><input type="text" name="korisnickoIme"/></td></tr>
 			<tr><th>lozinka:</th><td><input type="password" name="lozinka"/></td></tr>
 			<tr><th>ponovljena lozinka:</th><td><input type="password" name="ponovljenaLozinka"/></td></tr>
 			<tr><th>Ime:</th><td><input type="text" name="ime"/></td></tr>

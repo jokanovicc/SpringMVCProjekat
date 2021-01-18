@@ -59,7 +59,7 @@ public class KorisnikKontroler {
 			// prijava
 			session.setAttribute(KorisnikKontroler.KORISNIK_KEY, korisnik);
 			
-			response.sendRedirect(baseURL + "Knjige");
+			response.sendRedirect(baseURL);
 			return null;
 		} catch (Exception ex) {
 			// ispis greške

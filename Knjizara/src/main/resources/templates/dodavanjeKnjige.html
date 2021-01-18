@@ -13,7 +13,7 @@
 </head>
 <body>
 <ul class="navbar">
-		<li>Leksikograf</li>
+		<li style="font-family: 'Pacifico', cursive;font-size: 31px;color: white; margin-left: 10px; " ><a href="/Knjizara">Лексикограф</a></li>
 		<li th:if="${session.prijavljeniKorisnik == null}"><a href="prijava.html">prijava</a></li>
 		<li th:if="${session.prijavljeniKorisnik == null}" ><a href="registracija.html">Registracija</a></li>
 		<li><a href="Zanrovi">žanrovi</a></li>
@@ -24,7 +24,7 @@
 <div class="container">
 		<h1>Dodavanje Nove knjige</h1>
 		<hr>
-		<form style="margin-left: 280px; margin-top: 70px; width: 500px" method="post" action="Knjige/Create">
+		<form style="margin-left: 280px; margin-top: 70px; width: 500px" method="post" action="Create">
 			<table class="forma">
 				<caption>Dodavanje knjige</caption>
 				<tr><th>naziv:</th><td><input type="text" name="naziv"/></td></tr>

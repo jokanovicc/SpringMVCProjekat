@@ -27,7 +27,7 @@ import com.ftn.Knjizara.service.ZanrService;
 
 
 @Controller
-@RequestMapping(value="/Knjige")
+@RequestMapping(value="/")
 public class KnjigaKontroler implements ServletContextAware {
 
 	@Autowired
@@ -86,7 +86,7 @@ public class KnjigaKontroler implements ServletContextAware {
 		System.out.println(knjige);
 		
 		// prosleđivanje
-		ModelAndView rezultat = new ModelAndView("knjige");
+		ModelAndView rezultat = new ModelAndView("index");
 		rezultat.addObject("knjige", knjige);
 		rezultat.addObject("zanrovi", zanrovi);
 		
@@ -157,7 +157,7 @@ public class KnjigaKontroler implements ServletContextAware {
 		try {
 		Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute(KorisnikKontroler.KORISNIK_KEY);
 		if (prijavljeniKorisnik == null || !prijavljeniKorisnik.isAdministrator()) {
-			response.sendRedirect(baseURL + "Knjige");
+			response.sendRedirect(baseURL);
 
 		}
 		
@@ -206,7 +206,7 @@ public class KnjigaKontroler implements ServletContextAware {
 		knjiga.setZanrovi(zanrService.find(zanrIds));
 		knjiga2Service.save(knjiga);
 
-		response.sendRedirect(baseURL + "Knjige");
+		response.sendRedirect(baseURL);
 		return null;
 		}catch (Exception ex) {
 			// ispis greške
@@ -246,18 +246,18 @@ public class KnjigaKontroler implements ServletContextAware {
 		// autentikacija, autorizacija
 		Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute(KorisnikKontroler.KORISNIK_KEY);
 		if (prijavljeniKorisnik == null || !prijavljeniKorisnik.isAdministrator()) {
-			response.sendRedirect(baseURL + "Knjige");
+			response.sendRedirect(baseURL);
 			return;
 		}
 
 		// validacija
 		Knjiga knjiga = knjiga2Service.findOne(id);
 		if (knjiga == null) {
-			response.sendRedirect(baseURL + "Knjige");
+			response.sendRedirect(baseURL);
 			return;
 		}	
 		if (naziv == null || naziv.equals("") || autor.equals("") || isbn.equals("")|| izdavac.equals("") || jezik.equals("") || zanrIds==null || godinaIzdavanja == null || ocena == null || brojStrana == null ||  cena < 5) {
-			response.sendRedirect(baseURL + "Knjige/Details?id=" + id);
+			response.sendRedirect(baseURL + "Details?id=" + id);
 			return;
 		}
 
@@ -277,7 +277,7 @@ public class KnjigaKontroler implements ServletContextAware {
 		knjiga.setZanrovi(zanrService.find(zanrIds));
 		knjiga2Service.update(knjiga);
 
-		response.sendRedirect(baseURL + "Knjige/Details?id=" + id);	}
+		response.sendRedirect(baseURL + "Details?id=" + id);	}
 	
 	@PostMapping(value="/EditKolicina")
 	public void editKolicina(@RequestParam Long id, 
@@ -287,18 +287,18 @@ public class KnjigaKontroler implements ServletContextAware {
 		// autentikacija, autorizacija
 		Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute(KorisnikKontroler.KORISNIK_KEY);
 		if (prijavljeniKorisnik == null || !prijavljeniKorisnik.isAdministrator()) {
-			response.sendRedirect(baseURL + "Knjige");
+			response.sendRedirect(baseURL);
 			return;
 		}
 
 		// validacija
 		Knjiga knjiga = knjiga2Service.findOne(id);
 		if (knjiga == null) {
-			response.sendRedirect(baseURL + "Knjige");
+			response.sendRedirect(baseURL);
 			return;
 		}	
-		if (kolicina == null || kolicina < 0) {
-			response.sendRedirect(baseURL + "Knjige/Details?id=" + id);
+		if (kolicina == null || kolicina < knjiga.getKolicina() || kolicina > 500) {
+			response.sendRedirect(baseURL + "Details?id=" + id);
 			return;
 		}
 
@@ -306,7 +306,7 @@ public class KnjigaKontroler implements ServletContextAware {
 		knjiga.setKolicina(kolicina);
 		knjiga2Service.update(knjiga);
 
-		response.sendRedirect(baseURL + "Knjige/Details?id=" + id);
+		response.sendRedirect(baseURL + "Details?id=" + id);
 	}
 	
 	

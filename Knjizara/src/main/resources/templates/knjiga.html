@@ -44,11 +44,10 @@
 </head>
 <body>
 <ul class="navbar">
-		<li style="font-family: 'Pacifico', cursive;font-size: 31px;color: white; margin-left: 10px; " >Лексикограф</li>
+		<li style="font-family: 'Pacifico', cursive;font-size: 31px;color: white; margin-left: 10px; " ><a href="/Knjizara">Лексикограф</a></li>
 		<li th:if="${session.prijavljeniKorisnik == null}"><a href="prijava.html">prijava</a></li>
 		<li th:if="${session.prijavljeniKorisnik == null}" ><a href="registracija.html">Registracija</a></li>
 		<li><a href="Zanrovi">žanrovi</a></li>
-		<li><a href="Knjige">Knjige</a></li>
 		<li><a>Komentari</a></li>
 </ul>
 
@@ -56,8 +55,11 @@
 	
 	<div th:fragment="centralniDiv">
 		
-		<table style="margin-left: 25%; margin-top: 5%; width: 600px; font-size: 21px;" class="forma table">
-			<tr style="background-color: #044855;"><td style="background-color: #044855;" colspan="2"><img style="width: 360px;height: 420px; padding-left: 13%" th:src="${knjiga.slikaKnjige}"></td>
+		<table style="margin-left: 180px;
+    margin-top: 5%;
+    width: 800px;
+    font-size: 21px;" class="forma table">
+			<tr style="background-color: #044855;"><td style="background-color: #044855;" colspan="2"><img style="width: 420px;height: 470px; padding-left: 13%" th:src="${knjiga.slikaKnjige}"></td>
 			<tr><th>Naziv:</th><td th:text="${knjiga.naziv}"></td>
 			<tr><th>Autor:</th><td th:text="${knjiga.autor}"></td>
 			<tr><th>Izdavac:</th><td th:text="${knjiga.izdavackaKuca}"></td>
@@ -70,7 +72,7 @@
 			<tr><th>Jezik:</th><td th:text="${knjiga.jezik}"></td>
 			<tr><th>Ocena:</th><td th:text="${knjiga.ocena}"></td>
 			<tr th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}"><th>Kolicina:</th><td>
-						<form method="post" action="Knjige/EditKolicina" th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}">
+						<form method="post" action="EditKolicina" th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}">
 			<input type="hidden" name="id" th:value="${knjiga.id}"/>
 			<table class="forma">
 				<tr><th>Poruci:</th><td><input type="number" required th:value="${knjiga.kolicina}" name="kolicina"/></td></tr>
@@ -112,7 +114,7 @@
 	<button th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}" type="button" class="collapsible">Izmeni Knjigu</button>
 	
 	<div class= "content">
-			<form style="margin-left: 25%" method="post" action="Knjige/Edit" th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}">
+			<form style="margin-left: 25%" method="post" action="Edit" th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}">
 			<input type="hidden" name="id" th:value="${knjiga.id}"/>
 			<table class="forma">
 				<caption>Knjiga</caption>
