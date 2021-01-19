@@ -95,7 +95,7 @@
 			</tr>
 			<tr><th>cena:</th><td th:text="${knjiga.cena}"></td>
 			
-			<tr><th>Korpa:</th><td><button type="button" class="btn btn-primary btn-lg">U korpu</button>
+			<tr th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == false}"><th>Korpa:</th><td><button type="button" class="btn btn-primary btn-lg">U korpu</button>
 			<button type="button" class="btn btn-secondary btn-lg">Lista zelja</button></td>
 			
 		</table>

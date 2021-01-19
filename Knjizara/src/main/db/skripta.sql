@@ -131,10 +131,20 @@ insert into korisnici(korisnickoIme,lozinka,eMail,ime,prezime,datumRodjenja,adre
 insert into zanrovi(id,naziv,opis) values (1, 'roman', 'roman knjiga');
 insert into zanrovi(id,naziv,opis) values (2, 'krimi', 'krimi knjiga');
 insert into zanrovi(id,naziv,opis) values (3, 'istorijski', 'istorijska knjiga');
+insert into zanrovi(id,naziv,opis) values (4, 'triler', 'triler knjiga');
 
 insert into knjige(id,naziv,isbn,izdavac,autor,godinaIzdavanja,kratakOpis,cena,brojStrana,jezik,ocenaProsecna,pismo,tipPoveza,slika,kolicina) values (1, 'Na Drini ćuprija', '4534535', 'Laguna', 'Ivo Andrić', 2019, 'Visegrad u tursko doba', 950, 430, 'srpski', 1, 'latinica', 'meki', 'https://imgur.com/kTquRc0.png', 17);
 insert into knjige(id,naziv,isbn,izdavac,autor,godinaIzdavanja,kratakOpis,cena,brojStrana,jezik,ocenaProsecna,pismo,tipPoveza,slika,kolicina) values (2, 'Stranac', '111', 'skolska', 'Albert Kami', 2010, 'U strogo književnoumetničkom smislu roman Stranac najbolje je... ', 1750, 250, 'srpski', 4.35, 'cirilica', 'meki', 'https://img.wattpad.com/cover/181703545-352-k792002.jpg', 10);
+insert into knjige(id,naziv,isbn,izdavac,autor,godinaIzdavanja,kratakOpis,cena,brojStrana,jezik,ocenaProsecna,pismo,tipPoveza,slika,kolicina) values (3, 'Moby Dick', '4950498228552', 'Alma Books', 'Herman Melville', 2017, 'When the young Ishmael gets on board...', 470, 704, 'engleski', 1, 'latinica', 'tvrdi', 'https://imgur.com/LfrIt2t.png', 40);
+insert into knjige(id,naziv,isbn,izdavac,autor,godinaIzdavanja,kratakOpis,cena,brojStrana,jezik,ocenaProsecna,pismo,tipPoveza,slika,kolicina) values (4, 'Kad su cvetale Tikve', '3231123', 'laguna', 'Dragoslav Mihailovic', 2010, 'Radnja romana je smeštena u posleratnu Jugoslaviju. Ljuba...', 2000, 200, 'srpski', 4.6, 'cirilica', 'meki', 'https://www.delfi.rs/_img/artikli/2015/06/kad_su_cvetale_tikve_vv.jpg', 0);
+insert into knjige(id,naziv,isbn,izdavac,autor,godinaIzdavanja,kratakOpis,cena,brojStrana,jezik,ocenaProsecna,pismo,tipPoveza,slika,kolicina) values (5, 'A Young Doctor Notebook', '4534535', 'Alma Books', 'Mikhail Bulgakov', 2012, 'Using a sharply realistic and humorous style...', 580, 160, 'ruski', 1, 'cirilica', 'meki', 'https://imgur.com/PZBvTC4.png', 25);
+
 
 insert into knjigazanr(knjigaId, zanrId) values (1, 2);
 insert into knjigazanr(knjigaId, zanrId) values (2, 2);
+insert into knjigazanr(knjigaId, zanrId) values (2, 2);
 insert into knjigazanr(knjigaId, zanrId) values (2, 3);
+insert into knjigazanr(knjigaId, zanrId) values (3, 1);
+insert into knjigazanr(knjigaId, zanrId) values (4, 4);
+insert into knjigazanr(knjigaId, zanrId) values (5, 1);
+insert into knjigazanr(knjigaId, zanrId) values (5, 2);

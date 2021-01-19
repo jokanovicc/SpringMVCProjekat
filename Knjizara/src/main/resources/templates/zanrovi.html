@@ -19,24 +19,15 @@
 				<tr>
 					<th>r. br.</th>
 					<th>naziv</th>
-					<th></th>
-				</tr>
-				<tr>
-					<th></th>
-					<th><input type="search" name="naziv" th:value="${param.naziv?: null}"/></th>
-					<th><input type="submit" value="Pretraži"/></th>
+					<th>Opis</th>
 				</tr>
 				<tr th:each="itZanr, status: ${zanrovi}">
 					<td th:text="${status.index + 1}">1</td>
-					<td><a th:href="|Zanrovi/Details?id=${itZanr.id}|" th:text="${itZanr.naziv}">fantazija</a></td>
-					<td><a th:href="|Zanrovi/Details?id=${itZanr.id}|" th:text="${itZanr.opis}">fantazija</a></td>
+					<td th:text="${itZanr.naziv}"></td>
+					<td th:text="${itZanr.opis}"></td>
 				</tr>
 			</table>
 		</form>
-		<ul>
-			<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}"><a href="Zanrovi/Create">dodavanje žanra</a></li>
-		</ul>
-	</div>
 	</div>
 </body>
 </html>
