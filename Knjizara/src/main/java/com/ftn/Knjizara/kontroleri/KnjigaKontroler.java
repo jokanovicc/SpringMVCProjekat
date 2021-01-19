@@ -256,7 +256,7 @@ public class KnjigaKontroler implements ServletContextAware {
 			response.sendRedirect(baseURL);
 			return;
 		}	
-		if (naziv == null || naziv.equals("") || autor.equals("") || isbn.equals("")|| izdavac.equals("") || jezik.equals("") || zanrIds==null || godinaIzdavanja == null || ocena == null || brojStrana == null ||  cena < 5) {
+		if (naziv == null || naziv.equals("") || autor.equals("") || isbn.equals("")|| izdavac.equals("") || jezik.equals("") || zanrIds==null || godinaIzdavanja == null || ocena == null || godinaIzdavanja < 1950 || godinaIzdavanja > 2020 ||  brojStrana == null || brojStrana < 10 ||  cena < 5) {
 			response.sendRedirect(baseURL + "Details?id=" + id);
 			return;
 		}

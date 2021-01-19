@@ -142,7 +142,6 @@ insert into knjige(id,naziv,isbn,izdavac,autor,godinaIzdavanja,kratakOpis,cena,b
 
 insert into knjigazanr(knjigaId, zanrId) values (1, 2);
 insert into knjigazanr(knjigaId, zanrId) values (2, 2);
-insert into knjigazanr(knjigaId, zanrId) values (2, 2);
 insert into knjigazanr(knjigaId, zanrId) values (2, 3);
 insert into knjigazanr(knjigaId, zanrId) values (3, 1);
 insert into knjigazanr(knjigaId, zanrId) values (4, 4);

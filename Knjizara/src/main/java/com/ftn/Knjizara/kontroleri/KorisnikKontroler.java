@@ -2,7 +2,10 @@ package com.ftn.Knjizara.kontroleri;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
+import java.util.Calendar;
 import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
@@ -107,6 +110,9 @@ public class KorisnikKontroler {
 			if (eMail.equals("")) {
 				throw new Exception("E-mail ne sme biti prazan");
 			}
+			if (!eMail.contains("@")) {
+				throw new Exception("email mora imati bar @");
+			}
 			if (adresa.equals("")) {
 				throw new Exception("adresa ne sme biti prazna!");
 			}
@@ -127,9 +133,9 @@ public class KorisnikKontroler {
 				throw new Exception("popunite datum");
 			}
 			
-			@SuppressWarnings("deprecation")
-			Date datum = new Date(2002, 02, 30);
-			if (datumRodjenja.after(datum)) {
+			Date sqlDate2 = Date.valueOf(LocalDate.of(2003, Month.JULY, 12));
+			Date sqlDate3 = Date.valueOf(LocalDate.of(1920, Month.JULY, 12));
+			if (datumRodjenja.after(sqlDate2) || datumRodjenja.before(sqlDate3)) {
 				throw new Exception("Neispravan datum rodjenja!");
 			}
 
