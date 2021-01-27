@@ -83,11 +83,11 @@ public class DatabaseKorisnikService implements KorisnikService {
 	}
 
 	@Override
-	public List<Korisnik> find(String korisnickoIme, String eMail, String ime, String prezime, String pol,
+	public List<Korisnik> find(String korisnickoIme, String eMail, String ime, String prezime,
 			String adresa, String brojTelefona,Date datumRodjenja, Boolean administrator,
 			LocalDateTime datumRegistracije) {
 		// TODO Auto-generated method stub
-		return korisnikDAO.find(korisnickoIme, eMail, ime, prezime, pol, adresa, brojTelefona, datumRodjenja, administrator, datumRegistracije);
+		return korisnikDAO.find(korisnickoIme, eMail, ime, prezime, adresa, brojTelefona, datumRodjenja, administrator, datumRegistracije);
 	}
 
 }

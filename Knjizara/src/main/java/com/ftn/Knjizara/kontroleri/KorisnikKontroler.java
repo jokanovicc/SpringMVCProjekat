@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Calendar;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
@@ -43,6 +44,122 @@ public class KorisnikKontroler {
 	@PostConstruct
 	public void init() {	
 		baseURL = servletContext.getContextPath() + "/";			
+	}
+	
+	
+	
+	@GetMapping
+	public ModelAndView index(
+			@RequestParam(required=false) String korisnickoIme,
+			@RequestParam(required=false) String eMail,
+			@RequestParam(required=false) String lozinka,
+			@RequestParam(required=false) String ime,
+			@RequestParam(required=false) String prezime,
+			@RequestParam(required=false) String adresa,
+			@RequestParam(required=false) String brojTelefona,
+			@RequestParam(required=false) Date datumRodjenja,
+			@RequestParam(required=false) LocalDateTime datumRegistracije,
+			@RequestParam(required=false) boolean administrator,
+			@RequestParam(required=false) boolean blokiran,
+
+
+
+			HttpSession session, HttpServletResponse response) throws IOException {		
+		// autentikacija, autorzacija
+		Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute(KorisnikKontroler.KORISNIK_KEY);
+		if (prijavljeniKorisnik == null || !prijavljeniKorisnik.isAdministrator()) {
+			response.sendRedirect(baseURL);
+			return null;
+		}
+
+
+		// čitanje
+		List<Korisnik> korisnici = korisnikService.findAll();
+
+		// prosleđivanje
+		ModelAndView rezultat = new ModelAndView("korisnici");
+		rezultat.addObject("korisnici", korisnici);
+
+		return rezultat;
+	}
+
+	@GetMapping(value="/Details")
+	public ModelAndView details(@RequestParam String korisnickoIme, 
+			HttpSession session, HttpServletResponse response) throws IOException {
+		// autentikacija, autorizacija
+		Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute(KorisnikKontroler.KORISNIK_KEY);
+		// samo administrator može da vidi druge korisnike; svaki korisnik može da vidi sebe
+		if (prijavljeniKorisnik == null || (!prijavljeniKorisnik.isAdministrator() && !prijavljeniKorisnik.getKorisnickoIme().equals(korisnickoIme))) {
+			response.sendRedirect(baseURL + "Korisnici");
+			return null;
+		}
+
+		// validacija
+		Korisnik korisnik = korisnikService.findOne(korisnickoIme);
+		if (korisnik == null) {
+			response.sendRedirect(baseURL + "Korisnici");
+			return null;
+		}
+
+		// prosleđivanje
+		ModelAndView rezultat = new ModelAndView("korisnik");
+		rezultat.addObject("korisnik", korisnik);
+
+		return rezultat;
+	}
+	
+	
+	@GetMapping(value="/Create")
+	public String create(HttpSession session, HttpServletResponse response) throws IOException {
+		// autentikacija, autorizacija
+		Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute(KorisnikKontroler.KORISNIK_KEY);
+		// samo administrator može da kreira korisnike
+		if (prijavljeniKorisnik == null || !prijavljeniKorisnik.isAdministrator()) {
+			response.sendRedirect(baseURL);
+			return "korisnici";
+		}
+
+		return "dodavanjeKorisnika";
+	}
+	
+	
+	
+
+	@PostMapping(value="/Edit")
+	public void edit(@RequestParam(required=false) String korisnickoIme, @RequestParam(required=false) String administrator, @RequestParam(required=false) String blokiran,
+			HttpSession session, HttpServletResponse response) throws IOException {
+		// autentikacija, autorizacija
+		Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute(KorisnikKontroler.KORISNIK_KEY);
+		// samo administrator može da menja druge korisnike; svaki korisnik može da menja sebe
+		if (prijavljeniKorisnik == null || (!prijavljeniKorisnik.isAdministrator() && !prijavljeniKorisnik.getKorisnickoIme().equals(korisnickoIme))) {
+			response.sendRedirect(baseURL + "Korisnici");
+			return;
+		}
+
+		// validacija
+		Korisnik korisnik = korisnikService.findOne(korisnickoIme);
+		if (korisnik == null) {
+			response.sendRedirect(baseURL + "Korisnici");
+			return;
+		}
+
+		// privilegije može menjati samo administrator i to drugim korisnicima
+		if (prijavljeniKorisnik.isAdministrator() && !prijavljeniKorisnik.equals(korisnik)) {
+			korisnik.setAdministrator(administrator != null);
+			korisnik.setBlokiran(blokiran != null);
+		}
+		korisnikService.update(korisnik);
+
+		// sigurnost
+		if (!prijavljeniKorisnik.equals(korisnik)) {
+			// TODO odjaviti korisnika
+		}
+
+		if (prijavljeniKorisnik.isAdministrator()) {
+			response.sendRedirect(baseURL + "Korisnici");
+		} else {
+			response.sendRedirect(baseURL);
+		}
 	}
 	
 	@PostMapping(value="/Login")
@@ -141,7 +258,7 @@ public class KorisnikKontroler {
 
 
 			// registracija
-			Korisnik korisnik = new Korisnik(korisnickoIme, lozinka, eMail, ime, prezime, adresa, brojTelefona, datumRodjenja, LocalDateTime.now(), false);
+			Korisnik korisnik = new Korisnik(korisnickoIme, lozinka, eMail, ime, prezime, adresa, brojTelefona, datumRodjenja, LocalDateTime.now(), false,false);
 			korisnikService.save(korisnik);
 
 			response.sendRedirect(baseURL + "prijava.html");

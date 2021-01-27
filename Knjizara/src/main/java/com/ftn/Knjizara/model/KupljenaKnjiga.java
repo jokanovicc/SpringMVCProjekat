@@ -7,14 +7,16 @@ public class KupljenaKnjiga {
 	private Knjiga knjiga;
 	private int brojPrimeraka;
 	private double cena;
+	private Kupovina kupovina;
 	
 	
-	public KupljenaKnjiga(Long id, Knjiga knjiga, int brojPrimeraka, double cena) {
+	public KupljenaKnjiga(Long id, Knjiga knjiga, int brojPrimeraka, double cena,Kupovina kupovina) {
 		super();
 		this.id = id;
 		this.knjiga = knjiga;
 		this.brojPrimeraka = brojPrimeraka;
 		this.cena = cena;
+		this.kupovina = kupovina;
 	}
 
 	@Override
@@ -24,7 +26,17 @@ public class KupljenaKnjiga {
 		result = prime*result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
+	
+	
 
+
+	public Kupovina getKupovina() {
+		return kupovina;
+	}
+
+	public void setKupovina(Kupovina kupovina) {
+		this.kupovina = kupovina;
+	}
 
 	@Override
 	public boolean equals(Object obj) {

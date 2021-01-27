@@ -47,6 +47,8 @@
 		<li style="font-family: 'Pacifico', cursive;font-size: 31px;color: white; margin-left: 10px; " ><a href="/Knjizara">Лексикограф</a></li>
 		<li th:if="${session.prijavljeniKorisnik == null}"><a href="prijava.html">prijava</a></li>
 		<li th:if="${session.prijavljeniKorisnik == null}" ><a href="registracija.html">Registracija</a></li>
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}"><a href="Korisnici">korisnici</a></li>		
+		
 		<li><a href="Zanrovi">žanrovi</a></li>
 		<li><a>Komentari</a></li>
 </ul>
@@ -71,20 +73,7 @@
 			<tr><th>Pismo:</th><td th:text="${knjiga.pismo}"></td>
 			<tr><th>Jezik:</th><td th:text="${knjiga.jezik}"></td>
 			<tr><th>Ocena:</th><td th:text="${knjiga.ocena}"></td>
-			<tr th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}"><th>Kolicina:</th><td>
-						<form method="post" action="EditKolicina" th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}">
-			<input type="hidden" name="id" th:value="${knjiga.id}"/>
-			<table class="forma">
-				<tr><th>Poruci:</th><td><input type="number" required th:value="${knjiga.kolicina}" name="kolicina"/></td></tr>
-				<tr><th></th><td><input type="submit" value="Poruci Kolicinu"/></td></tr>
-			</table>
-		</form>
-			
-			
-			
-			
-			</td>
-			
+			<tr th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}"><th>Br pr:</th><td th:text="${knjiga.kolicina}"></td>	
 			<tr>
 				<th>žanr:</th>
 				<td>
@@ -98,6 +87,22 @@
 			<tr th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == false}"><th>Korpa:</th><td><button type="button" class="btn btn-primary btn-lg">U korpu</button>
 			<button type="button" class="btn btn-secondary btn-lg">Lista zelja</button></td>
 			
+		</table>
+		<table style="margin-left: 200px">
+					<tr th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}"><th>Kolicina:</th><td>
+						<form method="post" action="EditKolicina" th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}">
+			<input type="hidden" name="id" th:value="${knjiga.id}"/>
+			<table class="forma">
+				<tr><th>Poruci:</th><td><input type="number" required name="kolicina"/></td></tr>
+				<tr><th></th><td><input type="submit" value="Poruci Kolicinu"/></td></tr>
+			</table>
+		</form>
+			
+			
+			
+			
+			</td>
+		
 		</table>
 		<hr>
 		

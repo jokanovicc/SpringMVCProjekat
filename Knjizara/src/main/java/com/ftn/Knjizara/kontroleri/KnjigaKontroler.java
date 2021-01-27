@@ -297,13 +297,15 @@ public class KnjigaKontroler implements ServletContextAware {
 			response.sendRedirect(baseURL);
 			return;
 		}	
-		if (kolicina == null || kolicina < knjiga.getKolicina() || kolicina > 500) {
+		if (kolicina == null ||  kolicina > 500) {
 			response.sendRedirect(baseURL + "Details?id=" + id);
 			return;
 		}
+		System.out.println(knjiga.getKolicina()+ " " +kolicina);
+		Integer kolicina1 = knjiga.getKolicina() + kolicina;
 
 		// izmena
-		knjiga.setKolicina(kolicina);
+		knjiga.setKolicina(kolicina1);
 		knjiga2Service.update(knjiga);
 
 		response.sendRedirect(baseURL + "Details?id=" + id);

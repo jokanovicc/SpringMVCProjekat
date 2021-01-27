@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<base th:href="@{/}">
+	<link rel="stylesheet" type="text/css" href="css/StiloviForma.css"/>
+	<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="css/tabela.css">
+	<link rel="stylesheet" type="text/css" href="css/glavno.css">
+	<link rel="stylesheet" type="text/css" href="css/StiloviTabela.css"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="css/navbar.css"/>
+	<title>Korisnik</title>
+</head>
+<body>
+<ul class="navbar">
+		<li style="font-family: 'Pacifico', cursive;font-size: 31px;color: white; margin-left: 10px; " ><a href="/Knjizara">Лексикограф</a></li>
+		<li th:if="${session.prijavljeniKorisnik == null}"><a href="prijava.html">prijava</a></li>
+		<li th:if="${session.prijavljeniKorisnik == null}" ><a href="registracija.html">Registracija</a></li>
+		<li><a href="Zanrovi">žanrovi</a></li>
+		<li><a href="Korisnici">korisnici</a></li>
+		<li th:if="${session.prijavljeniKorisnik != null}" ><a href="Korisnici/Details">Informacije</a></li>
+		
+		
+		<li><a>Komentari</a></li>
+</ul>
+
+		<div style="background-color: white;">
+		<div th:unless="${session.prijavljeniKorisnik == null}">
+			<h3>Prijavljeni ste kao <a th:href="|Korisnici/Details?korisnickoIme=${session.prijavljeniKorisnik.korisnickoIme}|" th:text="${session.prijavljeniKorisnik.korisnickoIme}"></a>.
+
+					<ul>
+						<li><a href="Korisnici/Logout">odjava</a></li>
+					</ul>
+		</div>
+
+
+	
+
+
+	<div th:fragment="centralniDiv">
+		<form method="post" action="Korisnici/Edit">
+			<input type="hidden" name="korisnickoIme" th:value="${korisnik.korisnickoIme}"/>
+			<table class="forma">
+				<caption>Korisnik</caption>
+				<tr><th>korisničko ime:</th><td readonly th:text="${korisnik.korisnickoIme}"></td></tr>
+				<tr><th>e-mail:</th><td><input type="text" readonly name="eMail" th:value="${korisnik.eMail}"/></td></tr>
+				<tr><th>Ime:</th><td><input type="text" readonly name="ime" th:value="${korisnik.ime}"/></td></tr>
+				<tr><th>Prezime:</th><td><input type="text" readonly name="prezime" th:value="${korisnik.prezime}"/></td></tr>
+				<tr><th>Adresa:</th><td><input type="text" readonly name="adresa" th:value="${korisnik.adresa}"/></td></tr>
+				<tr><th>Broj telefona:</th><td><input type="text" readonly name="brojTelefona" th:value="${korisnik.brojTelefona}"/></td></tr>
+				<tr><th>Datum rodjenja:</th><td><input type="text" readonly name="datumRodjenja" th:value="${korisnik.datumRodjenja}"/></td></tr>
+				<tr><th>Datum registracije:</th><td><input type="text" readonly name="eMail" th:value="${korisnik.datumRegistracije}"/></td></tr>
+				
+				
+				<tr th:if="${session.prijavljeniKorisnik.administrator and session.prijavljeniKorisnik != korisnik and korisnik.blokiran != true}"><th>administrator:</th><td><input type="checkbox" name="administrator" th:checked="${korisnik.administrator}"/></td></tr>
+				<tr th:if="${session.prijavljeniKorisnik.administrator and session.prijavljeniKorisnik != korisnik and korisnik.administrator == false}"><th>blokiran:</th><td th:if="${korisnik.administrator == false}"><input type="checkbox" name="blokiran" th:checked="${korisnik.blokiran}"/></td></tr>
+				
+				<tr><th></th><td><input type="submit" value="Izmeni"/></td></tr>
+			</table>
+		</form>
+	</div>
+	</div>
+</body>
+</html>

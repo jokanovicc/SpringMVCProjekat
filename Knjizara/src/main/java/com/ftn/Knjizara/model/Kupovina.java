@@ -7,7 +7,7 @@ import java.util.List;
 public class Kupovina {
 	
 	private Long id;
-	private int ocena;
+	private Double ukupnaCena;
 	private LocalDateTime datumKupovine;
 	private Korisnik korisnik;
 	private int brojKnjiga;
@@ -19,11 +19,14 @@ public class Kupovina {
 	
 	
 	
-	
-	public Kupovina(Long id, int ocena, LocalDateTime datumKupovine, Korisnik korisnik, int brojKnjiga) {
+
+
+
+
+	public Kupovina(Long id, Double ukupnaCena, LocalDateTime datumKupovine, Korisnik korisnik, int brojKnjiga) {
 		super();
 		this.id = id;
-		this.ocena = ocena;
+		this.ukupnaCena = ukupnaCena;
 		this.datumKupovine = datumKupovine;
 		this.korisnik = korisnik;
 		this.brojKnjiga = brojKnjiga;
@@ -34,11 +37,45 @@ public class Kupovina {
 
 
 
-	public Kupovina(Long id, int ocena, LocalDateTime datumKupovine, Korisnik korisnik, int brojKnjiga,
+	public Kupovina(Long id, Double ukupnaCena, LocalDateTime datumKupovine, Korisnik korisnik, int brojKnjiga,
 			List<KupljenaKnjiga> kupljeneKnjige) {
 		super();
 		this.id = id;
-		this.ocena = ocena;
+		this.ukupnaCena = ukupnaCena;
+		this.datumKupovine = datumKupovine;
+		this.korisnik = korisnik;
+		this.brojKnjiga = brojKnjiga;
+		this.kupljeneKnjige = kupljeneKnjige;
+	}
+
+
+
+
+
+
+	public Double getUkupnaCena() {
+		return ukupnaCena;
+	}
+
+
+
+
+
+
+	public void setUkupnaCena(Double ukupnaCena) {
+		this.ukupnaCena = ukupnaCena;
+	}
+
+
+
+
+
+
+	public Kupovina(Long id, LocalDateTime datumKupovine, Korisnik korisnik, int brojKnjiga,
+			List<KupljenaKnjiga> kupljeneKnjige) {
+		super();
+		this.id = id;
+
 		this.datumKupovine = datumKupovine;
 		this.korisnik = korisnik;
 		this.brojKnjiga = brojKnjiga;
@@ -67,19 +104,6 @@ public class Kupovina {
 
 
 
-
-	public int getOcena() {
-		return ocena;
-	}
-
-
-
-
-
-
-	public void setOcena(int ocena) {
-		this.ocena = ocena;
-	}
 
 
 

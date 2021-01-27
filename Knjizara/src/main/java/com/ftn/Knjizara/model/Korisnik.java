@@ -11,11 +11,12 @@ public class Korisnik {
 	private LocalDateTime datumRegistracije;
 	
 	private boolean administrator = false;
+	private boolean blokiran = false;
 	
 	
 
 	public Korisnik(String korisnickoIme, String lozinka, String eMail, String ime, String prezime, String adresa,
-			String brojTelefona, Date datumRodjenja, LocalDateTime datumRegistracije, boolean administrator) {
+			String brojTelefona, Date datumRodjenja, LocalDateTime datumRegistracije, boolean administrator, boolean blokiran) {
 		super();
 		this.korisnickoIme = korisnickoIme;
 		this.lozinka = lozinka;
@@ -27,6 +28,7 @@ public class Korisnik {
 		this.datumRodjenja = datumRodjenja;
 		this.datumRegistracije = datumRegistracije;
 		this.administrator = administrator;
+		this.blokiran = blokiran;
 	}
 
 	@Override
@@ -64,7 +66,17 @@ public class Korisnik {
 		this.korisnickoIme = korisnickoIme;
 	}
 
+	
+	
 
+
+	public boolean isBlokiran() {
+		return blokiran;
+	}
+
+	public void setBlokiran(boolean blokiran) {
+		this.blokiran = blokiran;
+	}
 
 	public String getLozinka() {
 		return lozinka;

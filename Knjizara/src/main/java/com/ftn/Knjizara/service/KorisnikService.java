@@ -19,7 +19,7 @@ public interface KorisnikService {
 	List<Korisnik> update(List<Korisnik> korisnici);
 	Korisnik delete(String korisnickoIme);
 	void delete(List<String> korisnickaImena);
-	List<Korisnik> find(String korisnickoIme, String eMail,String ime,String prezime, String pol, String adresa, String brojTelefona,Date datumRodjenja,Boolean administrator,LocalDateTime datumRegistracije);
+	List<Korisnik> find(String korisnickoIme, String eMail,String ime,String prezime,String adresa, String brojTelefona,Date datumRodjenja,Boolean administrator,LocalDateTime datumRegistracije);
 	List<Korisnik> findByKorisnickoIme(String korisnickoIme);
 
 }

@@ -15,7 +15,7 @@ public interface KorisnikDAO {
 
 	public List<Korisnik> findAll();
 
-	public List<Korisnik> find(String korisnickoIme, String eMail,String ime,String prezime, String pol, String adresa, String brojTelefona,Date datumRodjenja,Boolean administrator,LocalDateTime datumRegistracije);
+	public List<Korisnik> find(String korisnickoIme, String eMail,String ime,String prezime,String adresa, String brojTelefona,Date datumRodjenja,Boolean administrator,LocalDateTime datumRegistracije);
 	
 	public void save(Korisnik korisnik);
 

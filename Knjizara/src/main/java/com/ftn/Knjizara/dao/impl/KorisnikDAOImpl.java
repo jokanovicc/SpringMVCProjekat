@@ -37,8 +37,10 @@ public class KorisnikDAOImpl implements KorisnikDAO {
 			String adresa = rs.getString(index++);
 			String brTel = rs.getString(index++);
 			Boolean administrator = rs.getBoolean(index++);
+			Boolean blokiran = rs.getBoolean(index++);
 
-			Korisnik korisnik = new Korisnik(korisnickoIme, null, eMail, ime, prezime, adresa, brTel, datumRodj, regDatumIVreme, administrator);
+
+			Korisnik korisnik = new Korisnik(korisnickoIme, null, eMail, ime, prezime, adresa, brTel, datumRodj, regDatumIVreme, administrator,blokiran);
 			return korisnik;
 		}
 
@@ -52,7 +54,7 @@ public class KorisnikDAOImpl implements KorisnikDAO {
 	@Override
 	public Korisnik findOne(String korisnickoIme) {
 		try {
-			String sql = "SELECT korisnickoIme,eMail,ime,prezime,datumRodjenja,vremeRegistracije,adresa,brojTelefona,administrator FROM korisnici WHERE korisnickoIme = ?";
+			String sql = "SELECT korisnickoIme,eMail,ime,prezime,datumRodjenja,vremeRegistracije,adresa,brojTelefona,administrator,blokiran FROM korisnici WHERE korisnickoIme = ?";
 			return jdbcTemplate.queryForObject(sql, new KorisnikRowMapper(), korisnickoIme);
 		} catch (EmptyResultDataAccessException ex) {
 			// ako korisnik nije pronađen
@@ -63,7 +65,7 @@ public class KorisnikDAOImpl implements KorisnikDAO {
 	@Override
 	public Korisnik findOne(String korisnickoIme, String lozinka) {
 		try {
-			String sql = "SELECT korisnickoIme,eMail,ime,prezime,datumRodjenja,vremeRegistracije,adresa,brojTelefona,administrator FROM korisnici WHERE korisnickoIme = ? AND lozinka = ?";
+			String sql = "SELECT korisnickoIme,eMail,ime,prezime,datumRodjenja,vremeRegistracije,adresa,brojTelefona,administrator,blokiran FROM korisnici WHERE korisnickoIme = ? AND lozinka = ? and blokiran = 0";
 			return jdbcTemplate.queryForObject(sql, new KorisnikRowMapper(), korisnickoIme, lozinka);
 		} catch (EmptyResultDataAccessException ex) {
 			// ako korisnik nije pronađen
@@ -73,7 +75,7 @@ public class KorisnikDAOImpl implements KorisnikDAO {
 
 	@Override
 	public List<Korisnik> findAll() {
-		String sql = "SELECT korisnickoIme,eMail,ime,prezime,datumRodjenja,vremeRegistracija,adresa,brojTelefona,administrator FROM korisnici";
+		String sql = "SELECT korisnickoIme,eMail,ime,prezime,datumRodjenja,vremeRegistracije,adresa,brojTelefona,administrator,blokiran FROM korisnici";
 		return jdbcTemplate.query(sql, new KorisnikRowMapper());
 	}
 
@@ -81,15 +83,20 @@ public class KorisnikDAOImpl implements KorisnikDAO {
 
 	@Override
 	public void save(Korisnik korisnik) {
-		String sql = "INSERT INTO korisnici (korisnickoIme, lozinka, eMail, ime,prezime,DatumRodjenja,adresa,brojTelefona,vremeRegistracije, administrator) VALUES (?, ?, ?, ?, ?,?, ?, ?, ?, ?)";
-		jdbcTemplate.update(sql, korisnik.getKorisnickoIme(), korisnik.getLozinka(), korisnik.geteMail(), korisnik.getIme(),korisnik.getPrezime(),korisnik.getDatumRodjenja(),korisnik.getAdresa(),korisnik.getBrojTelefona(),korisnik.getDatumRegistracije(),korisnik.isAdministrator());
+		String sql = "INSERT INTO korisnici (korisnickoIme, lozinka, eMail, ime,prezime,DatumRodjenja,adresa,brojTelefona,vremeRegistracije, administrator,blokiran) VALUES (?, ?, ?, ?, ?,?, ?, ?, ?, ?,?)";
+		jdbcTemplate.update(sql, korisnik.getKorisnickoIme(), korisnik.getLozinka(), korisnik.geteMail(), korisnik.getIme(),korisnik.getPrezime(),korisnik.getDatumRodjenja(),korisnik.getAdresa(),korisnik.getBrojTelefona(),korisnik.getDatumRegistracije(),korisnik.isAdministrator(),korisnik.isBlokiran());
 		
 	}
 
 	@Override
 	public void update(Korisnik korisnik) {
-		// TODO Auto-generated method stub
-		
+		if (korisnik.getLozinka() == null) {
+			String sql = "UPDATE korisnici SET  administrator = ?, blokiran = ? WHERE korisnickoIme = ?";
+			jdbcTemplate.update(sql, korisnik.isAdministrator(),korisnik.isBlokiran(), korisnik.getKorisnickoIme());
+		} else {
+			String sql = "UPDATE korisnici SET administrator = ?, blokiran = ? WHERE korisnickoIme = ?";
+			jdbcTemplate.update(sql, korisnik.isAdministrator(),korisnik.isBlokiran(), korisnik.getKorisnickoIme());
+		}
 	}
 
 	@Override
@@ -100,7 +107,7 @@ public class KorisnikDAOImpl implements KorisnikDAO {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public List<Korisnik> find(String korisnickoIme, String eMail, String ime, String prezime, String pol,
+	public List<Korisnik> find(String korisnickoIme, String eMail, String ime, String prezime,
 			String adresa, String brojTelefona, Date datumRodjenja, Boolean administrator,
 			LocalDateTime datumRegistracije) {
 		// TODO Auto-generated method stub
