@@ -7,10 +7,10 @@ public class KupljenaKnjiga {
 	private Knjiga knjiga;
 	private int brojPrimeraka;
 	private double cena;
-	private Kupovina kupovina;
+	private Long kupovina;
 	
 	
-	public KupljenaKnjiga(Long id, Knjiga knjiga, int brojPrimeraka, double cena,Kupovina kupovina) {
+	public KupljenaKnjiga(Long id, Knjiga knjiga, int brojPrimeraka, double cena,Long kupovina) {
 		super();
 		this.id = id;
 		this.knjiga = knjiga;
@@ -30,11 +30,11 @@ public class KupljenaKnjiga {
 	
 
 
-	public Kupovina getKupovina() {
+	public Long getKupovina() {
 		return kupovina;
 	}
 
-	public void setKupovina(Kupovina kupovina) {
+	public void setKupovina(Long kupovina) {
 		this.kupovina = kupovina;
 	}
 

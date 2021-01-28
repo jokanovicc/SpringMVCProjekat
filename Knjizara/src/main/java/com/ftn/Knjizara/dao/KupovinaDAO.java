@@ -9,6 +9,7 @@ import com.ftn.Knjizara.model.Kupovina;
 public interface KupovinaDAO {
     public Kupovina findOne(Long id);
     public List<Kupovina> findAll();
+    public List<Kupovina> findAllzaKorisnika(String korisnicko);
     public int save(Kupovina kupovina);
     public int update(Kupovina kupovina);
     public int delete(Long id);

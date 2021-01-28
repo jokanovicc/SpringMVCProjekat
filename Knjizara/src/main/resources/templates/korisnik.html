@@ -59,7 +59,59 @@
 				<tr><th></th><td><input type="submit" value="Izmeni"/></td></tr>
 			</table>
 		</form>
+<!-- 					<table class="tabela">
+				<caption>Kupovine</caption>
+				<tr>
+					<th>r. br.</th>
+					<th>ukupnaCena</th>
+					<th>datum</th>
+					<th>broj knjiga</th>
+					<th>korisnicko ime</th>
+				</tr>
+			<tr th:each="itKupovina, status: ${kupovine}">
+					<td th:text="${status.index + 1}">1</td>
+					<td th:text="${itKupovina.ukupnaCena}"></td>
+					<td th:text="${itKupovina.datumKupovine}"></td>
+					<td th:text="${itKupovina.brojKnjiga}"></td>
+					<td th:text="${itKupovina.korisnik.korisnickoIme}"></td>
+				<td><table><tr th:each="itKupljenaKnjiga, status: ${kupljeneKnjige}">
+					<td th:text="${itKupljenaKnjiga.brojPrimeraka}"></td>
+					<td th:text="${itKupljenaKnjiga.knjiga.naziv}"></td>
+					</tr></table>
+				</td>
+			</tr>
+			</table> -->
+			
+			<hr>
+			<h3>Kupovine</h3>
+			<table class="table" style="width: 400px;">
+				<caption>Kupovine</caption>
+			<thead style="background-color: #044855; color: white;">
+				<tr>
+					<th>r. br.</th>
+					<th>ukupnaCena</th>
+					<th>datum</th>
+				</tr>
+			</thead>
+			 <tbody>
+			<tr th:each="itKupovina, status: ${kupovine}">
+					<td th:text="${status.index + 1}"></td>
+					<td th:text="${itKupovina.ukupnaCena}"></td>
+					<td><a th:href="|Korisnici/DetailsKupovine?id=${itKupovina.id}|" th:text="${itKupovina.datumKupovine}"></a></td>
+			</tr>
+			</tbody>
+			</table> 
+			
+			
+			
+			
+			
+			
+			
+			
+			
 	</div>
+	
 	</div>
 </body>
 </html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<base th:href="@{/}">
+	<link rel="stylesheet" type="text/css" href="css/StiloviTabela.css"/>
+	    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<link rel="stylesheet" type="text/css" href="css/glavno.css">
+	
+	<title>Žanrovi</title>
+</head>
+<body>
+<div class="container">
+<h1>Korpica</h1>
+<hr>
+			<form method="get">
+			<table class="tabela">
+				<tr>
+					<th>r. br.</th>
+					<th>Naziv</th>
+					<th>Broj Primeraka</th>
+					<th>Jedinicna Cena</th>
+				</tr>
+				<tr th:each="itKupljenaKnjiga, status: ${kupljeneKnjige}">
+					<td th:text="${status.index + 1}">1</td>
+					<td th:text="${itKupljenaKnjiga.knjiga.naziv}"></td>
+					<td th:text="${itKupljenaKnjiga.brojPrimeraka}"></td>
+					<td th:text="${itKupljenaKnjiga.cena}"></td>
+					<td><a th:href="|Korpa/Brisanje?kupljenaKnjigaID=${itKupljenaKnjiga.id}|">Brisanje</a></td>
+					
+			</tr>
+			<tr></tr>
+			<tr>
+				<th>Sumarum</th>
+				<th>Ukupna Cena</th><td  th:text="${kupovina.ukupnaCena}"></td>
+				<th>Broj knjiga</th><td th:text="${kupovina.brojKnjiga}"></td>
+			
+					
+			</tr>
+			<tr>
+				<td th:if="${kupovina.brojKnjiga > 0}"><a class="btn btn-primary btn-lg"  th:href="|Korpa/Dodavanje?kupovina1=${kupovina.brojKnjiga}|">Zavrsi Kupovinu</a></td>
+			
+			</tr>
+			</table>			
+			
+		
+		</form>
+	</div>
+</body>
+</html>

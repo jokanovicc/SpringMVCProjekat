@@ -82,10 +82,19 @@
 					</ul>
 				</td>
 			</tr>
+			<tr>
 			<tr><th>cena:</th><td th:text="${knjiga.cena}"></td>
-			
-			<tr th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == false}"><th>Korpa:</th><td><button type="button" class="btn btn-primary btn-lg">U korpu</button>
-			<button type="button" class="btn btn-secondary btn-lg">Lista zelja</button></td>
+			<tr>
+				<td></td>
+				<tr><th>Kupi:</th><td  th:if="${session.prijavljeniKorisnik != null}">
+					<form method="post" action="Korpa" name="formaKorpa">
+						<input type="number" min="0" required name="brojKnjiga"/>&nbsp;
+						<input type="hidden" name="knjigaId" th:value="${knjiga.id}" />
+						<input type="hidden" name="korisnickoIme" th:value="${session.prijavljeniKorisnik.korisnickoIme}"/>
+						<input type="submit" value="Kupi Knjigu"/>
+					</form>
+				</td>
+			</tr>		
 			
 		</table>
 		<table style="margin-left: 200px">

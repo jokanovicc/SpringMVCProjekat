@@ -75,39 +75,31 @@ create table KupljenaKnjiga(
 
 	id BIGINT AUTO_INCREMENT,
 	knjigaID bigint not null,
+	kupovinaId bigint not null,
     brojPrimeraka int not null,
     cena double not null,
         FOREIGN KEY(knjigaID) REFERENCES knjige(id)
+		ON DELETE CASCADE,
+        FOREIGN KEY(kupovinaId) REFERENCES kupovina(id)
 		ON DELETE CASCADE,
 	primary key(id)
 
 );
 
 create table kupovina(
-	id BIGINT AUTO_INCREMENT,
+	id bigint,
     ukupnaCena double not null,
-    datumKupovina dateTime not null,
-    korisnik varchar(50) not null,
+    datumKupovine datetime,
+    korisnik varchar(20),
     ukupanBrojKnjiga int,
 	FOREIGN KEY(korisnik) REFERENCES korisnici(korisnickoIme)
 	ON DELETE CASCADE,
     PRIMARY KEY(id)
 
-);
 
-create table kupovinaKupljena(
-	kupljenaID BIGINT,
-    kupovinaId BIGINT,
-    PRIMARY KEY(kupljenaID, kupovinaId),
-    FOREIGN KEY(kupljenaID) REFERENCES kupljenaknjiga(id)
-		ON DELETE CASCADE,
-    FOREIGN KEY(kupovinaId) REFERENCES kupovina(id)
-		ON DELETE CASCADE
+)
 
 
-
-
-);
 
 create table Komentar(
 	id BIGINT AUTO_INCREMENT,

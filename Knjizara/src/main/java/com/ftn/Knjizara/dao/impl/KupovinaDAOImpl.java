@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 
 import com.ftn.Knjizara.dao.KorisnikDAO;
 import com.ftn.Knjizara.dao.KupljenaKnjigaDAO;
@@ -17,6 +18,7 @@ import com.ftn.Knjizara.model.KupljenaKnjiga;
 import com.ftn.Knjizara.model.Kupovina;
 
 
+@Repository
 public class KupovinaDAOImpl implements KupovinaDAO {
 	
 	@Autowired
@@ -27,6 +29,8 @@ public class KupovinaDAOImpl implements KupovinaDAO {
 	
 	@Autowired
 	private KupljenaKnjigaDAO kupljenaKnjigaDAO;
+	
+
 	
 	private class KupovinaRowMapper implements RowMapper<Kupovina> {
 
@@ -43,7 +47,7 @@ public class KupovinaDAOImpl implements KupovinaDAO {
 			Integer ukupanBrojKnjiga = rs.getInt(index++);
 
 			
-			Kupovina kupovine = new Kupovina(kupovinaId, ukupnaCena, DatumIVreme, korisnik, ukupanBrojKnjiga, kupljeneKnjige);
+			Kupovina kupovine = new Kupovina(kupovinaId, ukupnaCena, DatumIVreme, korisnik, ukupanBrojKnjiga);
 			return kupovine;
 		}
 
@@ -75,11 +79,23 @@ public class KupovinaDAOImpl implements KupovinaDAO {
 				+"ORDER BY k.id";
 		return jdbcTemplate.query(sql, new KupovinaRowMapper());
 	}
+	
+	
+	@Override
+	public List<Kupovina> findAllzaKorisnika(String korisnicko) {
+		String sql = 
+				"SELECT k.id,k.ukupnaCena,k.datumKupovine,u.korisnickoIme,k.ukupanBrojKnjiga FROM kupovina k "
+				+"LEFT JOIN korisnici u on u.korisnickoIme = k.korisnik where k.korisnik = ? " 
+				+"ORDER BY k.datumKupovine ASC";
+		return jdbcTemplate.query(sql, new KupovinaRowMapper(),korisnicko);
+	}
+	
+	
 
 	@Override
 	public int save(Kupovina kupovina) {
-		String sql = "INSERT INTO kupovina (ukupnaCena,datumKupovine,korisnik,ukupanBrojKnjiga) VALUES (?, ?,?, ?)";
-		return jdbcTemplate.update(sql, kupovina.getUkupnaCena(),kupovina.getDatumKupovine(),kupovina.getKorisnik().getKorisnickoIme(),kupovina.getBrojKnjiga());
+		String sql = "INSERT INTO kupovina (id,ukupnaCena,datumKupovine,korisnik,ukupanBrojKnjiga) VALUES (?,?, ?,?, ?)";
+		return jdbcTemplate.update(sql,kupovina.getId(), kupovina.getUkupnaCena(),kupovina.getDatumKupovine(),kupovina.getKorisnik().getKorisnickoIme(),kupovina.getBrojKnjiga());
 	}
 
 	@Override

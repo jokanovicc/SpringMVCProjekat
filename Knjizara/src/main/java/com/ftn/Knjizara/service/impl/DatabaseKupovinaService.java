@@ -3,10 +3,15 @@ package com.ftn.Knjizara.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.ftn.Knjizara.dao.KupovinaDAO;
 import com.ftn.Knjizara.model.Kupovina;
 import com.ftn.Knjizara.service.KupovinaService;
+
+
+
+@Service
 
 public class DatabaseKupovinaService implements KupovinaService {
 	
@@ -40,6 +45,11 @@ public class DatabaseKupovinaService implements KupovinaService {
 	public Kupovina delete(Long id) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<Kupovina> findAllzaKorisnika(String korisnicko) {
+		return kupovinaDAO.findAllzaKorisnika(korisnicko);
 	}
 
 }

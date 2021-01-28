@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<base th:href="@{/}">
+	<link rel="stylesheet" type="text/css" href="css/StiloviForma.css"/>
+	<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="css/tabela.css">
+	<link rel="stylesheet" type="text/css" href="css/glavno.css">
+	<link rel="stylesheet" type="text/css" href="css/StiloviTabela.css"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="css/navbar.css"/>
+	
+	<title>Žanrovi</title>
+</head>
+<body>
+<ul class="navbar">
+		<li style="font-family: 'Pacifico', cursive;font-size: 31px;color: white; margin-left: 10px; " ><a href="/Knjizara">Лексикограф</a></li>
+		<li th:if="${session.prijavljeniKorisnik == null}"><a href="prijava.html">prijava</a></li>
+		<li th:if="${session.prijavljeniKorisnik == null}" ><a href="registracija.html">Registracija</a></li>
+		<li><a href="Zanrovi">žanrovi</a></li>
+		<li><a href="Korisnici">korisnici</a></li>
+		<li th:if="${session.prijavljeniKorisnik != null}" ><a href="Korisnici/Details">Informacije</a></li>
+		
+		
+		<li><a>Komentari</a></li>
+</ul>
+
+		<div th:unless="${session.prijavljeniKorisnik == null}">
+			<h3>Prijavljeni ste kao <a th:href="|Korisnici/Details?korisnickoIme=${session.prijavljeniKorisnik.korisnickoIme}|" th:text="${session.prijavljeniKorisnik.korisnickoIme}"></a>.
+
+					<ul>
+						<li><a href="Korisnici/Logout">odjava</a></li>
+					</ul>
+		</div>
+
+
+
+
+
+
+
+
+<div class="container" style="padding: 100px;">
+<h1>Kupovina: <span th:text="${kupovina.id}"></span> </h1>
+<hr>
+	<table style="margin-left: 180px;
+    margin-top: 3%;
+    width: 650px;
+    font-size: 21px;" class="table tabela">
+			<tr><th>ID:</th><td th:text="${kupovina.id}"></td>
+			<tr><th>Ukupna Cnea:</th><td th:text="${kupovina.ukupnaCena}"></td>
+			<tr><th>DatumKupovine:</th><td th:text="${kupovina.datumKupovine}"></td>
+			<tr><th>Korisnik:</th><td th:text="${kupovina.korisnik.korisnickoIme}"></td>
+			<tr><th>Ukupan Broj Knjiga:</th><td th:text="${kupovina.brojKnjiga}"></td>				
+		</table>
+		<div style="margin-bottom: 100px;">
+			<table class="tabla tabela" style="margin-left: 300px; margin-bottom: 100px;">
+				<tr>
+					<th>ID</th>
+					<th>Naziv</th>
+					<th>Broj Primeraka</th>
+					<th>Cena</th>
+				</tr>
+				<tr th:each="itKupljenaKnjiga, status: ${kupljeneKnjige}">
+					<td th:text="${itKupljenaKnjiga.id}"></td>
+					<td th:text="${itKupljenaKnjiga.knjiga.naziv}"></td>
+					<td th:text="${itKupljenaKnjiga.brojPrimeraka}"></td>
+					<td th:text="${itKupljenaKnjiga.cena}"></td>
+				</tr>
+			</table>	
+			</div>
+	</div>
+</body>
+</html>

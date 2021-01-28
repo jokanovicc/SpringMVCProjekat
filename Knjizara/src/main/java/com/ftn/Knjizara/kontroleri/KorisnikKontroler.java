@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -23,7 +24,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ftn.Knjizara.model.Korisnik;
+import com.ftn.Knjizara.model.KupljenaKnjiga;
+import com.ftn.Knjizara.model.Kupovina;
 import com.ftn.Knjizara.service.KorisnikService;
+import com.ftn.Knjizara.service.KupljenaKnjigaService;
+import com.ftn.Knjizara.service.KupovinaService;
 
 
 
@@ -40,6 +45,14 @@ public class KorisnikKontroler {
 	@Autowired
 	private ServletContext servletContext;
 	private String baseURL;
+	
+	@Autowired
+	private KupovinaService kupovinaService;
+	
+	@Autowired
+	private KupljenaKnjigaService kupljenaKnjigaService;
+
+	private Object kupljeneKnjige;
 	
 	@PostConstruct
 	public void init() {	
@@ -100,13 +113,51 @@ public class KorisnikKontroler {
 			response.sendRedirect(baseURL + "Korisnici");
 			return null;
 		}
-
+		
+		
+		List<KupljenaKnjiga> kupljeneKnjige = new ArrayList<KupljenaKnjiga>();
+		
+		List<Kupovina> kupovine = kupovinaService.findAllzaKorisnika(korisnik.getKorisnickoIme());
+		for (Kupovina kupovina : kupovine) {
+			kupljeneKnjige = kupljenaKnjigaService.izvuciKupljeneKnjige(kupovina.getId());
+		}
+		
 		// prosleđivanje
 		ModelAndView rezultat = new ModelAndView("korisnik");
 		rezultat.addObject("korisnik", korisnik);
+		rezultat.addObject("kupovine", kupovine);
+		rezultat.addObject("kupljeneKnjige", kupljeneKnjige);	
 
 		return rezultat;
 	}
+	
+	
+	@GetMapping(value="/DetailsKupovine")
+	public ModelAndView detailsKupovine(@RequestParam Long id,
+			HttpSession session, HttpServletResponse response) throws IOException {
+
+
+		Kupovina kupovina = kupovinaService.findOne(id);
+		List<KupljenaKnjiga> kupljeneKnjige = kupovina.getKupljeneKnjige();
+		kupljeneKnjige = kupljenaKnjigaService.izvuciKupljeneKnjige(kupovina.getId());
+		
+		
+		
+		// prosleđivanje
+		ModelAndView rezultat = new ModelAndView("kupovinaDetalji");
+		rezultat.addObject("kupovina", kupovina);	
+		rezultat.addObject("kupljeneKnjige", kupljeneKnjige);	
+
+		return rezultat;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	@GetMapping(value="/Create")

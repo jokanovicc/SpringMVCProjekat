@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 
 import com.ftn.Knjizara.dao.KnjigaDAO2;
 import com.ftn.Knjizara.dao.KorisnikDAO;
@@ -16,6 +17,8 @@ import com.ftn.Knjizara.model.Knjiga;
 import com.ftn.Knjizara.model.KupljenaKnjiga;
 import com.ftn.Knjizara.model.Kupovina;
 
+
+@Repository
 public class KupljenaKnjigaDAOImpl implements KupljenaKnjigaDAO {
 	
 	@Autowired
@@ -26,8 +29,6 @@ public class KupljenaKnjigaDAOImpl implements KupljenaKnjigaDAO {
 	@Autowired
 	private KnjigaDAO2 knjigaDAO;
 	
-	@Autowired
-	private KupovinaDAO kupovinaDAO;
 	
 	
 	
@@ -43,12 +44,11 @@ public class KupljenaKnjigaDAOImpl implements KupljenaKnjigaDAO {
 			Knjiga knjiga = knjigaDAO.findOne(knjigaId);
 			
 			Long kupovinaId = rs.getLong(index++);
-			Kupovina kupovina = kupovinaDAO.findOne(kupovinaId);
 			
 			int brojPrimeraka = rs.getInt(index++);
 			Double cena = rs.getDouble(index++);
 			
-			KupljenaKnjiga kupljenaKnjiga = new KupljenaKnjiga(kupljenaKnjigaId, knjiga, brojPrimeraka, cena,kupovina);
+			KupljenaKnjiga kupljenaKnjiga = new KupljenaKnjiga(kupljenaKnjigaId, knjiga, brojPrimeraka, cena,kupovinaId);
 			return kupljenaKnjiga;
 		}
 
@@ -78,8 +78,8 @@ public class KupljenaKnjigaDAOImpl implements KupljenaKnjigaDAO {
 
 	@Override
 	public int save(KupljenaKnjiga kupljenaKnjiga) {
-		String sql = "INSERT INTO kupovina (knjigaID, kupovinaId, brojPrimeraka, cena) VALUES (?, ?)";
-		return jdbcTemplate.update(sql, kupljenaKnjiga.getKnjiga().getId(),kupljenaKnjiga.getKupovina().getId(),kupljenaKnjiga.getBrojPrimeraka(),kupljenaKnjiga.getCena());
+		String sql = "INSERT INTO kupljenaKnjiga (knjigaID, kupovinaId, brojPrimeraka, cena) VALUES (?, ?,?,?)";
+		return jdbcTemplate.update(sql, kupljenaKnjiga.getKnjiga().getId(),kupljenaKnjiga.getKupovina(),kupljenaKnjiga.getBrojPrimeraka(),kupljenaKnjiga.getCena());
 	}
 
 	@Override
@@ -97,11 +97,10 @@ public class KupljenaKnjigaDAOImpl implements KupljenaKnjigaDAO {
 	@Override
 	public List<KupljenaKnjiga> izvuciKupljeneKnjige(Long id) {
 		String sql = 
-				"SELECT * FROM kupljenaKnjiga where kupovinaId = ? ";
-//				"SELECT k.id,kk.id, u.id, k.brojPrimeraka,k.cena  FROM kupljenaKnjiga k "
-//				+"LEFT JOIN knjige kk ON kk.id = k.knjigaID "
-//				+"LEFT JOIN kupovina u on u.id = k.kupovinaId WHERE u.id = ? " 
-//				+"ORDER BY k.id";
+				"SELECT k.id,kk.id, u.id, k.brojPrimeraka,k.cena  FROM kupljenaKnjiga k "
+				+"LEFT JOIN knjige kk ON kk.id = k.knjigaID "
+				+"LEFT JOIN kupovina u on u.id = k.kupovinaId where u.id = ? " 
+				+"ORDER BY k.id";
 		return jdbcTemplate.query(sql, new KupljenaKnjigaRowMapper(),id);
 	}
 	

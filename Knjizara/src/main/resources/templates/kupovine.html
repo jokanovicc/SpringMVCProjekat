@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<base th:href="@{/}">
+	<link rel="stylesheet" type="text/css" href="css/StiloviTabela.css"/>
+	    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<link rel="stylesheet" type="text/css" href="css/glavno.css">
+	
+	<title>Žanrovi</title>
+</head>
+<body>
+<div class="container">
+<h1>Zanrovi</h1>
+<hr>
+			<form method="get">
+			<table class="tabela">
+				<caption>Kupovine</caption>
+				<tr>
+					<th>r. br.</th>
+					<th>ukupnaCena</th>
+					<th>datum</th>
+					<th>broj knjiga</th>
+					<th>korisnicko ime</th>
+				</tr>
+				<tr th:each="itKupovina, status: ${kupovine}">
+					<td th:text="${status.index + 1}">1</td>
+					<td th:text="${itKupovina.ukupnaCena}"></td>
+					<td th:text="${itKupovina.datumKupovine}"></td>
+					<td th:text="${itKupovina.brojKnjiga}"></td>
+					<td th:text="${itKupovina.korisnik.korisnickoIme}"></td>
+					
+			</tr>
+			</table>
+		</form>
+	</div>
+</body>
+</html>
