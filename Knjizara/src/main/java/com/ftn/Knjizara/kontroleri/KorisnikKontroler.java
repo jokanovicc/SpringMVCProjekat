@@ -26,9 +26,11 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ftn.Knjizara.model.Korisnik;
 import com.ftn.Knjizara.model.KupljenaKnjiga;
 import com.ftn.Knjizara.model.Kupovina;
+import com.ftn.Knjizara.model.LoyaltyKartica;
 import com.ftn.Knjizara.service.KorisnikService;
 import com.ftn.Knjizara.service.KupljenaKnjigaService;
 import com.ftn.Knjizara.service.KupovinaService;
+import com.ftn.Knjizara.service.LoyaltyKarticaService;
 
 
 
@@ -45,6 +47,10 @@ public class KorisnikKontroler {
 	@Autowired
 	private ServletContext servletContext;
 	private String baseURL;
+	
+	
+	@Autowired
+	private LoyaltyKarticaService loyaltyKarticaService;
 	
 	@Autowired
 	private KupovinaService kupovinaService;
@@ -84,7 +90,8 @@ public class KorisnikKontroler {
 			response.sendRedirect(baseURL);
 			return null;
 		}
-
+		List<LoyaltyKartica> kartice = new ArrayList<LoyaltyKartica>();
+		kartice = loyaltyKarticaService.findAll();
 
 		// čitanje
 		List<Korisnik> korisnici = korisnikService.findAll();
@@ -92,6 +99,8 @@ public class KorisnikKontroler {
 		// prosleđivanje
 		ModelAndView rezultat = new ModelAndView("korisnici");
 		rezultat.addObject("korisnici", korisnici);
+		rezultat.addObject("lojalti", kartice);
+
 
 		return rezultat;
 	}
@@ -122,11 +131,17 @@ public class KorisnikKontroler {
 			kupljeneKnjige = kupljenaKnjigaService.izvuciKupljeneKnjige(kupovina.getId());
 		}
 		
+		List<LoyaltyKartica> kartice = new ArrayList<LoyaltyKartica>();
+		kartice = loyaltyKarticaService.findAll();
+		
+		
 		// prosleđivanje
 		ModelAndView rezultat = new ModelAndView("korisnik");
 		rezultat.addObject("korisnik", korisnik);
 		rezultat.addObject("kupovine", kupovine);
-		rezultat.addObject("kupljeneKnjige", kupljeneKnjige);	
+		rezultat.addObject("kupljeneKnjige", kupljeneKnjige);
+		rezultat.addObject("lojalti", kartice);
+
 
 		return rezultat;
 	}
@@ -152,7 +167,22 @@ public class KorisnikKontroler {
 	}
 	
 	
-	
+	@PostMapping(value="/Izvestavanje")
+	public ModelAndView izvestavanje(@RequestParam Date datum1,@RequestParam Date datum2,
+			HttpSession session, HttpServletResponse response) throws IOException {
+
+
+		List<KupljenaKnjiga> izvestavanje = kupljenaKnjigaService.izvuciIzvestavanja2(datum1, datum2);
+		KupljenaKnjiga kg = kupljenaKnjigaService.izvuciIzvestavanja(datum1, datum2);
+		
+		// prosleđivanje
+		ModelAndView rezultat = new ModelAndView("izvestavanje");
+		rezultat.addObject("izvestavanje", izvestavanje);
+		rezultat.addObject("kg", kg);	
+
+
+		return rezultat;
+	}
 	
 	
 	
@@ -309,7 +339,7 @@ public class KorisnikKontroler {
 
 
 			// registracija
-			Korisnik korisnik = new Korisnik(korisnickoIme, lozinka, eMail, ime, prezime, adresa, brojTelefona, datumRodjenja, LocalDateTime.now(), false,false);
+			Korisnik korisnik = new Korisnik(korisnickoIme, lozinka, eMail, ime, prezime, adresa, brojTelefona, datumRodjenja, LocalDateTime.now(), false,false,false);
 			korisnikService.save(korisnik);
 
 			response.sendRedirect(baseURL + "prijava.html");

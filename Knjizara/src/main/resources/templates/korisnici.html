@@ -54,7 +54,45 @@
 				</tr>
 			</table>
 		</form>
-	</div>
+		
+		</div>
+
+		<h3>Kartice na cekanju</h3>
+		<table class="table" style="width: 400px;" th:each="itLojalti, status: ${lojalti}">
+			
+			<thead style="background-color: #044855; color: white;" th:if="${itLojalti.odobrena == false}">
+				<tr>
+					<th>Broj Poena</th>
+					<th>Popust koji ste ostvarili</th>
+				</tr>
+			</thead>
+			 <tbody>
+			<tr th:if="${itLojalti.odobrena == false}">
+					<td th:text="${itLojalti.Korisnik.korisnickoIme}"></td>
+					<td th:text="${itLojalti.id}"></td>
+					<td><a th:href="|Korpa/Odobrenje?korisnicko=${itLojalti.korisnik.korisnickoIme}|">Odobri</a></td>
+			</tr>
+			</tbody>			
+			</table> 
+		
+		
+		
+		
+		<hr>
+		<h3>Izvestavanja</h3>
+		<table class="table tabela" style="border: 0px;margin-left: 20px;">
+			<tr><th></th><td>
+			<form method="post" action="Korisnici/Izvestavanje" th:if="${session.prijavljeniKorisnik != null}">
+			<table class="forma">
+				<tr><th><td>Izvestavanje</td></tr>
+				<tr><th>Datum1:</th><td><input type="date" th:value="2021-01-25" required name="datum1"/></td></tr>
+				<tr><th>Datum2:</th><td><input type="date" th:value="2021-02-02" required name="datum2"/></td></tr>								
+				<tr><th></th><td><input type="submit" value="Izvestiraj"/></td></tr>
+			
+			</table>
+		</form>
+		</table>
+	
 	</div>
 </body>
 </html>

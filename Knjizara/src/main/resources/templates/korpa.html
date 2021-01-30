@@ -4,22 +4,75 @@
 	<meta charset="UTF-8">
 	<base th:href="@{/}">
 	<link rel="stylesheet" type="text/css" href="css/StiloviTabela.css"/>
-	    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="css/navbar.css"/>
+	<script src="js/sorttable.js"></script>
+	 <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+	
+	<link rel="stylesheet" type="text/css" href="css/tabela.css">
+	<link rel="stylesheet" type="text/css" href="css/glavno.css">
+			<style>
+		.collapsible {
+		  background-color: #044855;
+		  color: white;
+		  cursor: pointer;
+		  padding: 18px;
+		  width: 100%;
+		  border: none;
+		  text-align: center;
+		  outline: none;
+		  font-size: 20px;
+		}
+		
+		.active, .collapsible:hover {
+		  background-color: #555;
+		}
+		
+		.content {
+		  padding: 0 18px;
+		  display: none;
+		  overflow: hidden;
+		  background-color: #f1f1f1;
+
+		}
+</style>
+	
+	<title>Korpa</title>	
 		<link rel="stylesheet" type="text/css" href="css/glavno.css">
 	
-	<title>Žanrovi</title>
 </head>
 <body>
-<div class="container">
+<ul class="navbar">
+		<li style="font-family: 'Pacifico', cursive;font-size: 31px;color: white; margin-left: 10px; " ><a href="/Knjizara">Лексикограф</a></li>
+		<li th:if="${session.prijavljeniKorisnik == null}"><a href="prijava.html">prijava</a></li>
+		<li th:if="${session.prijavljeniKorisnik == null}" ><a href="registracija.html">Registracija</a></li>
+		<li><a href="Zanrovi">žanrovi</a></li>
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator==false}"><a href="Korpa">korpa</a></li>
+		
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}"><a href="Korisnici">korisnici</a></li>		
+		
+		<li><a>Komentari</a></li>
+</ul>
+
+		<div  style="background-color: white;">
+		<div th:unless="${session.prijavljeniKorisnik == null}">
+			<h3>Prijavljeni ste kao <a th:href="|Korisnici/Details?korisnickoIme=${session.prijavljeniKorisnik.korisnickoIme}|" th:text="${session.prijavljeniKorisnik.korisnickoIme}"></a>.
+
+					<ul>
+						<li><a href="Korisnici/Logout">odjava</a></li>
+					</ul>
+		</div>
+<div class="container" style="padding-bottom: 20px;">
 <h1>Korpica</h1>
 <hr>
-			<form method="get">
-			<table class="tabela">
+			<form method="get" style="margin: 20px;">
+			<table class="tabela table">
 				<tr>
 					<th>r. br.</th>
 					<th>Naziv</th>
 					<th>Broj Primeraka</th>
 					<th>Jedinicna Cena</th>
+					<th></th>
 				</tr>
 				<tr th:each="itKupljenaKnjiga, status: ${kupljeneKnjige}">
 					<td th:text="${status.index + 1}">1</td>
@@ -29,7 +82,13 @@
 					<td><a th:href="|Korpa/Brisanje?kupljenaKnjigaID=${itKupljenaKnjiga.id}|">Brisanje</a></td>
 					
 			</tr>
-			<tr></tr>
+			<tr><td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			
+			</tr>
 			<tr>
 				<th>Sumarum</th>
 				<th>Ukupna Cena</th><td  th:text="${kupovina.ukupnaCena}"></td>
@@ -37,14 +96,68 @@
 			
 					
 			</tr>
-			<tr>
-				<td th:if="${kupovina.brojKnjiga > 0}"><a class="btn btn-primary btn-lg"  th:href="|Korpa/Dodavanje?kupovina1=${kupovina.brojKnjiga}|">Zavrsi Kupovinu</a></td>
-			
-			</tr>
+		
 			</table>			
-			
 		
 		</form>
+		
+			<button th:if="${kupovina.brojKnjiga > 0}" type="button" class="collapsible">Zavrsi Kupovinu</button>
+		<div class= "content">
+		
+		
+		
+		
+		<table class="table tabela" style="border: 0px;margin-left: 20px;">
+			<tr><th></th><td>
+			<form method="post" action="Korpa/Popust" th:if="${session.prijavljeniKorisnik != null}">
+			<input type="hidden" name="id" th:value="${kupovina.id}"/>
+			<table class="forma" th:each="itLojalti, status: ${lojalti}">
+				<tr th:if="${itLojalti.korisnik.korisnickoIme == session.prijavljeniKorisnik.korisnickoIme}"><th><td>Snizite cenu kupovini uz vasu Loyalty Karticu!</td></tr>
+				<tr th:if="${itLojalti.korisnik.korisnickoIme == session.prijavljeniKorisnik.korisnickoIme}"><th>Broj bodova:</th><td><input type="number" th:value="${itLojalti.brojPoena}"  th:max="${itLojalti.brojPoena}" min="0"  required name="brojBodova"/></td></tr>				
+				<tr th:if="${itLojalti.korisnik.korisnickoIme == session.prijavljeniKorisnik.korisnickoIme}"><th></th><td><input type="submit" value="Snizi cenu"/></td></tr>
+			
+			</table>
+		</form>
+			
+			
+			
+			
+			</td>
+		
+		</table>
+				<a th:if="${kupovina.brojKnjiga > 0}" style="float: right; margin-bottom: 50px;" class="btn btn-primary btn-lg"  th:href="|Korpa/Dodavanje?kupovina1=${kupovina.brojKnjiga}|">Zavrsi Kupovinu</a>
+		
+			
+			
 	</div>
+			
+<!-- 			<tr th:each="itLojalti, status: ${lojalti}"   th:if="${itLojalti.korisnik.korisnickoIme == session.prijavljeniKorisnik.korisnickoIme and itLojalti.popust > 0}">			
+			<td><a class="btn btn-primary btn-lg" th:href="|Korpa/Popust?kupljenaKnjigaID=${kupovina.id}|">Iskoristi popust</a></td>				
+			</tr> -->
+			
+			
+			
+	</div>
+	</div>
+
+
+	<script>
+		var coll = document.getElementsByClassName("collapsible");
+		var i;
+		
+		for (i = 0; i < coll.length; i++) {
+		  coll[i].addEventListener("click", function() {
+		    this.classList.toggle("active");
+		    var content = this.nextElementSibling;
+		    if (content.style.display === "block") {
+		      content.style.display = "none";
+		    } else {
+		      content.style.display = "block";
+		    }
+		  });
+		}
+	</script>
+
+
 </body>
 </html>

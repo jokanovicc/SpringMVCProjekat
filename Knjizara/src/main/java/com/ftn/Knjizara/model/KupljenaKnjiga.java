@@ -10,6 +10,14 @@ public class KupljenaKnjiga {
 	private Long kupovina;
 	
 	
+	private Double sumaIzvestanje;
+	private Integer brojKnjiga;
+	private String naziv;
+	private String autor;
+	private Integer ukupnaKnjiga;
+	private double ukupnaCena;
+	
+	
 	public KupljenaKnjiga(Long id, Knjiga knjiga, int brojPrimeraka, double cena,Long kupovina) {
 		super();
 		this.id = id;
@@ -18,6 +26,54 @@ public class KupljenaKnjiga {
 		this.cena = cena;
 		this.kupovina = kupovina;
 	}
+
+
+
+	public KupljenaKnjiga(Knjiga knjiga, Double sumaIzvestanje, Integer brojKnjiga, String naziv, String autor) {
+		super();
+		this.knjiga = knjiga;
+		this.sumaIzvestanje = sumaIzvestanje;
+		this.brojKnjiga = brojKnjiga;
+		this.naziv = naziv;
+		this.autor = autor;
+	}
+
+
+
+
+
+
+	public KupljenaKnjiga(Integer ukupnaKnjiga, double ukupnaCena) {
+		super();
+		this.ukupnaKnjiga = ukupnaKnjiga;
+		this.ukupnaCena = ukupnaCena;
+	}
+
+
+
+	public Integer getUkupnaKnjiga() {
+		return ukupnaKnjiga;
+	}
+
+
+
+	public void setUkupnaKnjiga(Integer ukupnaKnjiga) {
+		this.ukupnaKnjiga = ukupnaKnjiga;
+	}
+
+
+
+	public double getUkupnaCena() {
+		return ukupnaCena;
+	}
+
+
+
+	public void setUkupnaCena(double ukupnaCena) {
+		this.ukupnaCena = ukupnaCena;
+	}
+
+
 
 	@Override
 	public int hashCode() {
@@ -29,6 +85,51 @@ public class KupljenaKnjiga {
 	
 	
 
+	public KupljenaKnjiga(Long id, Knjiga knjiga, int brojPrimeraka, double cena, Long kupovina, Double sumaIzvestanje,
+			Integer brojKnjiga, String naziv, String autor) {
+		super();
+		this.id = id;
+		this.knjiga = knjiga;
+		this.brojPrimeraka = brojPrimeraka;
+		this.cena = cena;
+		this.kupovina = kupovina;
+		this.sumaIzvestanje = sumaIzvestanje;
+		this.brojKnjiga = brojKnjiga;
+		this.naziv = naziv;
+		this.autor = autor;
+	}
+
+	public Double getSumaIzvestanje() {
+		return sumaIzvestanje;
+	}
+
+	public void setSumaIzvestanje(Double sumaIzvestanje) {
+		this.sumaIzvestanje = sumaIzvestanje;
+	}
+
+	public Integer getBrojKnjiga() {
+		return brojKnjiga;
+	}
+
+	public void setBrojKnjiga(Integer brojKnjiga) {
+		this.brojKnjiga = brojKnjiga;
+	}
+
+	public String getNaziv() {
+		return naziv;
+	}
+
+	public void setNaziv(String naziv) {
+		this.naziv = naziv;
+	}
+
+	public String getAutor() {
+		return autor;
+	}
+
+	public void setAutor(String autor) {
+		this.autor = autor;
+	}
 
 	public Long getKupovina() {
 		return kupovina;

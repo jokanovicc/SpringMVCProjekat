@@ -25,11 +25,13 @@ import com.ftn.Knjizara.model.Knjiga;
 import com.ftn.Knjizara.model.Korisnik;
 import com.ftn.Knjizara.model.KupljenaKnjiga;
 import com.ftn.Knjizara.model.Kupovina;
+import com.ftn.Knjizara.model.LoyaltyKartica;
 import com.ftn.Knjizara.model.Zanr;
 import com.ftn.Knjizara.service.Knjiga2Service;
 import com.ftn.Knjizara.service.KorisnikService;
 import com.ftn.Knjizara.service.KupljenaKnjigaService;
 import com.ftn.Knjizara.service.KupovinaService;
+import com.ftn.Knjizara.service.LoyaltyKarticaService;
 
 @Controller
 @RequestMapping(value="/Korpa")
@@ -45,6 +47,12 @@ public class KorpaKontroler {
 	
 	@Autowired
 	private KupljenaKnjigaService kupljenaKnjigaService;
+	
+	@Autowired
+	private LoyaltyKarticaService loyaltyKarticaService;
+	
+	@Autowired
+	private KorisnikService ks;
 	
 	@Autowired
 	private ServletContext servletContext;
@@ -123,10 +131,12 @@ public class KorpaKontroler {
 	@GetMapping
 	public ModelAndView get(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		Kupovina kupovina = (Kupovina) request.getSession().getAttribute(KORPA_KEY);
+		Korisnik korisnik = (Korisnik) request.getSession().getAttribute(KorisnikKontroler.KORISNIK_KEY);
+
 		
 		
-		
-		
+		List<LoyaltyKartica> kartice = new ArrayList<LoyaltyKartica>();
+		kartice = loyaltyKarticaService.findAll();
 		
 		
 		List<KupljenaKnjiga> kupljeneKnjige = new ArrayList<KupljenaKnjiga>();
@@ -143,6 +153,14 @@ public class KorpaKontroler {
 		ModelAndView rezultat = new ModelAndView("korpa");
 		rezultat.addObject("kupovina", kupovina);
 		rezultat.addObject("kupljeneKnjige", kupljeneKnjige);
+		
+		
+
+			
+
+		rezultat.addObject("lojalti", kartice);
+
+		
 
 		return rezultat;
 	}
@@ -162,7 +180,7 @@ public class KorpaKontroler {
 				kupovina.getKupljeneKnjige().remove(kupljenaKnjiga);
 				System.out.println("AAAAAAAAAAA" + kupljenaKnjiga);
 
-				response.sendRedirect(baseURL);
+				response.sendRedirect(baseURL + "Korpa");
 				return;
 			}
 		}
@@ -178,19 +196,84 @@ public class KorpaKontroler {
 	}
 	
 	
+	
+	@GetMapping("/Izdavanje")
+	public void IzdavanjeKartice(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		Korisnik korisnik = (Korisnik) request.getSession().getAttribute(KorisnikKontroler.KORISNIK_KEY);
+		
+		LoyaltyKartica ly = new LoyaltyKartica(1L, korisnik, 0, 0,false);
+		
+		loyaltyKarticaService.save(ly);
+		korisnik.setKartica(true);
+		ks.update(korisnik);
+		
+		response.sendRedirect(baseURL);
+	}
+	
+	
+	
+	@GetMapping("/Odobrenje")
+	public void OdobrenjeKartice(String korisnicko,HttpServletRequest request, HttpServletResponse response) throws IOException {
+		Korisnik korisnik = (Korisnik) request.getSession().getAttribute(KorisnikKontroler.KORISNIK_KEY);
+		
+		Korisnik kupac = ks.findOne(korisnicko);
+		kupac.setKartica(true);
+		LoyaltyKartica ly = loyaltyKarticaService.izvuciKorisnikovu(kupac.getKorisnickoIme());
+		
+		ly.setBrojPoena(4);
+		ly.setOdobrena(true);
+		ly.setKorisnik(kupac);
+		
+		
+		
+		
+		loyaltyKarticaService.update(ly);
+		
+		
+	//	loyaltyKarticaService.save(ly);
+		
+		response.sendRedirect(baseURL);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	@GetMapping("/Dodavanje")
 	public void Dodavanje(Integer kupovina1,HttpServletRequest request, HttpServletResponse response,HttpSession session) throws IOException {
 		Kupovina kupovina = (Kupovina) request.getSession().getAttribute(KORPA_KEY);
 		Korisnik korisnik = (Korisnik) request.getSession().getAttribute(KorisnikKontroler.KORISNIK_KEY);
+		LoyaltyKartica loyalty = loyaltyKarticaService.izvuciKorisnikovu(korisnik.getKorisnickoIme());
+		
+			
+		
+		
 
 		kupovina.setDatumKupovine(LocalDateTime.now());
 		kupovina.setKorisnik(korisnik);
 		kupovinaService.save(kupovina);
 		
+		double pare = kupovina.getUkupnaCena();
+		int bodovi = 0;
+		while(pare >=1000) {
+			pare -= 1000;
+			bodovi++;
+		}
+		
+		loyalty.setBrojPoena(loyalty.getBrojPoena()+bodovi);
+		loyaltyKarticaService.update(loyalty);
+
 		
 		for (KupljenaKnjiga kupljenaKnjiga : kupovina.getKupljeneKnjige()) {
 			kupljenaKnjiga.setKupovina(kupovina.getId());
 			kupljenaKnjigaService.save(kupljenaKnjiga);
+			kupljenaKnjiga.getKnjiga().setKolicina(kupljenaKnjiga.getKnjiga().getKolicina()-kupljenaKnjiga.getBrojPrimeraka());
+			knjigaService.update(kupljenaKnjiga.getKnjiga());
 		}
 		
 		
@@ -198,10 +281,57 @@ public class KorpaKontroler {
 		
 		
 		kupovina.getKupljeneKnjige().clear();
+		kupovina.setUkupnaCena(0.0);
+		kupovina.setBrojKnjiga(0);
 		response.sendRedirect(baseURL); 
 		return;
 	
 }
+	
+	
+	@PostMapping("/Popust")
+	public void Popust(Long kupovinaID,@RequestParam(required=false) Integer brojBodova, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		
+		
+		
+
+		Kupovina kupovina = (Kupovina) request.getSession().getAttribute(KORPA_KEY);
+		Korisnik korisnik = (Korisnik) request.getSession().getAttribute(KorisnikKontroler.KORISNIK_KEY);
+		
+		
+		if(brojBodova < 11) {
+		
+			if(kupovina !=null) {
+			
+				LoyaltyKartica loyalty = loyaltyKarticaService.izvuciKorisnikovu(korisnik.getKorisnickoIme());
+				double popust = 0;
+				for (int i = 0; i < loyalty.getBrojPoena(); i++) {
+					loyalty.setPopust(kupovina.getUkupnaCena()-kupovina.getUkupnaCena()*0.95);
+					popust = kupovina.getUkupnaCena()-kupovina.getUkupnaCena()*0.95;
+					
+				}
+				
+					
+				kupovina.setUkupnaCena(kupovina.getUkupnaCena()-popust);
+				loyalty.setBrojPoena(loyalty.getBrojPoena()-brojBodova);
+				loyaltyKarticaService.update(loyalty);
+			}
+		}
+		response.sendRedirect(baseURL + "Korpa");
+		
+		
+		
+		
+		
+		
+		
+		
+
+	}
+	
+	
+	
+	
 }
 	
 	

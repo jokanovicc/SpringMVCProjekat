@@ -24,7 +24,7 @@
 		<li th:if="${session.prijavljeniKorisnik == null}"><a href="prijava.html">prijava</a></li>
 		<li th:if="${session.prijavljeniKorisnik == null}" ><a href="registracija.html">Registracija</a></li>
 		<li><a href="Zanrovi">žanrovi</a></li>
-		<li><a href="Korpa">korpa</a></li>
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == false}"><a href="Korpa">korpa</a></li>
 		
 		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}"><a href="Korisnici">korisnici</a></li>		
 		

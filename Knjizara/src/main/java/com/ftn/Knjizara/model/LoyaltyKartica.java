@@ -6,7 +6,8 @@ public class LoyaltyKartica {
 	public Korisnik korisnik;
 	public double popust;
 	public int brojPoena;
-	
+	public boolean odobrena;
+	public boolean iskoriscena;
 	
 	public LoyaltyKartica(Long id, Korisnik korisnik, double popust, int brojPoena) {
 		super();
@@ -14,6 +15,41 @@ public class LoyaltyKartica {
 		this.korisnik = korisnik;
 		this.popust = popust;
 		this.brojPoena = brojPoena;
+	}
+	
+	
+
+	public LoyaltyKartica(Long id, Korisnik korisnik, double popust, int brojPoena, boolean odobrena) {
+		super();
+		this.id = id;
+		this.korisnik = korisnik;
+		this.popust = popust;
+		this.brojPoena = brojPoena;
+		this.odobrena = odobrena;
+	}
+
+
+	
+	
+
+	public boolean isIskoriscena() {
+		return iskoriscena;
+	}
+
+
+
+	public void setIskoriscena(boolean iskoriscena) {
+		this.iskoriscena = iskoriscena;
+	}
+
+
+
+	public boolean isOdobrena() {
+		return odobrena;
+	}
+
+	public void setOdobrena(boolean odobrena) {
+		this.odobrena = odobrena;
 	}
 
 

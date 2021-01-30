@@ -1,5 +1,6 @@
 package com.ftn.Knjizara.dao.impl;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -54,7 +55,42 @@ public class KupljenaKnjigaDAOImpl implements KupljenaKnjigaDAO {
 
 	}
 	
+	private class IzvestavanjeRowMapper implements RowMapper<KupljenaKnjiga> {
 
+		@Override
+		public KupljenaKnjiga mapRow(ResultSet rs, int rowNum) throws SQLException {
+			int index = 1;
+			Integer ukupnoKnjiga = rs.getInt(index++);
+			Double ukupnaCena = rs.getDouble(index++);
+			
+			KupljenaKnjiga kupljenaKnjiga1 = new KupljenaKnjiga(ukupnoKnjiga, ukupnaCena);
+			return kupljenaKnjiga1;
+		}
+
+	}
+
+	private class IzvestavanjeRowMapper2 implements RowMapper<KupljenaKnjiga> {
+
+		@Override
+		public KupljenaKnjiga mapRow(ResultSet rs, int rowNum) throws SQLException {
+			int index = 1;
+			Long knjigaId = rs.getLong(index++);
+			Knjiga knjiga = knjigaDAO.findOne(knjigaId);
+			String naziv = rs.getString(index++);
+			String autor = rs.getString(index++);
+			Integer sumaKnjiga = rs.getInt(index++);
+			Double sumaCena = rs.getDouble(index++);
+			
+			
+			KupljenaKnjiga kupljenaKnjiga2 = new KupljenaKnjiga(knjiga, sumaCena, sumaKnjiga, naziv, autor);
+			return kupljenaKnjiga2;
+		}
+
+	}
+
+	
+	
+	
 	@Override
 	public KupljenaKnjiga findOne(Long id) {
 		String sql = 
@@ -102,6 +138,29 @@ public class KupljenaKnjigaDAOImpl implements KupljenaKnjigaDAO {
 				+"LEFT JOIN kupovina u on u.id = k.kupovinaId where u.id = ? " 
 				+"ORDER BY k.id";
 		return jdbcTemplate.query(sql, new KupljenaKnjigaRowMapper(),id);
+	}
+
+	@Override
+	public KupljenaKnjiga izvuciIzvestavanja(Date datum1, Date datum2) {
+		String sql = 
+				" SELECT count(k.naziv),sum(k.cena) FROM kupljenaKnjiga kg "
+				+ " LEFT JOIN knjige k ON k.id = kg.knjigaId "
+				+ "	LEFT JOIN kupovina kp on kp.id = kg.kupovinaId where kp.datumKupovine > ?"
+				+ "	AND kp.datumKupovine < ? ";
+		return jdbcTemplate.queryForObject(sql, new IzvestavanjeRowMapper(), datum1,datum2);
+	}
+	
+	
+	
+	@Override
+	public List<KupljenaKnjiga> izvuciIzvestavanja2(Date datum1, Date datum2) {
+		String sql = 
+				"SELECT k.id, k.naziv,k.autor,count(k.naziv),sum(k.cena) FROM kupljenaKnjiga kg "
+				+"LEFT JOIN knjige k ON k.id = kg.knjigaId "
+				+"LEFT JOIN kupovina kp on kp.id = kg.kupovinaId where kp.datumKupovine > ? " 
+				+" AND kp.datumKupovine < ? "
+				+"GROUP BY k.id,k.naziv,k.autor";
+		return jdbcTemplate.query(sql, new IzvestavanjeRowMapper2(),datum1,datum2);
 	}
 	
 

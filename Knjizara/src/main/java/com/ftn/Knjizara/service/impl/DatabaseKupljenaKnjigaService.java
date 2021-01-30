@@ -1,5 +1,6 @@
 package com.ftn.Knjizara.service.impl;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,17 @@ public class DatabaseKupljenaKnjigaService implements KupljenaKnjigaService {
 	@Override
 	public List<KupljenaKnjiga> izvuciKupljeneKnjige(Long id) {
 		return kupljenaKnjigaDAO.izvuciKupljeneKnjige(id);
+	}
+
+	@Override
+	public KupljenaKnjiga izvuciIzvestavanja(Date datum1, Date datum2) {
+		return kupljenaKnjigaDAO.izvuciIzvestavanja(datum1, datum2);
+	}
+
+	@Override
+	public List<KupljenaKnjiga> izvuciIzvestavanja2(Date datum1, Date datum2) {
+		return kupljenaKnjigaDAO.izvuciIzvestavanja2(datum1, datum2);
+
 	}
 
 }

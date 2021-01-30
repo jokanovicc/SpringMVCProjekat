@@ -81,10 +81,35 @@
 				</td>
 			</tr>
 			</table> -->
+			<table class="table" style="width: 400px;" th:each="itLojalti, status: ${lojalti}" th:if="${korisnik.administrator == false}">
+				<caption th:if="${itLojalti.Korisnik.korisnickoIme == session.prijavljeniKorisnik.korisnickoIme and itLojalti.odobrena == false}">Kartica Vam jos nije odobrena</caption>
+							
+			
+			<thead style="background-color: #044855; color: white;" th:if="${itLojalti.Korisnik.korisnickoIme == korisnik.korisnickoIme and itLojalti.odobrena == true}">
+				<tr>
+					<th>Broj Poena</th>
+					<th>Popust koji ste ostvarili</th>
+				</tr>
+			</thead>
+			 <tbody>
+			<tr th:if="${itLojalti.Korisnik.korisnickoIme == korisnik.korisnickoIme  and itLojalti.odobrena == true}">
+					<td th:text="${itLojalti.brojPoena}"></td>
+					<td th:text="${itLojalti.popust}"></td>
+			</tr>
+			 
+			
+			</tbody>			
+			</table> 
+			
+			
+			<a  th:if="${korisnik.kartica == false and korisnik.administrator == false}" style="margin-bottom: 50px;" class="btn btn-primary btn-lg"  href="Korpa/Izdavanje">Izdaj karticu</a>
+			
+			
+			
 			
 			<hr>
 			<h3>Kupovine</h3>
-			<table class="table" style="width: 400px;">
+			<table class="table" style="width: 400px;" th:if="${korisnik.administrator == false}">
 				<caption>Kupovine</caption>
 			<thead style="background-color: #044855; color: white;">
 				<tr>

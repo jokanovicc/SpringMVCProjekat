@@ -12,6 +12,7 @@ public class Korisnik {
 	
 	private boolean administrator = false;
 	private boolean blokiran = false;
+	private boolean kartica = false;
 	
 	
 
@@ -30,6 +31,52 @@ public class Korisnik {
 		this.administrator = administrator;
 		this.blokiran = blokiran;
 	}
+	
+	
+	
+	
+	
+	
+
+	public Korisnik(String korisnickoIme, String lozinka, String eMail, String ime, String prezime, String adresa,
+			String brojTelefona, Date datumRodjenja, LocalDateTime datumRegistracije, boolean administrator,
+			boolean blokiran, boolean kartica) {
+		super();
+		this.korisnickoIme = korisnickoIme;
+		this.lozinka = lozinka;
+		this.eMail = eMail;
+		this.ime = ime;
+		this.prezime = prezime;
+		this.adresa = adresa;
+		this.brojTelefona = brojTelefona;
+		this.datumRodjenja = datumRodjenja;
+		this.datumRegistracije = datumRegistracije;
+		this.administrator = administrator;
+		this.blokiran = blokiran;
+		this.kartica = kartica;
+	}
+
+
+
+
+
+
+
+	public boolean isKartica() {
+		return kartica;
+	}
+
+
+
+
+
+	public void setKartica(boolean kartica) {
+		this.kartica = kartica;
+	}
+
+
+
+
 
 	@Override
 	public int hashCode() {
