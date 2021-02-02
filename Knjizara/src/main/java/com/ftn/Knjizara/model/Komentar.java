@@ -1,5 +1,6 @@
 package com.ftn.Knjizara.model;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
 
 public class Komentar {
@@ -7,7 +8,7 @@ public class Komentar {
 	private Long id;
 	private String tekstKomentara;
 	private double ocena;
-	private LocalDateTime vremeKomentara;
+	private Date vremeKomentara;
 	private Korisnik korisnik;
 	private Knjiga knjiga;
 	private StatusKomentara status;
@@ -18,7 +19,7 @@ public class Komentar {
 
 	
 	
-	public Komentar(Long id, String tekstKomentara, double ocena, LocalDateTime vremeKomentara, Korisnik korisnik,
+	public Komentar(Long id, String tekstKomentara, double ocena, Date vremeKomentara, Korisnik korisnik,
 			Knjiga knjiga, StatusKomentara status) {
 		super();
 		this.id = id;
@@ -67,12 +68,12 @@ public class Komentar {
 	}
 
 
-	public LocalDateTime getVremeKomentara() {
+	public Date getVremeKomentara() {
 		return vremeKomentara;
 	}
 
 
-	public void setVremeKomentara(LocalDateTime vremeKomentara) {
+	public void setVremeKomentara(Date vremeKomentara) {
 		this.vremeKomentara = vremeKomentara;
 	}
 

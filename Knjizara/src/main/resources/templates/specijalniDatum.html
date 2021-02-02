@@ -10,12 +10,10 @@
 	<link rel="stylesheet" type="text/css" href="css/StiloviTabela.css"/>
 	<script src="js/sorttable.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-	<link rel="stylesheet" type="text/css" href="css/navbar.css"/>
 	
 	<title>Žanrovi</title>
 </head>
 <body>
-
 
 <div class="container" style="padding: 100px;">
 <h1>Izveštavanje za uneti opseg datuma </h1>
@@ -23,25 +21,39 @@
 		<div style="margin-bottom: 100px;">
 			<table class="tabla tabela sortable" style="margin-bottom: 100px;">
 				<tr>
-					<th>Naziv</th>
-					<th>Autor</th>
-					<th>Ukupna Cena</th>
-					<th>Broj prodatih</th>
+					<th>Datum</th>
+					<th>Popust na taj Datum</th>
 				</tr>
-				<tr th:each="itIzvestavanja, status: ${izvestavanje}">
-					<td><a th:href="|Details?id=${itIzvestavanja.knjiga.id}|" th:text="${itIzvestavanja.naziv}"></a></td>
-					<td th:text="${itIzvestavanja.autor}"></td>
-					<td th:text="${itIzvestavanja.sumaIzvestanje}"></td>
-					<td th:text="${itIzvestavanja.brojKnjiga}"></td>
-				</tr>
-				<tr>
-					<td></td>
-					<td></td>
-					<td th:text="${kg.ukupnaCena}"></td>
-					<td th:text="${kg.ukupnaKnjiga}"></td>
-				
+				<tr th:each="itSpecijalni, status: ${specijalniDatumi}">
+					<td th:text="${itSpecijalni.datum}"></td>
+					<td th:text="${itSpecijalni.popust}"></td>
 				</tr>
 			</table>
+			
+			
+			
+			
+			
+			
+			
+		<table class="table tabela" style="border: 0px;margin-left: 20px;">
+			<tr><th></th><td>
+			<form method="post" action="SpecijalniDatum/Dodavanje" th:if="${session.prijavljeniKorisnik != null}">
+			<table class="forma">
+				<tr><th><td>Dodavanje novog datuma</td></tr>
+				<tr><th>Datum:</th><td><input type="date" th:value="2021-01-25" required name="datum"/></td></tr>
+				<tr><th>Popust:</th><td><input type="number" max="100" min="1" th:value="1" required name="popust"/></td></tr>								
+				<tr><th></th><td><input type="submit" value="Dodaj"/></td></tr>
+			
+			</table>
+		</form>
+		</table>
+			
+			
+			
+			
+			
+			
 			</div>
 	</div>
 </body>

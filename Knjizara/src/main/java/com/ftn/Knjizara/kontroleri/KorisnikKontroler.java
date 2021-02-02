@@ -8,10 +8,12 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
 import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -23,13 +25,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ftn.Knjizara.model.Knjiga;
 import com.ftn.Knjizara.model.Korisnik;
 import com.ftn.Knjizara.model.KupljenaKnjiga;
 import com.ftn.Knjizara.model.Kupovina;
+import com.ftn.Knjizara.model.ListaZelja;
 import com.ftn.Knjizara.model.LoyaltyKartica;
+import com.ftn.Knjizara.service.Knjiga2Service;
 import com.ftn.Knjizara.service.KorisnikService;
 import com.ftn.Knjizara.service.KupljenaKnjigaService;
 import com.ftn.Knjizara.service.KupovinaService;
+import com.ftn.Knjizara.service.ListaZeljaService;
 import com.ftn.Knjizara.service.LoyaltyKarticaService;
 
 
@@ -54,6 +60,11 @@ public class KorisnikKontroler {
 	
 	@Autowired
 	private KupovinaService kupovinaService;
+	
+	@Autowired
+	private Knjiga2Service knjigaService;
+	@Autowired
+	private ListaZeljaService listaZeljaService;
 	
 	@Autowired
 	private KupljenaKnjigaService kupljenaKnjigaService;
@@ -135,12 +146,24 @@ public class KorisnikKontroler {
 		kartice = loyaltyKarticaService.findAll();
 		
 		
+		
+		
+		
+		List<ListaZelja> listeZelja = listaZeljaService.izvuciKorisnikove(korisnik.getKorisnickoIme());
+		
+		
+		
+		
+		
+		
 		// prosleđivanje
 		ModelAndView rezultat = new ModelAndView("korisnik");
 		rezultat.addObject("korisnik", korisnik);
 		rezultat.addObject("kupovine", kupovine);
 		rezultat.addObject("kupljeneKnjige", kupljeneKnjige);
 		rezultat.addObject("lojalti", kartice);
+		rezultat.addObject("listeZelja", listeZelja);
+
 
 
 		return rezultat;
@@ -280,6 +303,73 @@ public class KorisnikKontroler {
 			return rezultat;
 		}
 	}
+	
+	
+	
+	@GetMapping("/BrisanjeListeZelja")
+	public void BrisanjeListaZelja(Long id, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		
+		
+		listaZeljaService.delete(id);
+	
+		response.sendRedirect(baseURL);
+
+		
+		
+
+	}
+	
+	@PostMapping("/ListaZelja")
+	public void dodajUListuZelja(
+			@RequestParam String knjigaId,
+			@RequestParam String korisnickoIme,
+			HttpSession session,
+			HttpServletRequest request, HttpServletResponse response) throws IOException {
+		
+		Korisnik korisnik = (Korisnik) request.getSession().getAttribute(KorisnikKontroler.KORISNIK_KEY);
+		if(korisnik==null || korisnik.isAdministrator()==true) {
+			response.sendRedirect(baseURL+"prijava.html");
+			return;
+		}
+		
+		Long idKnjige = new Long(knjigaId);
+		
+		if(idKnjige!=null && idKnjige<=0) {
+			response.sendRedirect(baseURL);
+			return;
+		}
+		
+		Knjiga knjiga = knjigaService.findOne(idKnjige);
+		if(knjiga==null) {
+			response.sendRedirect(baseURL);
+			return;
+		}
+		
+
+		ListaZelja listaZelja = new ListaZelja(1L, knjiga, korisnik);
+		
+		listaZeljaService.save(listaZelja);
+
+		// smisliti za domaci kako da kupi n karata gde se taj broj prosledi od strane korisnika
+		// i voditi racuna koliko koja projekcija ima karata
+//		Karta karta = new Karta(projekcija, korisnik);
+//		kartaService.save(karta);
+//		
+		response.sendRedirect(baseURL); 
+//		return;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

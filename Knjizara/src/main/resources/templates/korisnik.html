@@ -19,7 +19,6 @@
 		<li th:if="${session.prijavljeniKorisnik == null}" ><a href="registracija.html">Registracija</a></li>
 		<li><a href="Zanrovi">žanrovi</a></li>
 		<li><a href="Korisnici">korisnici</a></li>
-		<li th:if="${session.prijavljeniKorisnik != null}" ><a href="Korisnici/Details">Informacije</a></li>
 		
 		
 		<li><a>Komentari</a></li>
@@ -39,7 +38,7 @@
 
 
 	<div th:fragment="centralniDiv">
-		<form method="post" action="Korisnici/Edit">
+		<form method="post" action="Korisnici/Edit" style="margin-left: 30%;">
 			<input type="hidden" name="korisnickoIme" th:value="${korisnik.korisnickoIme}"/>
 			<table class="forma">
 				<caption>Korisnik</caption>
@@ -81,7 +80,63 @@
 				</td>
 			</tr>
 			</table> -->
-			<table class="table" style="width: 400px;" th:each="itLojalti, status: ${lojalti}" th:if="${korisnik.administrator == false}">
+			
+			
+			<div class="row">
+			
+			<div class="col">
+			
+			<h3>Kupovine</h3>
+			<table class="table" style="width: 700px; margin-left: 100px;" th:if="${korisnik.administrator == false}">
+				<caption>Kupovine</caption>
+			<thead style="background-color: #044855; color: white;">
+				<tr>
+					<th>r. br.</th>
+					<th>ukupnaCena</th>
+					<th>datum</th>
+				</tr>
+			</thead>
+			 <tbody>
+			<tr th:each="itKupovina, status: ${kupovine}">
+					<td th:text="${status.index + 1}"></td>
+					<td th:text="${itKupovina.ukupnaCena}"></td>
+					<td><a th:href="|Korisnici/DetailsKupovine?id=${itKupovina.id}|" th:text="${itKupovina.datumKupovine}"></a></td>
+			</tr>
+			</tbody>
+			</table>
+			
+			
+			</div>
+			
+ 	<div class="col">
+			<h3 style="width: 100px;">Liste Zelja</h3>
+			<table class="table" style="width: 700px; margin-bottom: 100px;">
+			<thead style="background-color: #044855; color: white;">
+				<tr>
+					<th>r. br.</th>
+					<th>Knjiga</th>
+					<th>Autor</th>
+					<th>Ukloni</th>
+				</tr>
+			</thead>
+			 <tbody>
+			<tr th:each="itListaZelja, status: ${listeZelja}">
+					<td th:text="${status.index + 1}"></td>
+					<td th:text="${itListaZelja.knjiga.naziv}"></td>
+					<td th:text="${itListaZelja.knjiga.autor}"></td>
+					<td th:if="${session.prijavljeniKorisnik.administrator == false}"><a th:href="|Korisnici/BrisanjeListeZelja?id=${itListaZelja.id}|">Brisanje</a></td>
+					
+			</tr>
+			</tbody>
+			</table>  
+			
+			</div>
+			
+			
+			
+			</div>
+			
+				<table class="table" style="width: 400px;margin-left: 100px;" th:each="itLojalti, status: ${lojalti}" th:if="${korisnik.administrator == false}">
 				<caption th:if="${itLojalti.Korisnik.korisnickoIme == session.prijavljeniKorisnik.korisnickoIme and itLojalti.odobrena == false}">Kartica Vam jos nije odobrena</caption>
 							
 			
@@ -102,35 +157,7 @@
 			</table> 
 			
 			
-			<a  th:if="${korisnik.kartica == false and korisnik.administrator == false}" style="margin-bottom: 50px;" class="btn btn-primary btn-lg"  href="Korpa/Izdavanje">Izdaj karticu</a>
-			
-			
-			
-			
-			<hr>
-			<h3>Kupovine</h3>
-			<table class="table" style="width: 400px;" th:if="${korisnik.administrator == false}">
-				<caption>Kupovine</caption>
-			<thead style="background-color: #044855; color: white;">
-				<tr>
-					<th>r. br.</th>
-					<th>ukupnaCena</th>
-					<th>datum</th>
-				</tr>
-			</thead>
-			 <tbody>
-			<tr th:each="itKupovina, status: ${kupovine}">
-					<td th:text="${status.index + 1}"></td>
-					<td th:text="${itKupovina.ukupnaCena}"></td>
-					<td><a th:href="|Korisnici/DetailsKupovine?id=${itKupovina.id}|" th:text="${itKupovina.datumKupovine}"></a></td>
-			</tr>
-			</tbody>
-			</table> 
-			
-			
-			
-			
-			
+			<a  th:if="${korisnik.kartica == false and korisnik.administrator == false}" style="margin-bottom: 50px;" class="btn btn-primary btn-lg"  href="Korpa/Izdavanje">Izdaj karticu</a>		
 			
 			
 			

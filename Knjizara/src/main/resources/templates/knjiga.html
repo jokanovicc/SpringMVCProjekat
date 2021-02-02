@@ -53,8 +53,7 @@
 		<li><a>Komentari</a></li>
 </ul>
 
-	<div class="container" style="background-color: white; padding: 10px;">
-	
+	<div class="container" style="background-color: white; padding: 10px;">	
 	<div th:fragment="centralniDiv">
 		
 		<table style="margin-left: 180px;
@@ -84,21 +83,31 @@
 			</tr>
 			<tr>
 			<tr><th>cena:</th><td th:text="${knjiga.cena}"></td>
-			<tr>
+			<tr th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == false}">
 				<td></td>
 				<tr><th>Kupi:</th><td  th:if="${session.prijavljeniKorisnik != null}">
 					<form method="post" action="Korpa" name="formaKorpa">
-						<input type="number" min="0" required name="brojKnjiga"/>&nbsp;
+						<input type="number" min="0" th:max="${knjiga.kolicina}" required name="brojKnjiga"/>&nbsp;
 						<input type="hidden" name="knjigaId" th:value="${knjiga.id}" />
 						<input type="hidden" name="korisnickoIme" th:value="${session.prijavljeniKorisnik.korisnickoIme}"/>
 						<input type="submit" value="Kupi Knjigu"/>
+					</form>
+				</td>
+			</tr>
+						<tr>
+				<td></td>
+				<tr th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == false}"><th>Lista Zelja:</th><td  th:if="${session.prijavljeniKorisnik != null}">
+					<form method="post" action="Korisnici/ListaZelja" name="formaListaZelja">
+						<input type="hidden" name="knjigaId" th:value="${knjiga.id}" />
+						<input type="hidden" name="korisnickoIme" th:value="${session.prijavljeniKorisnik.korisnickoIme}"/>
+						<input type="submit" value="U listu zelja"/>
 					</form>
 				</td>
 			</tr>		
 			
 		</table>
 		<table style="margin-left: 200px">
-					<tr th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}"><th>Kolicina:</th><td>
+					<tr th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator and knjiga.kolicina > 0}"><th>Kolicina:</th><td>
 						<form method="post" action="EditKolicina" th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}">
 			<input type="hidden" name="id" th:value="${knjiga.id}"/>
 			<table class="forma">
@@ -114,6 +123,42 @@
 		
 		</table>
 		<hr>
+		
+		
+		
+		
+		<form method="get">
+			<table class="tabela" th:each="itKomentar, status: ${komentari}" >
+				<caption>Komentari</caption>
+				<tr>
+					<th>r. br.</th>
+					<th>Korisnik</th>
+					<th>Opis</th>
+				</tr>
+				<tr th:if="${itKomentar.status.name() == 'odobren' and itKomentar.knjiga.id == knjiga.id}">
+					<td th:text="${status.index + 1}">1</td>
+					<td th:text="${itKomentar.korisnik.korisnickoIme}"></td>
+					<td th:text="${itKomentar.tekstKomentara}"></td>
+				</tr>
+			</table>
+		</form>
+		
+		
+
+			<table th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == false}">
+			<tr><th>Komentarisi</th><td>
+					<form method="post" action="Komentari/Komentarisi" name="komentarisanje">
+						<input type="hidden" name="knjigaId" th:value="${knjiga.id}" />
+						<input type="hidden" name="korisnickoIme" th:value="${session.prijavljeniKorisnik.korisnickoIme}"/>
+						<input type="text" name="opis" required />
+						<input type="number" min="1" max="5" required name="ocena" />
+						<input type="submit" value="Komentarisi"/>
+					</form>
+					</td></tr>
+		</table>
+		
+		
+		
 		
 		
 		
@@ -179,8 +224,6 @@
 		</form>
 	
 	</div>
-	
-	
 	
 	
 	

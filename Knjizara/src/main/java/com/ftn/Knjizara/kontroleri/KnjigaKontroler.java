@@ -1,6 +1,7 @@
 package com.ftn.Knjizara.kontroleri;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -19,9 +20,13 @@ import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ftn.Knjizara.model.Knjiga;
+import com.ftn.Knjizara.model.Komentar;
 import com.ftn.Knjizara.model.Korisnik;
+import com.ftn.Knjizara.model.Kupovina;
 import com.ftn.Knjizara.model.Zanr;
 import com.ftn.Knjizara.service.Knjiga2Service;
+import com.ftn.Knjizara.service.KomentarService;
+import com.ftn.Knjizara.service.KupovinaService;
 import com.ftn.Knjizara.service.ZanrService;
 
 
@@ -38,7 +43,11 @@ public class KnjigaKontroler implements ServletContextAware {
 	@Autowired
 	private ServletContext servletContext;
 	private String baseURL;
+	@Autowired
+	private KomentarService komentarService;
 	
+	@Autowired
+	private KupovinaService kupovinaService;
 	
 	@Override
 	public void setServletContext(ServletContext servletContext) {
@@ -100,14 +109,22 @@ public class KnjigaKontroler implements ServletContextAware {
 	public ModelAndView details(@RequestParam Long id, 
 			HttpSession session, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		// čitanje
+		
+	
+		
 		Knjiga knjiga = knjiga2Service.findOne(id);
 		List<Zanr> zanrovi = zanrService.findAll();
-
+		List<Komentar> komentari = komentarService.findAll();
+		List<Kupovina> kupovine = kupovinaService.findAll();
+		
 
 		// prosleđivanje
 		ModelAndView rezultat = new ModelAndView("knjiga");
 		rezultat.addObject("knjiga", knjiga);
 		rezultat.addObject("zanrovi", zanrovi);
+		rezultat.addObject("komentari", komentari);
+		rezultat.addObject("kupovine", kupovine);
+
 
 		return rezultat;
 	}

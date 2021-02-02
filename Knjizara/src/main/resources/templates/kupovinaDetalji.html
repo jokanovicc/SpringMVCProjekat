@@ -27,7 +27,7 @@
 </ul>
 
 		<div th:unless="${session.prijavljeniKorisnik == null}">
-			<h3>Prijavljeni ste kao <a th:href="|Korisnici/Details?korisnickoIme=${session.prijavljeniKorisnik.korisnickoIme}|" th:text="${session.prijavljeniKorisnik.korisnickoIme}"></a>.
+			<h3>Prijavljeni ste kao <a th:href="|Korisnici/Details?korisnickoIme=${session.prijavljeniKorisnik.korisnickoIme}|" th:text="${session.prijavljeniKorisnik.korisnickoIme}"></a></h3>.
 
 					<ul>
 						<li><a href="Korisnici/Logout">odjava</a></li>

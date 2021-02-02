@@ -40,6 +40,22 @@ create table knjige(
 
 );
 
+create table specijalnidatum(
+	id bigint auto_increment,
+    datum date,
+    popust bigint,
+    primary key(id)
+
+)
+
+
+
+
+
+
+
+
+
 
 create table zanrovi(
 	id BIGINT AUTO_INCREMENT,
@@ -101,6 +117,33 @@ create table kupovina(
 
 
 
+create table listazelja(
+	id BIGINT AUTO_INCREMENT,
+	korisnik varchar(20) not null,
+    knjigaID bigint not null,
+	FOREIGN KEY(knjigaID) REFERENCES knjige(id)
+	ON DELETE CASCADE,
+	FOREIGN KEY(korisnik) REFERENCES korisnici(korisnickoIme)
+	ON DELETE CASCADE,
+	PRIMARY KEY(id)
+    
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 create table Komentar(
 	id BIGINT AUTO_INCREMENT,
     ocena float not null,
@@ -114,6 +157,17 @@ create table Komentar(
 	FOREIGN KEY(knjigaId) REFERENCES knjige(id)
 	ON DELETE CASCADE
 );
+
+
+
+
+
+
+
+
+
+
+
 
 
 insert into korisnici(korisnickoIme,lozinka,eMail,ime,prezime,datumRodjenja,adresa,brojTelefona,vremeRegistracije,administrator) values('pera', 'pera', 'pera@gmail.com', 'Petar', 'Petrovic', '1978-05-05', 'deligradska', '0651111', '2020-12-31 12:35:00', true);

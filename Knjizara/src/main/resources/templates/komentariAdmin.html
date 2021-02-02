@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<base th:href="@{/}">
+	<link rel="stylesheet" type="text/css" href="css/StiloviTabela.css"/>
+	    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<link rel="stylesheet" type="text/css" href="css/glavno.css">
+	
+	<title>Žanrovi</title>
+</head>
+<body>
+<div class="container">
+<h1>Zanrovi</h1>
+<hr>
+		<form method="get">
+			<table class="tabela">
+				<caption>Komentari na Cekanju</caption>
+				<tr>
+					<th>r. br.</th>
+					<th>Datum</th>
+					<th>Korisnik</th>
+					<th>Knjiga</th>
+					<th>Opis</th>
+					<th>Odobri</th>
+					<th>Odbiji</th>											
+				</tr>
+				<tr th:each="itKomentar, status: ${komentari}" th:if="${itKomentar.status.name() == 'naCekanju'}">
+					<td th:text="${status.index + 1}">1</td>
+					<td th:text="${itKomentar.vremeKomentara}"></td>
+					<td th:text="${itKomentar.korisnik.korisnickoIme}"></td>
+					<td th:text="${itKomentar.knjiga.naziv}"></td>
+					<td th:text="${itKomentar.tekstKomentara}"></td>
+					<td><a th:href="|Komentari/OdobriKomentar?id=${itKomentar.id}|">Odobri</a></td>			
+					<td><a th:href="|Komentari/OdbijiKomentar?id=${itKomentar.id}|">Odbiji</a></td>
+					
+				</tr>
+			</table>
+		</form>
+	</div>
+</body>
+</html>

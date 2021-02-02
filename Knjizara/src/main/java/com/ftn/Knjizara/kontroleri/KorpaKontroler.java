@@ -2,6 +2,7 @@ package com.ftn.Knjizara.kontroleri;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,12 +27,14 @@ import com.ftn.Knjizara.model.Korisnik;
 import com.ftn.Knjizara.model.KupljenaKnjiga;
 import com.ftn.Knjizara.model.Kupovina;
 import com.ftn.Knjizara.model.LoyaltyKartica;
+import com.ftn.Knjizara.model.SpecijalniDatum;
 import com.ftn.Knjizara.model.Zanr;
 import com.ftn.Knjizara.service.Knjiga2Service;
 import com.ftn.Knjizara.service.KorisnikService;
 import com.ftn.Knjizara.service.KupljenaKnjigaService;
 import com.ftn.Knjizara.service.KupovinaService;
 import com.ftn.Knjizara.service.LoyaltyKarticaService;
+import com.ftn.Knjizara.service.SpecijalniDatumService;
 
 @Controller
 @RequestMapping(value="/Korpa")
@@ -43,7 +46,8 @@ public class KorpaKontroler {
 	private KupovinaService kupovinaService;
 	@Autowired
 	private Knjiga2Service knjigaService;
-
+	@Autowired
+	private SpecijalniDatumService specijalniService;
 	
 	@Autowired
 	private KupljenaKnjigaService kupljenaKnjigaService;
@@ -244,29 +248,67 @@ public class KorpaKontroler {
 	
 	
 	
-	@GetMapping("/Dodavanje")
-	public void Dodavanje(Integer kupovina1,HttpServletRequest request, HttpServletResponse response,HttpSession session) throws IOException {
+	@PostMapping("/Dodavanje")
+	public void Dodavanje(HttpServletRequest request,@RequestParam(required=false) Integer brojBodova, HttpServletResponse response,HttpSession session) throws IOException {
 		Kupovina kupovina = (Kupovina) request.getSession().getAttribute(KORPA_KEY);
 		Korisnik korisnik = (Korisnik) request.getSession().getAttribute(KorisnikKontroler.KORISNIK_KEY);
 		LoyaltyKartica loyalty = loyaltyKarticaService.izvuciKorisnikovu(korisnik.getKorisnickoIme());
 		
-			
+		SpecijalniDatum sc = new SpecijalniDatum(3L, Date.valueOf("2015-03-31"), 0);
+		Date datum =  Date.valueOf(LocalDate.now());
+		
+		List<SpecijalniDatum> specijalniDatumi = specijalniService.findAll();
+
+		for (SpecijalniDatum specijalniDatum : specijalniDatumi) {
+			if(specijalniDatum.getDatum().equals(datum)) {
+				sc = specijalniDatum;
+			}
+		}
 		
 		
+		
+		if(!sc.getDatum().equals(datum)) {
+		
+				if(brojBodova < 11) {
+					
+		
+						double popust = 0;
+						for (int i = 0; i < loyalty.getBrojPoena(); i++) {
+							loyalty.setPopust(kupovina.getUkupnaCena()-kupovina.getUkupnaCena()*0.95);
+							popust = kupovina.getUkupnaCena()-kupovina.getUkupnaCena()*0.95;
+							
+						}
+						
+							
+						kupovina.setUkupnaCena(kupovina.getUkupnaCena()-popust);
+						loyalty.setBrojPoena(loyalty.getBrojPoena()-brojBodova);
+						loyaltyKarticaService.update(loyalty);
+		
+		
+				}
+		}else {
+			kupovina.setUkupnaCena(kupovina.getUkupnaCena()-sc.getPopust());
+
+		}
 
 		kupovina.setDatumKupovine(LocalDateTime.now());
 		kupovina.setKorisnik(korisnik);
 		kupovinaService.save(kupovina);
 		
-		double pare = kupovina.getUkupnaCena();
-		int bodovi = 0;
-		while(pare >=1000) {
-			pare -= 1000;
-			bodovi++;
-		}
 		
-		loyalty.setBrojPoena(loyalty.getBrojPoena()+bodovi);
-		loyaltyKarticaService.update(loyalty);
+		if(!sc.getDatum().equals(datum)) {
+		
+					double pare = kupovina.getUkupnaCena();
+					int bodovi = 0;
+					while(pare >=1000) {
+						pare -= 1000;
+						bodovi++;
+				}
+				
+				loyalty.setBrojPoena(loyalty.getBrojPoena()+bodovi);
+			//	loyaltyKarticaService.update(loyalty);
+				loyaltyKarticaService.update(loyalty);
+		}
 
 		
 		for (KupljenaKnjiga kupljenaKnjiga : kupovina.getKupljeneKnjige()) {
@@ -279,11 +321,10 @@ public class KorpaKontroler {
 		
 		
 		
-		
 		kupovina.getKupljeneKnjige().clear();
 		kupovina.setUkupnaCena(0.0);
 		kupovina.setBrojKnjiga(0);
-		response.sendRedirect(baseURL); 
+		response.sendRedirect(baseURL + "Korisnici/DetailsKupovine?id=" + kupovina.getId()); 
 		return;
 	
 }
