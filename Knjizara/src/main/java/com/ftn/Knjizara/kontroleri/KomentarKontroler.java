@@ -24,10 +24,14 @@ import com.ftn.Knjizara.model.Knjiga;
 import com.ftn.Knjizara.model.Komentar;
 import com.ftn.Knjizara.model.Korisnik;
 import com.ftn.Knjizara.model.KupljenaKnjiga;
+import com.ftn.Knjizara.model.Kupovina;
 import com.ftn.Knjizara.model.SpecijalniDatum;
 import com.ftn.Knjizara.model.StatusKomentara;
+import com.ftn.Knjizara.model.Zanr;
 import com.ftn.Knjizara.service.Knjiga2Service;
 import com.ftn.Knjizara.service.KomentarService;
+import com.ftn.Knjizara.service.KupovinaService;
+import com.ftn.Knjizara.service.ZanrService;
 
 @Controller
 @RequestMapping(value="/Komentari")
@@ -40,12 +44,14 @@ public class KomentarKontroler {
 	
 	@Autowired
 	private KomentarService komentarService;
-	
+	@Autowired
+	private KupovinaService kupovinaService;
 	
 	@Autowired
 	private ServletContext servletContext;
 	private String baseURL;
-	
+	@Autowired
+	private ZanrService zanrService;
 	
 	@PostConstruct
 	public void init() {
@@ -117,45 +123,96 @@ public class KomentarKontroler {
 	
 	
 	@PostMapping("/Komentarisi")
-	public void dodajUKorpu(
+	public ModelAndView dodajUKorpu(
 			@RequestParam Long knjigaId,
 			@RequestParam String korisnickoIme,
 			@RequestParam String opis,
 			@RequestParam Integer ocena,HttpSession session,
-			HttpServletRequest request, HttpServletResponse response) throws IOException {
+			HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
-		Korisnik korisnik = (Korisnik) request.getSession().getAttribute(KorisnikKontroler.KORISNIK_KEY);
-		if(korisnik==null || korisnik.isAdministrator()==true) {
-			response.sendRedirect(baseURL+"prijava.html");
-			return;
-		}
-		Date datum =  Date.valueOf(LocalDate.now());
+		try {
+						
+					Korisnik korisnik = (Korisnik) request.getSession().getAttribute(KorisnikKontroler.KORISNIK_KEY);
+					if(korisnik==null || korisnik.isAdministrator()==true) {
+						response.sendRedirect(baseURL+"prijava.html");
+					}
+					Date datum =  Date.valueOf(LocalDate.now());
+			
+					
+					Knjiga knjiga = knjigaService.findOne(knjigaId);
+					if(knjiga==null) {
+						response.sendRedirect(baseURL);
+					}
+					
+					
+					if (jelKupio(korisnik) == false) {
+						throw new Exception("Ne mozete komentarisati knjigu koju niste kupili");
+					}
+					if (jelKomantarisao(korisnik,knjiga) == false) {
+						throw new Exception("Ne mozete 2 puta komentarisati istu knjigu!");
+					}
+					
+					
+					Komentar komentar = new Komentar(1L, opis, ocena, datum, korisnik, knjiga, StatusKomentara.naCekanju);
+					
+					komentarService.save(komentar);
+					response.sendRedirect(baseURL);
+					return null;
+					
+					
+					
+					
+		}catch (Exception ex) {
+			// ispis greške
+			String poruka = ex.getMessage();
+			if (poruka == "") {
+				poruka = "Neuspešno dodavanje komentara!";
+			}
+			
+			Knjiga knjiga = knjigaService.findOne(knjigaId);
+			List<Zanr> zanrovi = zanrService.findAll();
 
-		
-		Knjiga knjiga = knjigaService.findOne(knjigaId);
-		if(knjiga==null) {
-			response.sendRedirect(baseURL);
-			return;
-		}
-		
-		Komentar komentar = new Komentar(1L, opis, ocena, datum, korisnik, knjiga, StatusKomentara.naCekanju);
-		
-		komentarService.save(komentar);
 
-		
-		response.sendRedirect(baseURL);
-		// smisliti za domaci kako da kupi n karata gde se taj broj prosledi od strane korisnika
-		// i voditi racuna koliko koja projekcija ima karata
-//		Karta karta = new Karta(projekcija, korisnik);
-//		kartaService.save(karta);
-//		
-//		response.sendRedirect(bURL + "Karte"); 
-//		return;
+			// prosleđivanje
+			ModelAndView rezultat = new ModelAndView("knjiga");
+			// čitanje
+			rezultat.addObject("knjiga", knjiga);
+
+			rezultat.addObject("poruka", poruka);
+			rezultat.addObject("zanrovi", zanrovi);
+
+
+			return rezultat;
+		}
+	}
+	
+	
+	public boolean jelKupio(Korisnik korisnik) {
+		List<Kupovina> kupovine = kupovinaService.findAll();
+		for (Kupovina kupovina : kupovine) {
+			if(kupovina.getKorisnik().getKorisnickoIme().equals(korisnik.getKorisnickoIme())) {
+				return true;
+			}
+			
+		}
+		return false;
 	}
 	
 	
 	
-	
+	public boolean jelKomantarisao(Korisnik korisnik,Knjiga knjiga) {
+		List<Komentar> komentari = komentarService.findAll();
+		for (Komentar komentar : komentari) {
+			if(komentar.getKorisnik().getKorisnickoIme().equals(korisnik.getKorisnickoIme()) && knjiga.getId() == komentar.getKnjiga().getId()) {
+					System.out.println("KOMENTARISANA JE VEC");
+					return false;
+			}
+			
+		}
+		System.out.println("NIJE");
+
+		return true;
+	}
 	
 	
 	

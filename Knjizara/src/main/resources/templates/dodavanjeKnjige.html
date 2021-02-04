@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 		<link rel="stylesheet" type="text/css" href="css/navbar.css"/>
 		<link rel="stylesheet" type="text/css" href="css/glavno.css">
+		<script src="webjars/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+</script>
+	<script src="js/lokacijaJS.js"></script>
 	<title>Dodavanje knjige</title>
 
 
@@ -14,30 +18,43 @@
 <body>
 <ul class="navbar">
 		<li style="font-family: 'Pacifico', cursive;font-size: 31px;color: white; margin-left: 10px; " ><a href="/Knjizara">Лексикограф</a></li>
-		<li th:if="${session.prijavljeniKorisnik == null}"><a href="prijava.html">prijava</a></li>
-		<li th:if="${session.prijavljeniKorisnik == null}" ><a href="registracija.html">Registracija</a></li>
-		<li><a href="Zanrovi">žanrovi</a></li>
-		<li><a href="Knjige">Knjige</a></li>
-		<li><a>Komentari</a></li>
-</ul>
+		<li><a th:text="#{index.zanrovi}" href="Zanrovi">žanrovi</a></li>
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == true}"><a th:text="#{index.komentari}"  href="Komentari">Komentari</a></li>
+		
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == true}"><a th:text="#{index.specijalniDatumi}"  href="SpecijalniDatum">Specijalni Datumi</a></li>
+		
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == false}"><a th:text="#{index.korpa}"  href="Korpa">korpa</a></li>
+		
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}"><a th:text="#{index.korisnici}"  href="Korisnici">korisnici</a></li>		
+		</ul>
 
-<div class="container">
-		<h1>Dodavanje Nove knjige</h1>
+
+	<div class="container" style="background-color: white; padding: 10px;">
+				<div style="float:right">
+		<span th:text="${#locale}"></span>
+		<span th:text="#{lang.change}"></span>:
+		<select id="locales" name="locales">
+		    <option value=""></option>
+		    <option value="ru" th:text="#{lang.ru}" th:selected="${#strings.equals(#locale.language,'ru')}"></option>
+		    <option value="sr" th:text="#{lang.sr}" th:selected="${#strings.equals(#locale.language,'sr')}"></option>
+		</select>
+	</div>	
+		<h1 th:text="#{dodavanjeKnjige.h1}">Dodavanje Nove knjige</h1>
 		<hr>
 		<form style="margin-left: 280px; margin-top: 70px; width: 500px" method="post" action="Create">
 			<table class="forma">
-				<caption>Dodavanje knjige</caption>
-				<tr><th>naziv:</th><td><input type="text" name="naziv"/></td></tr>
-				<tr><th>Autor:</th><td><input type="text" name="autor"/></td></tr>
-				<tr><th>Izdavac:</th><td><input type="text" name="izdavac"/></td></tr>
-				<tr><th>Godina Izdavanja:</th><td><input value="2000" type="number" name="godinaIzdavanja"/></td></tr>
-				<tr><th>URL Slike:</th><td><input  type="text" name="slika"/></td></tr>
-				<tr><th>Kratak opis:</th><td><input type="text" name="kratakOpis"/></td></tr>
-				<tr><th>Broj Strana:</th><td><input type="number" value="0"  name="brojStrana"/></td></tr>
-				<tr><th>Kolicina:</th><td><input type="number" value="5" name="kolicina"/></td></tr>
+				<caption th:text="#{dodavanjeKnjige.h1}">Dodavanje knjige</caption>
+				<tr><th th:text="#{knjiga.naziv}">naziv:</th><td><input type="text" name="naziv"/></td></tr>
+				<tr><th th:text="#{knjiga.autor}">Autor:</th><td><input type="text" name="autor"/></td></tr>
+				<tr><th th:text="#{knjiga.izdavac}">Izdavac:</th><td><input type="text" name="izdavac"/></td></tr>
+				<tr><th th:text="#{knjiga.godinaIzdavanja}">Godina Izdavanja:</th><td><input value="2000" type="number" name="godinaIzdavanja"/></td></tr>
+				<tr><th>URL </th><td><input  type="text" name="slika"/></td></tr>
+				<tr><th th:text="#{knjiga.kratakOpis}">Kratak opis:</th><td><input type="text" name="kratakOpis"/></td></tr>
+				<tr><th th:text="#{knjiga.brojStranica}">Broj Strana:</th><td><input type="number" value="0"  name="brojStrana"/></td></tr>
+				<tr><th th:text="#{knjiga.kolicina}">Kolicina:</th><td><input type="number" value="5" name="kolicina"/></td></tr>
 				
 				<tr>
-					<th>Tip Poveza:</th>
+					<th th:text="#{knjiga.tipPoveza}">Tip Poveza:</th>
 					<td>
 						<select name="tipPoveza">
 							<option value="tvrdi">Tvrdi</option>
@@ -54,23 +71,20 @@
 						</select>
 					</td>
 				</tr>
-				<tr><th>Jezik:</th><td><input type="text" name="jezik"/></td></tr>
+				<tr><th th:text="#{knjiga.jezik}">Jezik:</th><td><input type="text" name="jezik"/></td></tr>
 				<tr>
-					<th>žanr:</th>
+					<th th:text="#{knjiga.zanr}">žanr:</th>
 					<td>
 						<th:block th:each="itZanr: ${zanrovi}">
 							<input type="checkbox" name="zanrId" th:value="${itZanr.id}"/><span th:text="${itZanr.naziv}"></span><br>
 						</th:block>
 					</td>
 				</tr>
-				<tr><th>Cena:</th><td><input type="number"  min="5" value="120" name="cena"/></td></tr>
+				<tr><th th:text="#{knjiga.cena}">Cena:</th><td><input type="number"  min="5" value="120" name="cena"/></td></tr>
 				<tr><th></th><td><input type="submit" value="Dodaj"/></td></tr>
 				<p class="greska" th:text="${poruka}"></p>
 			</table>
 		</form>
-		<ul>
-			<li><a href="Knjige">povratak</a></li>
-		</ul>
 	</div>
 </body>
 </html>

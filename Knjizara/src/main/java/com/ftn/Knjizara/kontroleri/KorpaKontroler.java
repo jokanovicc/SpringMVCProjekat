@@ -273,21 +273,22 @@ public class KorpaKontroler {
 					
 		
 						double popust = 0;
+						double pocetnaCena = kupovina.getUkupnaCena();
+						
+						
 						for (int i = 0; i < loyalty.getBrojPoena(); i++) {
-							loyalty.setPopust(kupovina.getUkupnaCena()-kupovina.getUkupnaCena()*0.95);
-							popust = kupovina.getUkupnaCena()-kupovina.getUkupnaCena()*0.95;
+							pocetnaCena = pocetnaCena * 0.95;
 							
 						}
 						
-							
-						kupovina.setUkupnaCena(kupovina.getUkupnaCena()-popust);
+						kupovina.setUkupnaCena(pocetnaCena);
 						loyalty.setBrojPoena(loyalty.getBrojPoena()-brojBodova);
 						loyaltyKarticaService.update(loyalty);
 		
 		
 				}
 		}else {
-			kupovina.setUkupnaCena(kupovina.getUkupnaCena()-sc.getPopust());
+			kupovina.setUkupnaCena(kupovina.getUkupnaCena()*(sc.getPopust()/100));
 
 		}
 

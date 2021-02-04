@@ -11,22 +11,37 @@
 	<script src="js/sorttable.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="css/navbar.css"/>
-	
-	<title>Žanrovi</title>
+	<script src="webjars/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+</script>
+	<script src="js/lokacijaJS.js"></script>		
+	<title th:text="#{izvestavanje.h1}">.</title>
 </head>
 <body>
-
+<ul class="navbar">
+		<li style="font-family: 'Pacifico', cursive;font-size: 31px;color: white; margin-left: 10px; " ><a href="/Knjizara">Лексикограф</a></li>
+		<li th:if="${session.prijavljeniKorisnik == null}"><a th:text="#{index.prijava}" href="prijava.html">prijava</a></li>
+		<li th:if="${session.prijavljeniKorisnik == null}" ><a th:text="#{index.registracija}" href="registracija.html">Registracija</a></li>
+		<li><a th:text="#{index.zanrovi}" href="Zanrovi">žanrovi</a></li>
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == true}"><a th:text="#{index.komentari}"  href="Komentari">Komentari</a></li>
+		
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == true}"><a th:text="#{index.specijalniDatumi}"  href="SpecijalniDatum">Specijalni Datumi</a></li>
+		
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == false}"><a th:text="#{index.korpa}"  href="Korpa">korpa</a></li>
+		
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}"><a th:text="#{index.korisnici}"  href="Korisnici">korisnici</a></li>		
+</ul>
 
 <div class="container" style="padding: 100px;">
-<h1>Izveštavanje za uneti opseg datuma </h1>
+<h1 th:text="#{izvestavanje.h1}">Izveštavanje za uneti opseg datuma </h1>
 <hr>
 		<div style="margin-bottom: 100px;">
 			<table class="tabla tabela sortable" style="margin-bottom: 100px;">
 				<tr>
-					<th>Naziv</th>
-					<th>Autor</th>
-					<th>Ukupna Cena</th>
-					<th>Broj prodatih</th>
+					<th th:text="#{knjiga.naziv}">Naziv</th>
+					<th th:text="#{knjiga.autor}">Autor</th>
+					<th th:text="#{izvestavanje.ukupna}">Ukupna Cena</th>
+					<th th:text="#{izvestavanje.brojProdatih}">Broj prodatih</th>
 				</tr>
 				<tr th:each="itIzvestavanja, status: ${izvestavanje}">
 					<td><a th:href="|Details?id=${itIzvestavanja.knjiga.id}|" th:text="${itIzvestavanja.naziv}"></a></td>

@@ -8,7 +8,10 @@
 	<link rel="stylesheet" type="text/css" href="css/navbar.css"/>
 	<script src="js/sorttable.js"></script>
 	 <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
-	
+	<script src="webjars/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+</script>
+	<script src="js/lokacijaJS.js"></script>	
 	<link rel="stylesheet" type="text/css" href="css/tabela.css">
 	<link rel="stylesheet" type="text/css" href="css/glavno.css">
 		
@@ -21,33 +24,40 @@
 <body>
 <ul class="navbar">
 		<li style="font-family: 'Pacifico', cursive;font-size: 31px;color: white; margin-left: 10px; " ><a href="/Knjizara">Лексикограф</a></li>
-		<li th:if="${session.prijavljeniKorisnik == null}"><a href="prijava.html">prijava</a></li>
-		<li th:if="${session.prijavljeniKorisnik == null}" ><a href="registracija.html">Registracija</a></li>
-		<li><a href="Zanrovi">žanrovi</a></li>
-		<li><a href="Komentari">Komentari</a></li>
+		<li th:if="${session.prijavljeniKorisnik == null}"><a th:text="#{index.prijava}" href="prijava.html">prijava</a></li>
+		<li th:if="${session.prijavljeniKorisnik == null}" ><a th:text="#{index.registracija}" href="registracija.html">Registracija</a></li>
+		<li><a th:text="#{index.zanrovi}" href="Zanrovi">žanrovi</a></li>
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == true}"><a th:text="#{index.komentari}"  href="Komentari">Komentari</a></li>
 		
-		<li><a href="SpecijalniDatum">Specijalni Datumi</a></li>
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == true}"><a th:text="#{index.specijalniDatumi}"  href="SpecijalniDatum">Specijalni Datumi</a></li>
 		
-		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == false}"><a href="Korpa">korpa</a></li>
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == false}"><a th:text="#{index.korpa}"  href="Korpa">korpa</a></li>
 		
-		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}"><a href="Korisnici">korisnici</a></li>		
-		
-		<li><a>Komentari</a></li>
-</ul>
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}"><a th:text="#{index.korisnici}"  href="Korisnici">korisnici</a></li>		
+		</ul>
+	<div style="float:right">
+		<span th:text="${#locale}"></span>
+		<span th:text="#{lang.change}"></span>:
+		<select id="locales" name="locales">
+		    <option value=""></option>
+		    <option value="ru" th:text="#{lang.ru}" th:selected="${#strings.equals(#locale.language,'ru')}"></option>
+		    <option value="sr" th:text="#{lang.sr}" th:selected="${#strings.equals(#locale.language,'sr')}"></option>
+		</select>
+	</div>		
 
 		<div  style="background-color: white;">
 		<div th:unless="${session.prijavljeniKorisnik == null}">
-			<h3>Prijavljeni ste kao <a th:href="|Korisnici/Details?korisnickoIme=${session.prijavljeniKorisnik.korisnickoIme}|" th:text="${session.prijavljeniKorisnik.korisnickoIme}"></a>.
+			<h3 th:text="#{index.PrijavljeniKao}" ></h3> <h3><a th:href="|Korisnici/Details?korisnickoIme=${session.prijavljeniKorisnik.korisnickoIme}|" th:text="${session.prijavljeniKorisnik.korisnickoIme}"></a></h3>.
 
 					<ul>
-						<li><a href="Korisnici/Logout">odjava</a></li>
+						<li><a th:text="#{index.odjava}"  href="Korisnici/Logout">odjava</a></li>
 					</ul>
 		</div>
 		
 		<div th:if="${session.prijavljeniKorisnik == null}" style="padding: 20px;">
-		<h3 th:if="${session.prijavljeniKorisnik == null}">Niste prijavljeni</h3>
-		<h5 th:if="${session.prijavljeniKorisnik == null}" ><a href="registracija.html">Registruj se </a></h5>
-		<h5 th:if="${session.prijavljeniKorisnik == null}" ><a href="prijava.html">Prijavi se</a></h5>
+		<h3 th:text="#{index.nistePrijavljeni}" th:if="${session.prijavljeniKorisnik == null}">Niste prijavljeni</h3>
+		<h5 th:if="${session.prijavljeniKorisnik == null}" ><a th:text="#{index.registrujse}" href="registracija.html">Registruj se </a></h5>
+		<h5 th:if="${session.prijavljeniKorisnik == null}" ><a th:text="#{index.prijaviSe}" href="prijava.html">Prijavi se</a></h5>
 		</div>
 		
 <!-- 		<div class="col-lg-6" style="height: 250px;">
@@ -80,35 +90,35 @@
 
 
 
-				<h1 style="text-align: center; font-family: 'Pacifico', cursive;">Sve knjige</h1>
+				<h1 th:text="#{index.natpis}" style="text-align: center; font-family: 'Pacifico', cursive;"></h1>
 				<hr>
 				
 
 
 	<ul>
-			<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}"><a class="btn btn-primary" style="margin-bottom: 10px;" href="Create">Dodavanje Nove Knjige</a></li>
+			<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}"><a th:text="#{index.dodavanje}" class="btn btn-primary" style="margin-bottom: 10px;" href="Create"></a></li>
 	</ul>
 
 		<form method="get">
 			<table class="table table-striped">
 				<tr style="background-color: #044855; color: white;">
-					<th>PRETRAGE</th>
-					<th><input placeholder="Pretraga po Nazivu" type="search" name="naziv" th:value="${param.naziv}?: null"/></th>
-					<th><input placeholder="Pretraga po Autoru" type="search" name="autor" th:value="${param.autor}?: null"/></th>
-					<th><input placeholder="Pretraga po Jeziku" type="search" name="jezik" th:value="${param.jezik}?: null"/></th>
-					<th th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}"><input placeholder="ISBN" type="search" name="isbn" th:value="${param.isbn}?: null"/></th>
+					<th th:text="#{index.pretrage}"></th>
+					<th><input th:placeholder="#{index.poNazivu}" type="search" name="naziv" th:value="${param.naziv}?: null"/></th>
+					<th><input th:placeholder="#{index.poAutoru}" type="search" name="autor" th:value="${param.autor}?: null"/></th>
+					<th><input th:placeholder="#{index.poJeziku}" type="search" name="jezik" th:value="${param.jezik}?: null"/></th>
+					<th th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}"><input th:placeholder="#{index.isbn}" type="search" name="isbn" th:value="${param.isbn}?: null"/></th>
 					
 					<th>
 						<select name="zanrId">
-							<option value="">odaberi</option>
+							<option th:text="#{index.odaberi}" value="">odaberi</option>
 							<option th:each="itZanr: ${zanrovi}" th:value="${itZanr.id}" th:text="${itZanr.naziv}" th:selected="${#strings.equals(itZanr.id, param.zanrId)}"></option>
 						</select>
 					</th>
 					<th>
-						od:<input type="number" min="0" th:value="${param.cenaOd}?: '200'" name="cenaOd"/><br/>
-						do:<input type="number" min="0" th:value="${param.cenaDo}?: '3000'" name="cenaDo"/>
+						ex:<input type="number" min="0" th:value="${param.cenaOd}?: '200'" name="cenaOd"/><br/>
+						et:<input type="number" min="0" th:value="${param.cenaDo}?: '3000'" name="cenaDo"/>
 					</th>
-					<th><input type="submit" value="Pretraži"/></th>
+					<th><input type="submit" th:value="Pretraži"/></th>
 				</tr>
 			</table>
 		</form>
@@ -117,12 +127,12 @@
 			<table class="table sortable tabela1">
 					  <thead style="background-color: #044855; color: white;">
 					    <tr>
-							<th scope="col">r. br.</th>
-							<th scope="col">Omot</th>
-							<th scope="col">Naziv</th>
-							<th scope="col">Ocena</th>
-							<th scope="col">Jezik</th>
-							<th scope="col">CENA</th>
+							<th  scope="col">r. br.</th>
+							<th th:text="#{index.omot}" scope="col">Omot</th>
+							<th th:text="#{index.naziv}" scope="col">Naziv</th>
+							<th th:text="#{index.ocena}" scope="col">Ocena</th>
+							<th th:text="#{index.jezik}" scope="col">Jezik</th>
+							<th th:text="#{index.cena}" scope="col">CENA</th>
 
 					    </tr>
 					  </thead>

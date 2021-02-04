@@ -6,14 +6,26 @@
 	<link rel="stylesheet" type="text/css" href="css/StiloviTabela.css"/>
 	    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 		<link rel="stylesheet" type="text/css" href="css/glavno.css">
-	
-	<title>Žanrovi</title>
+	<link rel="stylesheet" type="text/css" href="css/glavno.css">
+	<title>Komentari</title>
 </head>
 <body>
+<ul class="navbar">
+		<li style="font-family: 'Pacifico', cursive;font-size: 31px;color: white; margin-left: 10px; " ><a href="/Knjizara">Лексикограф</a></li>
+		<li><a href="Zanrovi">žanrovi</a></li>
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == true}"><a href="Komentari">Komentari</a></li>
+		
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == true}"><a href="SpecijalniDatum">Specijalni Datumi</a></li>
+		
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == false}"><a href="Korpa">korpa</a></li>
+		
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}"><a href="Korisnici">korisnici</a></li>		
+		
+</ul>
 <div class="container">
-<h1>Zanrovi</h1>
+<h1>Komentari</h1>
 <hr>
-		<form method="get">
+		<form method="get" style="margin-left: 25%;">
 			<table class="tabela">
 				<caption>Komentari na Cekanju</caption>
 				<tr>

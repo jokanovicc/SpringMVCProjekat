@@ -15,45 +15,49 @@
 <body>
 <ul class="navbar">
 		<li style="font-family: 'Pacifico', cursive;font-size: 31px;color: white; margin-left: 10px; " ><a href="/Knjizara">Лексикограф</a></li>
-		<li th:if="${session.prijavljeniKorisnik == null}"><a href="prijava.html">prijava</a></li>
-		<li th:if="${session.prijavljeniKorisnik == null}" ><a href="registracija.html">Registracija</a></li>
-		<li><a href="Zanrovi">žanrovi</a></li>
-		<li><a href="Korisnici">korisnici</a></li>
+		<li th:if="${session.prijavljeniKorisnik == null}"><a th:text="#{index.prijava}" href="prijava.html">prijava</a></li>
+		<li th:if="${session.prijavljeniKorisnik == null}" ><a th:text="#{index.registracija}" href="registracija.html">Registracija</a></li>
+		<li><a th:text="#{index.zanrovi}" href="Zanrovi">žanrovi</a></li>
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == true}"><a th:text="#{index.komentari}"  href="Komentari">Komentari</a></li>
 		
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == true}"><a th:text="#{index.specijalniDatumi}"  href="SpecijalniDatum">Specijalni Datumi</a></li>
 		
-		<li><a>Komentari</a></li>
-</ul>
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == false}"><a th:text="#{index.korpa}"  href="Korpa">korpa</a></li>
+		
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}"><a th:text="#{index.korisnici}"  href="Korisnici">korisnici</a></li>		
+		</ul>
 
 		<div style="background-color: white;">
-		<div th:unless="${session.prijavljeniKorisnik == null}">
-			<h3>Prijavljeni ste kao <a th:href="|Korisnici/Details?korisnickoIme=${session.prijavljeniKorisnik.korisnickoIme}|" th:text="${session.prijavljeniKorisnik.korisnickoIme}"></a>.
-
-					<ul>
-						<li><a href="Korisnici/Logout">odjava</a></li>
-					</ul>
-		</div>
-
-
-	
 
 
 	<div th:fragment="centralniDiv">
+	<div style="float:right">
+		<span th:text="${#locale}"></span>
+		<span th:text="#{lang.change}"></span>:
+		<select id="locales" name="locales">
+		    <option value=""></option>
+		    <option value="ru" th:text="#{lang.ru}" th:selected="${#strings.equals(#locale.language,'ru')}"></option>
+		    <option value="sr" th:text="#{lang.sr}" th:selected="${#strings.equals(#locale.language,'sr')}"></option>
+		</select>
+	</div>	
+	
+	
 		<form method="post" action="Korisnici/Edit" style="margin-left: 30%;">
 			<input type="hidden" name="korisnickoIme" th:value="${korisnik.korisnickoIme}"/>
 			<table class="forma">
-				<caption>Korisnik</caption>
-				<tr><th>korisničko ime:</th><td readonly th:text="${korisnik.korisnickoIme}"></td></tr>
-				<tr><th>e-mail:</th><td><input type="text" readonly name="eMail" th:value="${korisnik.eMail}"/></td></tr>
-				<tr><th>Ime:</th><td><input type="text" readonly name="ime" th:value="${korisnik.ime}"/></td></tr>
-				<tr><th>Prezime:</th><td><input type="text" readonly name="prezime" th:value="${korisnik.prezime}"/></td></tr>
-				<tr><th>Adresa:</th><td><input type="text" readonly name="adresa" th:value="${korisnik.adresa}"/></td></tr>
-				<tr><th>Broj telefona:</th><td><input type="text" readonly name="brojTelefona" th:value="${korisnik.brojTelefona}"/></td></tr>
-				<tr><th>Datum rodjenja:</th><td><input type="text" readonly name="datumRodjenja" th:value="${korisnik.datumRodjenja}"/></td></tr>
-				<tr><th>Datum registracije:</th><td><input type="text" readonly name="eMail" th:value="${korisnik.datumRegistracije}"/></td></tr>
+				<caption th:text="#{korisnik.korisnik}">Korisnik</caption>
+				<tr><th th:text="#{korisnik.korisnicko}">korisničko ime:</th><td readonly th:text="${korisnik.korisnickoIme}"></td></tr>
+				<tr><th th:text="#{korisnik.email}">e-mail:</th><td><input type="text" readonly name="eMail" th:value="${korisnik.eMail}"/></td></tr>
+				<tr><th th:text="#{korisnik.ime}">Ime:</th><td><input type="text" readonly name="ime" th:value="${korisnik.ime}"/></td></tr>
+				<tr><th th:text="#{korisnik.prezime}">Prezime:</th><td><input type="text" readonly name="prezime" th:value="${korisnik.prezime}"/></td></tr>
+				<tr><th th:text="#{korisnik.adresa}">Adresa:</th><td><input type="text" readonly name="adresa" th:value="${korisnik.adresa}"/></td></tr>
+				<tr><th th:text="#{korisnik.brojTelefona}">Broj telefona:</th><td><input type="text" readonly name="brojTelefona" th:value="${korisnik.brojTelefona}"/></td></tr>
+				<tr><th th:text="#{korisnik.datumRodj}">Datum rodjenja:</th><td><input type="text" readonly name="datumRodjenja" th:value="${korisnik.datumRodjenja}"/></td></tr>
+				<tr><th th:text="#{korisnici.datumReg}">Datum registracije:</th><td><input type="text" readonly name="eMail" th:value="${korisnik.datumRegistracije}"/></td></tr>
 				
 				
-				<tr th:if="${session.prijavljeniKorisnik.administrator and session.prijavljeniKorisnik != korisnik and korisnik.blokiran != true}"><th>administrator:</th><td><input type="checkbox" name="administrator" th:checked="${korisnik.administrator}"/></td></tr>
-				<tr th:if="${session.prijavljeniKorisnik.administrator and session.prijavljeniKorisnik != korisnik and korisnik.administrator == false}"><th>blokiran:</th><td th:if="${korisnik.administrator == false}"><input type="checkbox" name="blokiran" th:checked="${korisnik.blokiran}"/></td></tr>
+				<tr th:if="${session.prijavljeniKorisnik.administrator and session.prijavljeniKorisnik != korisnik and korisnik.blokiran != true}"><th th:text="#{korisnici.administrator}">administrator:</th><td><input type="checkbox" name="administrator" th:checked="${korisnik.administrator}"/></td></tr>
+				<tr th:if="${session.prijavljeniKorisnik.administrator and session.prijavljeniKorisnik != korisnik and korisnik.administrator == false}"><th th:text="#{korisnici.blokiran}">blokiran:</th><td th:if="${korisnik.administrator == false}"><input type="checkbox" name="blokiran" th:checked="${korisnik.blokiran}"/></td></tr>
 				
 				<tr><th></th><td><input type="submit" value="Izmeni"/></td></tr>
 			</table>
@@ -86,14 +90,13 @@
 			
 			<div class="col">
 			
-			<h3>Kupovine</h3>
+			<h3 th:text="#{korisnik.kupovine}">Kupovine</h3>
 			<table class="table" style="width: 700px; margin-left: 100px;" th:if="${korisnik.administrator == false}">
-				<caption>Kupovine</caption>
 			<thead style="background-color: #044855; color: white;">
 				<tr>
-					<th>r. br.</th>
-					<th>ukupnaCena</th>
-					<th>datum</th>
+					<th>#</th>
+					<th th:text="#{korisnik.ukupnaCena}">ukupnaCena</th>
+					<th th:text="#{korisnik.datum}">datum</th>
 				</tr>
 			</thead>
 			 <tbody>
@@ -109,14 +112,14 @@
 			</div>
 			
  	<div class="col">
-			<h3 style="width: 100px;">Liste Zelja</h3>
+			<h3 th:text="#{korisnik.listaZelja}" style="width: 100px;">Liste Zelja</h3>
 			<table class="table" style="width: 700px; margin-bottom: 100px;">
 			<thead style="background-color: #044855; color: white;">
 				<tr>
-					<th>r. br.</th>
-					<th>Knjiga</th>
-					<th>Autor</th>
-					<th>Ukloni</th>
+					<th>#</th>
+					<th th:text="#{korisnik.knjiga}">Knjiga</th>
+					<th th:text="#{korisnik.autor}">Autor</th>
+					<th th:text="#{korisnik.ukloni}">Ukloni</th>
 				</tr>
 			</thead>
 			 <tbody>
@@ -124,7 +127,7 @@
 					<td th:text="${status.index + 1}"></td>
 					<td th:text="${itListaZelja.knjiga.naziv}"></td>
 					<td th:text="${itListaZelja.knjiga.autor}"></td>
-					<td th:if="${session.prijavljeniKorisnik.administrator == false}"><a th:href="|Korisnici/BrisanjeListeZelja?id=${itListaZelja.id}|">Brisanje</a></td>
+					<td th:if="${session.prijavljeniKorisnik.administrator == false}"><a th:text="#{korisnik.brisanje}" th:href="|Korisnici/BrisanjeListeZelja?id=${itListaZelja.id}|">Brisanje</a></td>
 					
 			</tr>
 			</tbody>
@@ -137,13 +140,13 @@
 			</div>
 			
 				<table class="table" style="width: 400px;margin-left: 100px;" th:each="itLojalti, status: ${lojalti}" th:if="${korisnik.administrator == false}">
-				<caption th:if="${itLojalti.Korisnik.korisnickoIme == session.prijavljeniKorisnik.korisnickoIme and itLojalti.odobrena == false}">Kartica Vam jos nije odobrena</caption>
+				<caption th:text="#{korisnik.karticaN}" th:if="${itLojalti.Korisnik.korisnickoIme == session.prijavljeniKorisnik.korisnickoIme and itLojalti.odobrena == false}">Kartica Vam jos nije odobrena</caption>
 							
 			
 			<thead style="background-color: #044855; color: white;" th:if="${itLojalti.Korisnik.korisnickoIme == korisnik.korisnickoIme and itLojalti.odobrena == true}">
 				<tr>
-					<th>Broj Poena</th>
-					<th>Popust koji ste ostvarili</th>
+					<th th:text="#{korisnici.brojPoena}">Broj Poena</th>
+					<th th:text="#{korisnici.popust}">Popust koji ste ostvarili</th>
 				</tr>
 			</thead>
 			 <tbody>
@@ -157,7 +160,7 @@
 			</table> 
 			
 			
-			<a  th:if="${korisnik.kartica == false and korisnik.administrator == false}" style="margin-bottom: 50px;" class="btn btn-primary btn-lg"  href="Korpa/Izdavanje">Izdaj karticu</a>		
+			<a  th:text="#{korisnik.izdaj}" th:if="${korisnik.kartica == false and korisnik.administrator == false}" style="margin-bottom: 50px;" class="btn btn-primary btn-lg"  href="Korpa/Izdavanje">Izdaj karticu</a>		
 			
 			
 			

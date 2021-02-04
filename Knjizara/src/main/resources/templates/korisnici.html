@@ -15,36 +15,30 @@
 <body>
 <ul class="navbar">
 		<li style="font-family: 'Pacifico', cursive;font-size: 31px;color: white; margin-left: 10px; " ><a href="/Knjizara">Лексикограф</a></li>
-		<li th:if="${session.prijavljeniKorisnik == null}"><a href="prijava.html">prijava</a></li>
-		<li th:if="${session.prijavljeniKorisnik == null}" ><a href="registracija.html">Registracija</a></li>
-		<li><a href="Zanrovi">žanrovi</a></li>
-		<li><a href="Korisnici">korisnici</a></li>
-		<li th:if="${session.prijavljeniKorisnik != null}" ><a href="Korisnici/Details">Informacije</a></li>
+		<li th:if="${session.prijavljeniKorisnik == null}"><a th:text="#{index.prijava}" href="prijava.html">prijava</a></li>
+		<li th:if="${session.prijavljeniKorisnik == null}" ><a th:text="#{index.registracija}" href="registracija.html">Registracija</a></li>
+		<li><a th:text="#{index.zanrovi}" href="Zanrovi">žanrovi</a></li>
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == true}"><a th:text="#{index.komentari}"  href="Komentari">Komentari</a></li>
 		
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == true}"><a th:text="#{index.specijalniDatumi}"  href="SpecijalniDatum">Specijalni Datumi</a></li>
 		
-		<li><a>Komentari</a></li>
-</ul>
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == false}"><a th:text="#{index.korpa}"  href="Korpa">korpa</a></li>
+		
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}"><a th:text="#{index.korisnici}"  href="Korisnici">korisnici</a></li>		
+		</ul>
 
 		<div style="background-color: white;">
-		<div th:unless="${session.prijavljeniKorisnik == null}">
-			<h3>Prijavljeni ste kao <a th:href="|Korisnici/Details?korisnickoIme=${session.prijavljeniKorisnik.korisnickoIme}|" th:text="${session.prijavljeniKorisnik.korisnickoIme}"></a>.
-
-					<ul>
-						<li><a href="Korisnici/Logout">odjava</a></li>
-					</ul>
-		</div>
-
 
 
 	<div th:fragment="centralniDiv">
 		<form method="get">
 			<table class="tabela">
-				<caption>Korisnici</caption>
+				<caption th:text="#{index.korisnici}">Korisnici</caption>
 				<tr>
-					<th>Korisničko ime</th>
-					<th>Datum Registracije</th>
-					<th>Administrator</th>
-					<th>Blokiran</th>
+					<th th:text="#{korisnici.korisnicko}">Korisničko ime</th>
+					<th th:text="#{korisnici.datumReg}">Datum Registracije</th>
+					<th th:text="#{korisnici.administrator}">Administrator</th>
+					<th th:text="#{korisnici.blokiran}">Blokiran</th>
 				</tr>
 				<tr th:each="itKorisnik, status: ${korisnici}">
 					<td><a th:href="|Korisnici/Details?korisnickoIme=${itKorisnik.korisnickoIme}|" th:text="${itKorisnik.korisnickoIme}"></a></td>
@@ -57,20 +51,20 @@
 		
 		</div>
 
-		<h3>Kartice na cekanju</h3>
+		<h3 th:text="#{korisnici.karticaCekanje}">Kartice na cekanju</h3>
 		<table class="table" style="width: 400px;" th:each="itLojalti, status: ${lojalti}">
 			
 			<thead style="background-color: #044855; color: white;" th:if="${itLojalti.odobrena == false}">
 				<tr>
-					<th>Broj Poena</th>
-					<th>Popust koji ste ostvarili</th>
+					<th th:text="#{korisnici.brojPoena}">Broj Poena</th>
+					<th th:text="#{korisnici.popust}">Popust koji ste ostvarili</th>
 				</tr>
 			</thead>
 			 <tbody>
 			<tr th:if="${itLojalti.odobrena == false}">
 					<td th:text="${itLojalti.Korisnik.korisnickoIme}"></td>
 					<td th:text="${itLojalti.id}"></td>
-					<td><a th:href="|Korpa/Odobrenje?korisnicko=${itLojalti.korisnik.korisnickoIme}|">Odobri</a></td>
+					<td><a th:text="#{korisnici.odobri}" th:href="|Korpa/Odobrenje?korisnicko=${itLojalti.korisnik.korisnickoIme}|">Odobri</a></td>
 			</tr>
 			</tbody>			
 			</table> 
@@ -79,14 +73,14 @@
 		
 		
 		<hr>
-		<h3>Izvestavanja</h3>
+		<h3 th:text="#{korisnici.izvestavanja}">Izvestavanja</h3>
 		<table class="table tabela" style="border: 0px;margin-left: 20px;">
 			<tr><th></th><td>
 			<form method="post" action="Korisnici/Izvestavanje" th:if="${session.prijavljeniKorisnik != null}">
 			<table class="forma">
-				<tr><th><td>Izvestavanje</td></tr>
-				<tr><th>Datum1:</th><td><input type="date" th:value="2021-01-25" required name="datum1"/></td></tr>
-				<tr><th>Datum2:</th><td><input type="date" th:value="2021-02-02" required name="datum2"/></td></tr>								
+				<tr><th><td th:text="#{korisnici.izvestavanja}">Izvestavanje</td></tr>
+				<tr><th th:text="#{korisnici.datum1}">Datum 1:</th><td><input type="date" th:value="2021-01-25" required name="datum1"/></td></tr>
+				<tr><th th:text="#{korisnici.datum2}">Datum 2:</th><td><input type="date" th:value="2021-02-02" required name="datum2"/></td></tr>								
 				<tr><th></th><td><input type="submit" value="Izvestiraj"/></td></tr>
 			
 			</table>
