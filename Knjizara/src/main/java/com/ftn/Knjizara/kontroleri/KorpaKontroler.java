@@ -109,8 +109,6 @@ public class KorpaKontroler {
 		Long id2 = (long) rand.nextInt(1000); 
 		kupovina.setId(id2);
 		KupljenaKnjiga kupljenaKnjiga = new KupljenaKnjiga(id, knjiga, brojKnjiga, 0, kupovina.getId());
-		
-		
 		kupljenaKnjiga.setCena(brojKnjiga*knjiga.getCena());
 		
 		
@@ -198,6 +196,7 @@ public class KorpaKontroler {
 		
 
 	}
+
 	
 	
 	
@@ -240,7 +239,18 @@ public class KorpaKontroler {
 	}
 	
 	
+	@GetMapping("/OdbijanjeKartice")
+	public void Odbijanje(Long id,String korisnicko, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		
+		Korisnik k = ks.findOne(korisnicko);
+		k.setKartica(false);
+		ks.update(k);
+		loyaltyKarticaService.delete(id);
 	
+		response.sendRedirect(baseURL);
+
+
+	}
 	
 	
 	
@@ -256,42 +266,58 @@ public class KorpaKontroler {
 		
 		SpecijalniDatum sc = new SpecijalniDatum(3L, Date.valueOf("2015-03-31"), 0);
 		Date datum =  Date.valueOf(LocalDate.now());
-		
+		SpecijalniDatum danas = null;
 		List<SpecijalniDatum> specijalniDatumi = specijalniService.findAll();
-
+		
+		System.out.println("FDFDSFSDF "+ kupovina.getUkupnaCena());
+		
+		
+		
 		for (SpecijalniDatum specijalniDatum : specijalniDatumi) {
 			if(specijalniDatum.getDatum().equals(datum)) {
 				sc = specijalniDatum;
+				danas = specijalniDatum;
+				System.out.println(specijalniDatum);
 			}
 		}
 		
 		
 		
-		if(!sc.getDatum().equals(datum)) {
+		if(sc.getDatum().equals(datum)) {
 		
-				if(brojBodova < 11) {
-					
-		
-						double popust = 0;
-						double pocetnaCena = kupovina.getUkupnaCena();
-						
-						
-						for (int i = 0; i < loyalty.getBrojPoena(); i++) {
-							pocetnaCena = pocetnaCena * 0.95;
+				System.out.println("AAAAAAAAA" + danas);
+				double popust = danas.getPopust();
+				double posto = (100-popust)/100;
+				System.out.println(posto);
+				double pocetnaCena = kupovina.getUkupnaCena();
+				kupovina.setUkupnaCena(pocetnaCena*posto);
+
+			  System.out.println("???????????  "+ kupovina.getUkupnaCena());
+			} 
+		else { 
+						if(brojBodova < 11) {
 							
-						}
-						
-						kupovina.setUkupnaCena(pocetnaCena);
-						loyalty.setBrojPoena(loyalty.getBrojPoena()-brojBodova);
-						loyaltyKarticaService.update(loyalty);
+							
+							double popust = 0;
+							double pocetnaCena = kupovina.getUkupnaCena();
+							System.out.println(pocetnaCena);
+							
+							for (int i = 0; i < brojBodova; i++) {
+								pocetnaCena = pocetnaCena * 0.95;							
+							}
+							kupovina.setUkupnaCena(pocetnaCena);
+							loyalty.setBrojPoena(loyalty.getBrojPoena()-brojBodova);
+							loyaltyKarticaService.update(loyalty);
+			
+			
+					}
+				  
+				 
+				 }
+				 
+
 		
 		
-				}
-		}else {
-			kupovina.setUkupnaCena(kupovina.getUkupnaCena()*(sc.getPopust()/100));
-
-		}
-
 		kupovina.setDatumKupovine(LocalDateTime.now());
 		kupovina.setKorisnik(korisnik);
 		kupovinaService.save(kupovina);
@@ -310,6 +336,7 @@ public class KorpaKontroler {
 			//	loyaltyKarticaService.update(loyalty);
 				loyaltyKarticaService.update(loyalty);
 		}
+		System.out.println("FDFDSFSDF2222  "+ kupovina.getUkupnaCena());
 
 		
 		for (KupljenaKnjiga kupljenaKnjiga : kupovina.getKupljeneKnjige()) {
@@ -329,6 +356,79 @@ public class KorpaKontroler {
 		return;
 	
 }
+
+	
+	
+	@GetMapping("/Dodavanje2")
+	public void Dodavanje2(Integer kupovina1,HttpServletRequest request, HttpServletResponse response,HttpSession session) throws IOException {
+		Kupovina kupovina = (Kupovina) request.getSession().getAttribute(KORPA_KEY);
+		Korisnik korisnik = (Korisnik) request.getSession().getAttribute(KorisnikKontroler.KORISNIK_KEY);
+		
+		SpecijalniDatum sc = new SpecijalniDatum(3L, Date.valueOf("2015-03-31"), 0);
+		Date datum =  Date.valueOf(LocalDate.now());
+		SpecijalniDatum danas = null;
+		List<SpecijalniDatum> specijalniDatumi = specijalniService.findAll();
+		
+		
+		
+		
+		for (SpecijalniDatum specijalniDatum : specijalniDatumi) {
+			if(specijalniDatum.getDatum().equals(datum)) {
+				sc = specijalniDatum;
+				danas = specijalniDatum;
+				System.out.println(specijalniDatum);
+			}
+		}
+		
+		
+		
+		if(sc.getDatum().equals(datum)) {
+		
+				System.out.println("AAAAAAAAA" + danas);
+				double popust = danas.getPopust();
+				double posto = (100-popust)/100;
+				System.out.println(posto);
+				double pocetnaCena = kupovina.getUkupnaCena();
+				kupovina.setUkupnaCena(pocetnaCena*posto);
+
+			  System.out.println("???????????  "+ kupovina.getUkupnaCena());
+			} 
+
+				  
+				 
+				 
+				
+
+		
+		
+		kupovina.setDatumKupovine(LocalDateTime.now());
+		kupovina.setKorisnik(korisnik);
+		kupovinaService.save(kupovina);
+		
+		
+		
+		for (KupljenaKnjiga kupljenaKnjiga : kupovina.getKupljeneKnjige()) {
+			kupljenaKnjiga.setKupovina(kupovina.getId());
+			kupljenaKnjigaService.save(kupljenaKnjiga);
+			kupljenaKnjiga.getKnjiga().setKolicina(kupljenaKnjiga.getKnjiga().getKolicina()-kupljenaKnjiga.getBrojPrimeraka());
+			knjigaService.update(kupljenaKnjiga.getKnjiga());
+		}
+		
+		
+
+		
+		kupovina.getKupljeneKnjige().clear();
+		kupovina.setUkupnaCena(0.0);
+		kupovina.setBrojKnjiga(0);
+		response.sendRedirect(baseURL + "Korisnici/DetailsKupovine?id=" + kupovina.getId()); 
+		return;
+	
+}
+
+
+	
+	
+	
 	
 	
 	@PostMapping("/Popust")

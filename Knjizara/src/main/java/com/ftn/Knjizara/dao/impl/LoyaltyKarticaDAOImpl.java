@@ -100,8 +100,8 @@ public class LoyaltyKarticaDAOImpl implements LoyaltyKarticaDAO {
 
 	@Override
 	public int delete(Long id) {
-		// TODO Auto-generated method stub
-		return 0;
+		String sql = "DELETE FROM loyaltyKartica WHERE id = ?";
+		return jdbcTemplate.update(sql, id);
 	}
 
 }

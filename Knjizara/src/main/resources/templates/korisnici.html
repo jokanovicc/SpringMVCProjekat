@@ -65,6 +65,8 @@
 					<td th:text="${itLojalti.Korisnik.korisnickoIme}"></td>
 					<td th:text="${itLojalti.id}"></td>
 					<td><a th:text="#{korisnici.odobri}" th:href="|Korpa/Odobrenje?korisnicko=${itLojalti.korisnik.korisnickoIme}|">Odobri</a></td>
+					<td><a th:href="|Korpa/OdbijanjeKartice?id=${itLojalti.id}&korisnicko=${itLojalti.korisnik.korisnickoIme}|">Odbiji</a></td>
+					
 			</tr>
 			</tbody>			
 			</table> 

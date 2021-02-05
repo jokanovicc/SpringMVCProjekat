@@ -100,8 +100,8 @@ public class KupovinaDAOImpl implements KupovinaDAO {
 
 	@Override
 	public int update(Kupovina kupovina) {
-		// TODO Auto-generated method stub
-		return 0;
+		String sql = "UPDATE kupovina SET ukupnaCena = ?, datumKupovine = ?, ukupanBrojKnjiga = ? where id = ? ";
+		return jdbcTemplate.update(sql,kupovina.getUkupnaCena(),kupovina.getDatumKupovine(),kupovina.getBrojKnjiga(),kupovina.getId());
 	}
 
 	@Override

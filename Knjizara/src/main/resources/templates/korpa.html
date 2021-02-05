@@ -71,6 +71,7 @@
 					<th>r. br.</th>
 					<th>Naziv</th>
 					<th>Broj Primeraka</th>
+					<th>Cena</th>
 					<th>Jedinicna Cena</th>
 					<th></th>
 				</tr>
@@ -79,6 +80,7 @@
 					<td th:text="${itKupljenaKnjiga.knjiga.naziv}"></td>
 					<td th:text="${itKupljenaKnjiga.brojPrimeraka}"></td>
 					<td th:text="${itKupljenaKnjiga.cena}"></td>
+					<td th:text="${itKupljenaKnjiga.knjiga.cena}"></td>
 					<td><a th:href="|Korpa/Brisanje?kupljenaKnjigaID=${itKupljenaKnjiga.id}|">Brisanje</a></td>
 					
 			</tr>
@@ -111,11 +113,42 @@
 			<tr><th></th><td>
 			<form method="post" action="Korpa/Dodavanje" th:if="${session.prijavljeniKorisnik != null}">
 			<input type="hidden" name="id" th:value="${kupovina.id}"/>
+<!-- 			 <input type="hidden" id="ukupnaCena" name="ukupnaCena" th:value="${kupovina.ukupnaCena}">
+ -->			
 			<table class="forma" th:each="itLojalti, status: ${lojalti}">
 				<tr th:if="${itLojalti.korisnik.korisnickoIme == session.prijavljeniKorisnik.korisnickoIme}"><th><td>Snizite cenu kupovini uz vasu Loyalty Karticu!</td></tr>
-				<tr th:if="${itLojalti.korisnik.korisnickoIme == session.prijavljeniKorisnik.korisnickoIme}"><th>Broj bodova:</th><td><input type="number" th:value="${itLojalti.brojPoena}"  th:max="${itLojalti.brojPoena}" min="0"  required name="brojBodova"/></td></tr>				
-				<tr th:if="${itLojalti.korisnik.korisnickoIme == session.prijavljeniKorisnik.korisnickoIme}"><th></th><td><input type="submit" value="Zavrsi kupovinu"/></td></tr>
-			
+				<tr th:if="${itLojalti.korisnik.korisnickoIme == session.prijavljeniKorisnik.korisnickoIme}"><th>Broj bodova:</th>
+					
+					<td><label for="bodovi">Izaberite bodove</label>
+					
+					<select id="bodovi" name="brojBodova">
+					  <option selected value="0">0</option>
+					  <option value="1" th:disabled= "${itLojalti.brojPoena < 1}">1</option>
+					  <option value="2" th:disabled= "${itLojalti.brojPoena < 2}">2</option>
+					  <option value="3" th:disabled= "${itLojalti.brojPoena < 3}">3</option>
+					  <option value="4" th:disabled= "${itLojalti.brojPoena < 4}">4</option>
+					  <option value="5" th:disabled= "${itLojalti.brojPoena < 5}">5</option>
+					  <option value="6" th:disabled= "${itLojalti.brojPoena < 6}">6</option>
+					  <option value="7" th:disabled= "${itLojalti.brojPoena < 7}">7</option>
+					  <option value="8" th:disabled= "${itLojalti.brojPoena < 8}">8</option>
+					  <option value="9" th:disabled= "${itLojalti.brojPoena < 9}">9</option>
+					  <option value="10" th:disabled= "${itLojalti.brojPoena < 10}">10</option>
+					</select>
+					</td>
+				</tr>
+				
+				
+<!-- 				<td><input type="number" th:value="${itLojalti.brojPoena}"  th:max="${itLojalti.brojPoena}" min="0"  required name="brojBodova"/></td></tr>	
+ -->				
+				
+				
+				
+				
+							
+				<tr th:if="${itLojalti.korisnik.korisnickoIme == session.prijavljeniKorisnik.korisnickoIme}"><th></th><td><input type="submit" value="Zavrsi kupovinu"/></td></tr>			
+			</table>
+			<table>
+			<tr th:if="${session.prijavljeniKorisnik.kartica == false}"><td><a class="btn btn-primary btn-lg" style="font-size: 15px;"  th:href="|Korpa/Dodavanje2?kupovina1=${kupovina.brojKnjiga}|">Zavrsi Kupovinu</a></td></tr>
 			</table>
 		</form>
 			

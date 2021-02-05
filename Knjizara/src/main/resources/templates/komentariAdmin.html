@@ -3,39 +3,45 @@
 <head>
 	<meta charset="UTF-8">
 	<base th:href="@{/}">
-	<link rel="stylesheet" type="text/css" href="css/StiloviTabela.css"/>
-	    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="css/StiloviForma.css"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<link rel="stylesheet" type="text/css" href="css/navbar.css"/>
+			 <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="css/glavno.css">
-	<link rel="stylesheet" type="text/css" href="css/glavno.css">
-	<title>Komentari</title>
+			<link rel="stylesheet" type="text/css" href="css/StiloviTabela.css"/>
+			<script src="webjars/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+</script>
+	<script src="js/lokacijaJS.js"></script>	
 </head>
 <body>
 <ul class="navbar">
 		<li style="font-family: 'Pacifico', cursive;font-size: 31px;color: white; margin-left: 10px; " ><a href="/Knjizara">Лексикограф</a></li>
-		<li><a href="Zanrovi">žanrovi</a></li>
-		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == true}"><a href="Komentari">Komentari</a></li>
+		<li th:if="${session.prijavljeniKorisnik == null}"><a th:text="#{index.prijava}" href="prijava.html">prijava</a></li>
+		<li th:if="${session.prijavljeniKorisnik == null}" ><a th:text="#{index.registracija}" href="registracija.html">Registracija</a></li>
+		<li><a th:text="#{index.zanrovi}" href="Zanrovi">žanrovi</a></li>
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == true}"><a th:text="#{index.komentari}"  href="Komentari">Komentari</a></li>
 		
-		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == true}"><a href="SpecijalniDatum">Specijalni Datumi</a></li>
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == true}"><a th:text="#{index.specijalniDatumi}"  href="SpecijalniDatum">Specijalni Datumi</a></li>
 		
-		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == false}"><a href="Korpa">korpa</a></li>
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == false}"><a th:text="#{index.korpa}"  href="Korpa">korpa</a></li>
 		
-		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}"><a href="Korisnici">korisnici</a></li>		
-		
-</ul>
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}"><a th:text="#{index.korisnici}"  href="Korisnici">korisnici</a></li>		
+		</ul>
 <div class="container">
-<h1>Komentari</h1>
+<h1 th:text="#{komentari.h1}">Komentari</h1>
 <hr>
 		<form method="get" style="margin-left: 25%;">
 			<table class="tabela">
-				<caption>Komentari na Cekanju</caption>
+				<caption th:text="#{komentari.cekanje}">Komentari na Cekanju</caption>
 				<tr>
-					<th>r. br.</th>
-					<th>Datum</th>
-					<th>Korisnik</th>
-					<th>Knjiga</th>
-					<th>Opis</th>
-					<th>Odobri</th>
-					<th>Odbiji</th>											
+					<th>#</th>
+					<th th:text="#{komentari.datum}">Datum</th>
+					<th th:text="#{komentari.korisnik}">Korisnik</th>
+					<th th:text="#{komentari.knjige}">Knjiga</th>
+					<th th:text="#{knjiga.opis}">Opis</th>
+					<th th:text="#{korisnici.ododbri}">Odobri</th>
+					<th th:text="#{komentari.odbiji}">Odbiji</th>											
 				</tr>
 				<tr th:each="itKomentar, status: ${komentari}" th:if="${itKomentar.status.name() == 'naCekanju'}">
 					<td th:text="${status.index + 1}">1</td>

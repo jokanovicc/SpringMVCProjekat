@@ -37,8 +37,8 @@ public class DatabaseKupovinaService implements KupovinaService {
 
 	@Override
 	public Kupovina update(Kupovina kupovina) {
-		// TODO Auto-generated method stub
-		return null;
+		kupovinaDAO.update(kupovina);
+		return kupovina;
 	}
 
 	@Override

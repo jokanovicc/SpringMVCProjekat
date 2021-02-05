@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.ftn.Knjizara.dao.LoyaltyKarticaDAO;
 import com.ftn.Knjizara.model.Korisnik;
+import com.ftn.Knjizara.model.ListaZelja;
 import com.ftn.Knjizara.model.LoyaltyKartica;
 import com.ftn.Knjizara.service.LoyaltyKarticaService;
 
@@ -48,9 +49,13 @@ public class DatabaseLoyaltyKarticaService implements LoyaltyKarticaService {
 
 	@Override
 	public LoyaltyKartica delete(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		LoyaltyKartica loyaltyKartica = findOne(id);
+		if (loyaltyKartica != null) {
+			loyaltyKarticaDAO.delete(id);
+		}
+		return loyaltyKartica;
 	}
+	
 
 
 
