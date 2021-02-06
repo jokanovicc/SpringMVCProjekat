@@ -63,7 +63,7 @@ public class KorpaKontroler {
 	private String baseURL;
 	
 	
-	Kupovina kupovina = new Kupovina(2313L, 1.0, LocalDateTime.now(),null, 0);
+	Kupovina kupovina = new Kupovina(2313L, 0.0, LocalDateTime.now(),null, 0);
 
 	
 	@PostConstruct
@@ -104,9 +104,9 @@ public class KorpaKontroler {
 			
 		}
 		 Random rand = new Random(); 
-		Long id = (long) rand.nextInt(1000); 
+		Long id = (long) rand.nextInt(100000000); 
 		kupovina.setKorisnik(korisnik);
-		Long id2 = (long) rand.nextInt(1000); 
+		Long id2 = (long) rand.nextInt(10000000); 
 		kupovina.setId(id2);
 		KupljenaKnjiga kupljenaKnjiga = new KupljenaKnjiga(id, knjiga, brojKnjiga, 0, kupovina.getId());
 		kupljenaKnjiga.setCena(brojKnjiga*knjiga.getCena());
@@ -292,7 +292,6 @@ public class KorpaKontroler {
 				double pocetnaCena = kupovina.getUkupnaCena();
 				kupovina.setUkupnaCena(pocetnaCena*posto);
 
-			  System.out.println("???????????  "+ kupovina.getUkupnaCena());
 			} 
 		else { 
 						if(brojBodova < 11) {

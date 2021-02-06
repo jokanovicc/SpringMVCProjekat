@@ -115,6 +115,33 @@ public class KorisnikKontroler {
 
 		return rezultat;
 	}
+	
+	
+	
+    @GetMapping(value="/Prijava")
+    public String prijava() {
+        return "prijava";
+    }
+    
+    
+    @GetMapping(value="/Registracija")
+    public String registracija() {
+        return "registracija";
+    }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	@GetMapping(value="/Details")
 	public ModelAndView details(@RequestParam String korisnickoIme, 
@@ -307,12 +334,12 @@ public class KorisnikKontroler {
 	
 	
 	@GetMapping("/BrisanjeListeZelja")
-	public void BrisanjeListaZelja(Long id, HttpServletRequest request, HttpServletResponse response) throws IOException {
-		
+	public void BrisanjeListaZelja(Long id, HttpServletRequest request, HttpServletResponse response,HttpSession session) throws IOException {
+		Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute(KorisnikKontroler.KORISNIK_KEY);
+
 		
 		listaZeljaService.delete(id);
-	
-		response.sendRedirect(baseURL);
+		response.sendRedirect(baseURL + "/Korisnici/Details?korisnickoIme="+prijavljeniKorisnik.getKorisnickoIme());
 
 		
 		

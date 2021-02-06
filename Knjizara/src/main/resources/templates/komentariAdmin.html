@@ -40,7 +40,7 @@
 					<th th:text="#{komentari.korisnik}">Korisnik</th>
 					<th th:text="#{komentari.knjige}">Knjiga</th>
 					<th th:text="#{knjiga.opis}">Opis</th>
-					<th th:text="#{korisnici.ododbri}">Odobri</th>
+					<th th:text="#{korisnici.odobri}">Odobri</th>
 					<th th:text="#{komentari.odbiji}">Odbiji</th>											
 				</tr>
 				<tr th:each="itKomentar, status: ${komentari}" th:if="${itKomentar.status.name() == 'naCekanju'}">

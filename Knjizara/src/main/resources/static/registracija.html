@@ -1,51 +1,63 @@
 <!DOCTYPE html>
 <html>
+<base th:href="@{/}">
 <head>
-	<meta charset="UTF-8">
-	<base href="">
-	
 	<link rel="stylesheet" type="text/css" href="css/StiloviForma.css"/>
-	<link rel="stylesheet" type="text/css" href="css/StiloviKorisnik.css"/>
-	<link rel="stylesheet" type="text/css" href="css/StiloviHorizontalniMeni.css"/>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="css/StiloviForma.css"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<link rel="stylesheet" type="text/css" href="css/navbar.css"/>
+			 <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="css/glavno.css">
+			<link rel="stylesheet" type="text/css" href="css/StiloviTabela.css"/>
+			<script src="webjars/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+</script>
+	<script src="js/lokacijaJS.js"></script>	
 	
 	<title>Registracija</title>
+
 </head>
 <body>
+<ul class="navbar">
+		<li style="font-family: 'Pacifico', cursive;font-size: 31px;color: white; margin-left: 10px; " ><a href="/Knjizara">Лексикограф</a></li>
+		<li th:if="${session.prijavljeniKorisnik == null}"><a th:text="#{index.prijava}" href="prijava">prijava</a></li>
+		<li th:if="${session.prijavljeniKorisnik == null}" ><a th:text="#{index.registracija}" href="registracija">Registracija</a></li>
+		<li><a th:text="#{index.zanrovi}" href="Zanrovi">žanrovi</a></li>
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == true}"><a th:text="#{index.komentari}"  href="Komentari">Komentari</a></li>
+		
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == true}"><a th:text="#{index.specijalniDatumi}"  href="SpecijalniDatum">Specijalni Datumi</a></li>
+		
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == false}"><a th:text="#{index.korpa}"  href="Korpa">korpa</a></li>
+		
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}"><a th:text="#{index.korisnici}"  href="Korisnici">korisnici</a></li>		
+		</ul>
 <div class="container">
-	<table class="korisnik">
-		<tr><th>Niste prijavljeni</th></tr>
-		<tr>
-			<td>
-				<ul>
-					<li><a href="registracija.html">registracija</a></li>
-					<li><a href="prijava.html">prijava</a></li>
-				</ul>
-			</td>
-		</tr>
-	</table>
-	<ul>
-		<li><a href="Zanrovi">žanrovi</a></li>
-		<li><a href="Knjige">knjige</a></li>
-	</ul>
-	<form method="post" action="Korisnici/Register">
-		<table class="forma">
-			<caption>Registracija</caption>
-			<tr><th>korisničko ime:</th><td><input type="text" name="korisnickoIme"/></td></tr>
-			<tr><th>lozinka:</th><td><input type="password" name="lozinka"/></td></tr>
-			<tr><th>ponovljena lozinka:</th><td><input type="password" name="ponovljenaLozinka"/></td></tr>
-			<tr><th>Ime:</th><td><input type="text" name="ime"/></td></tr>
-			<tr><th>Prezime:</th><td><input type="text" name="prezime"/></td></tr>
-			<tr><th>e-mail:</th><td><input type="text" name="eMail"/></td></tr>
-			<tr><th>Adresa:</th><td><input type="text" name="adresa"/></td></tr>
-			<tr><th>Broj Telefona:</th><td><input type="text" name="brojTelefona"/></td></tr>
-			<tr><th>Datum rodjenja:</th><td><input type="date" id="start" name="datumRodjenja"
-       value="2000-07-22"></td></tr>
+	<div style="float:right">
+		<span th:text="${#locale}"></span>
+		<span th:text="#{lang.change}"></span>:
+		<select id="locales" name="locales">
+		    <option value=""></option>
+		    <option value="ru" th:text="#{lang.ru}" th:selected="${#strings.equals(#locale.language,'ru')}"></option>
+		    <option value="sr" th:text="#{lang.sr}" th:selected="${#strings.equals(#locale.language,'sr')}"></option>
+		</select>
+	</div>	
+	<div th:fragment="centralniDiv">
+		<form method="post" action="Korisnici/Register">
+			<table class="forma">
+			<tr><th th:text="#{korisnici.korisnicko}">korisničko ime:</th><td><input type="text" name="korisnickoIme"/></td></tr>
+			<tr><th th:text="#{registracija.lozinka}">lozinka:</th><td><input type="password" name="lozinka"/></td></tr>
+			<tr><th th:text="#{registracija.ponovljena}">ponovljena lozinka:</th><td><input type="password" name="ponovljenaLozinka"/></td></tr>
+			<tr><th th:text="#{korisnik.ime}">Ime:</th><td><input type="text" name="ime"/></td></tr>
+			<tr><th th:text="#{korisnik.prezime}">Prezime:</th><td><input type="text" name="prezime"/></td></tr>
+			<tr><th th:text="#{korisnik.email}">e-mail:</th><td><input type="text" name="eMail"/></td></tr>
+			<tr><th th:text="#{korisnik.adresa}">Adresa:</th><td><input type="text" name="adresa"/></td></tr>
+			<tr><th th:text="#{korisnik.brojTelefona}">Broj Telefona:</th><td><input type="text" name="brojTelefona"/></td></tr>
+			<tr><th th:text="#{korisnik.datumRodj}">Datum rodjenja:</th><td><input type="date" th:value="2000-04-01" name="datumRodjenja"/></td></tr>
 			<tr><th></th><td><input type="submit" value="Registracija"/></td></tr>
-		</table>
-	</form>
-	<p class="greska"></p>
+			</table>
+		</form>
+		<p class="greska" th:text="${poruka}"></p>
+	</div>
 	</div>
 </body>
 </html>

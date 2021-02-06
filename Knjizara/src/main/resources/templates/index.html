@@ -16,16 +16,16 @@
 	<link rel="stylesheet" type="text/css" href="css/glavno.css">
 		
 	
-	<title>Prijava</title>	
 		<link rel="stylesheet" type="text/css" href="css/glavno.css">
+		<title>Prijava</title>	
 	
 
 </head>
 <body>
 <ul class="navbar">
 		<li style="font-family: 'Pacifico', cursive;font-size: 31px;color: white; margin-left: 10px; " ><a href="/Knjizara">Лексикограф</a></li>
-		<li th:if="${session.prijavljeniKorisnik == null}"><a th:text="#{index.prijava}" href="prijava.html">prijava</a></li>
-		<li th:if="${session.prijavljeniKorisnik == null}" ><a th:text="#{index.registracija}" href="registracija.html">Registracija</a></li>
+		<li th:if="${session.prijavljeniKorisnik == null}"><a th:text="#{index.prijava}" href="Korisnici/Prijava">prijava</a></li>
+		<li th:if="${session.prijavljeniKorisnik == null}" ><a th:text="#{index.registracija}" href="Korisnici/Registracija">Registracija</a></li>
 		<li><a th:text="#{index.zanrovi}" href="Zanrovi">žanrovi</a></li>
 		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == true}"><a th:text="#{index.komentari}"  href="Komentari">Komentari</a></li>
 		
@@ -56,8 +56,8 @@
 		
 		<div th:if="${session.prijavljeniKorisnik == null}" style="padding: 20px;">
 		<h3 th:text="#{index.nistePrijavljeni}" th:if="${session.prijavljeniKorisnik == null}">Niste prijavljeni</h3>
-		<h5 th:if="${session.prijavljeniKorisnik == null}" ><a th:text="#{index.registrujse}" href="registracija.html">Registruj se </a></h5>
-		<h5 th:if="${session.prijavljeniKorisnik == null}" ><a th:text="#{index.prijaviSe}" href="prijava.html">Prijavi se</a></h5>
+		<h5 th:if="${session.prijavljeniKorisnik == null}" ><a th:text="#{index.registrujse}" href="Korisnici/Registracija">Registruj se </a></h5>
+		<h5 th:if="${session.prijavljeniKorisnik == null}" ><a th:text="#{index.prijaviSe}" href="Korisnici/Prijava">Prijavi se</a></h5>
 		</div>
 		
 <!-- 		<div class="col-lg-6" style="height: 250px;">
@@ -118,7 +118,7 @@
 						ex:<input type="number" min="0" th:value="${param.cenaOd}?: '200'" name="cenaOd"/><br/>
 						et:<input type="number" min="0" th:value="${param.cenaDo}?: '3000'" name="cenaDo"/>
 					</th>
-					<th><input type="submit" th:value="Pretraži"/></th>
+					<th><input type="submit" th:value="#{knjiga.pretrazi}"/></th>
 				</tr>
 			</table>
 		</form>

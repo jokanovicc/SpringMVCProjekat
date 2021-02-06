@@ -16,6 +16,8 @@ create table korisnici(
         brojTelefona VARCHAR(20) NOT NULL,
 		vremeRegistracije dateTime not null,
 		administrator BOOL DEFAULT false,
+		blokiran BOOL DEFAULT false,
+		kartica BOOL DEFAULT false,
 		PRIMARY KEY(korisnickoIme)
 
 );
@@ -41,19 +43,12 @@ create table knjige(
 );
 
 create table specijalnidatum(
-	id bigint auto_increment,
+	id bigint not null,
     datum date,
     popust bigint,
     primary key(id)
 
-)
-
-
-
-
-
-
-
+);
 
 
 
@@ -80,12 +75,29 @@ create table LoyaltyKartica(
 	id BIGINT AUTO_INCREMENT,
     popust double not null,
     brojPoena int not null,
-	korisnik varchar(20) not null,
-        FOREIGN KEY(korisnik) REFERENCES korisnici(korisnickoIme)
+	korisnicko varchar(20) not null,
+	odobrena BOOL DEFAULT false,
+        FOREIGN KEY(korisnicko) REFERENCES korisnici(korisnickoIme)
 		ON DELETE CASCADE,
 	PRIMARY KEY(id)
 
 );
+
+
+create table kupovina(
+	id bigint,
+    ukupnaCena double not null,
+    datumKupovine datetime,
+    korisnik varchar(20),
+    ukupanBrojKnjiga int,
+	FOREIGN KEY(korisnik) REFERENCES korisnici(korisnickoIme)
+	ON DELETE CASCADE,
+    PRIMARY KEY(id)
+
+
+);
+
+
 
 create table KupljenaKnjiga(
 
@@ -102,20 +114,6 @@ create table KupljenaKnjiga(
 
 );
 
-create table kupovina(
-	id bigint,
-    ukupnaCena double not null,
-    datumKupovine datetime,
-    korisnik varchar(20),
-    ukupanBrojKnjiga int,
-	FOREIGN KEY(korisnik) REFERENCES korisnici(korisnickoIme)
-	ON DELETE CASCADE,
-    PRIMARY KEY(id)
-
-
-)
-
-
 
 create table listazelja(
 	id BIGINT AUTO_INCREMENT,
@@ -128,17 +126,7 @@ create table listazelja(
 	PRIMARY KEY(id)
     
 
-)
-
-
-
-
-
-
-
-
-
-
+);
 
 
 
@@ -147,10 +135,11 @@ create table listazelja(
 create table Komentar(
 	id BIGINT AUTO_INCREMENT,
     ocena float not null,
-    datum datetime not null,
+    datum date not null,
     korisnik varchar(50) not null,
     knjigaId bigint not null,
     statusKomentara ENUM('odobren', 'naCekanju','nijeOdobren') DEFAULT 'naCekanju',
+    opis varchar(200),
     primary key(id),
 	FOREIGN KEY(korisnik) REFERENCES korisnici(korisnickoIme)
 	ON DELETE CASCADE,
@@ -165,13 +154,8 @@ create table Komentar(
 
 
 
-
-
-
-
-
-insert into korisnici(korisnickoIme,lozinka,eMail,ime,prezime,datumRodjenja,adresa,brojTelefona,vremeRegistracije,administrator) values('pera', 'pera', 'pera@gmail.com', 'Petar', 'Petrovic', '1978-05-05', 'deligradska', '0651111', '2020-12-31 12:35:00', true);
-insert into korisnici(korisnickoIme,lozinka,eMail,ime,prezime,datumRodjenja,adresa,brojTelefona,vremeRegistracije,administrator) values('jovo', 'jovo123', 'jovan@gmail.com', 'Jovan', 'Jovanovic', '2000-07-22', 'Gogoljeva', '0650004', '2021-01-15 17:24:57', false);
+insert into korisnici(korisnickoIme,lozinka,eMail,ime,prezime,datumRodjenja,adresa,brojTelefona,vremeRegistracije,administrator,blokiran,kartica) values('pera', 'pera', 'pera@gmail.com', 'Petar', 'Petrovic', '1978-05-05', 'deligradska', '0651111', '2020-12-31 12:35:00', true,false,false);
+insert into korisnici(korisnickoIme,lozinka,eMail,ime,prezime,datumRodjenja,adresa,brojTelefona,vremeRegistracije,administrator,blokiran,kartica) values('jovo', 'jovo123', 'jovan@gmail.com', 'Jovan', 'Jovanovic', '2000-07-22', 'Gogoljeva', '0650004', '2021-01-15 17:24:57', false,false,false);
 
 
 insert into zanrovi(id,naziv,opis) values (1, 'roman', 'roman knjiga');

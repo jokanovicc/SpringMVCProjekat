@@ -50,8 +50,8 @@
 <body>
 <ul class="navbar">
 		<li style="font-family: 'Pacifico', cursive;font-size: 31px;color: white; margin-left: 10px; " ><a href="/Knjizara">Лексикограф</a></li>
-		<li th:if="${session.prijavljeniKorisnik == null}"><a th:text="#{index.prijava}" href="prijava.html">prijava</a></li>
-		<li th:if="${session.prijavljeniKorisnik == null}" ><a th:text="#{index.registracija}" href="registracija.html">Registracija</a></li>
+		<li th:if="${session.prijavljeniKorisnik == null}"><a th:text="#{index.prijava}" href="Korisnici/Prijava">prijava</a></li>
+		<li th:if="${session.prijavljeniKorisnik == null}" ><a th:text="#{index.registracija}" href="Korisnici/Registracija">Registracija</a></li>
 		<li><a th:text="#{index.zanrovi}" href="Zanrovi">žanrovi</a></li>
 		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == true}"><a th:text="#{index.komentari}"  href="Komentari">Komentari</a></li>
 		
@@ -63,7 +63,7 @@
 		</ul>
 
 	<div class="container" style="background-color: white; padding: 10px;">
-				<div style="float:right">
+	<div style="float:right">
 		<span th:text="${#locale}"></span>
 		<span th:text="#{lang.change}"></span>:
 		<select id="locales" name="locales">
@@ -108,7 +108,7 @@
 						<input type="number" min="0" th:max="${knjiga.kolicina}" required name="brojKnjiga"/>&nbsp;
 						<input type="hidden" name="knjigaId" th:value="${knjiga.id}" />
 						<input type="hidden" name="korisnickoIme" th:value="${session.prijavljeniKorisnik.korisnickoIme}"/>
-						<input type="submit" value="Kupi Knjigu"/>
+						<input type="submit" th:value="#{knjiga.korpa}"/>
 					</form>
 				</td>
 			</tr>
@@ -118,14 +118,14 @@
 					<form method="post" action="Korisnici/ListaZelja" name="formaListaZelja">
 						<input type="hidden" name="knjigaId" th:value="${knjiga.id}" />
 						<input type="hidden" name="korisnickoIme" th:value="${session.prijavljeniKorisnik.korisnickoIme}"/>
-						<input type="submit" value="U listu zelja"/>
+						<input type="submit" th:value="#{knjiga.zelja}"/>
 					</form>
 				</td>
 			</tr>		
 			
 		</table>
 		<table style="margin-left: 200px">
-					<tr th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator and knjiga.kolicina > 0}"><th>Kolicina:</th><td>
+					<tr th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator and knjiga.kolicina > 0}"><th th:value="#{knjiga.kolicina}">Kolicina:</th><td>
 						<form method="post" action="EditKolicina" th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}">
 			<input type="hidden" name="id" th:value="${knjiga.id}"/>
 			<table class="forma">

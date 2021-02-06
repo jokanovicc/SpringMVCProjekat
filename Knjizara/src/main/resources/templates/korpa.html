@@ -8,9 +8,15 @@
 	<link rel="stylesheet" type="text/css" href="css/navbar.css"/>
 	<script src="js/sorttable.js"></script>
 	 <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
-	
+	<script src="webjars/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+</script>
+	<script src="js/lokacijaJS.js"></script>	
 	<link rel="stylesheet" type="text/css" href="css/tabela.css">
 	<link rel="stylesheet" type="text/css" href="css/glavno.css">
+		
+	
+		<link rel="stylesheet" type="text/css" href="css/glavno.css">
 			<style>
 		.collapsible {
 		  background-color: #044855;
@@ -44,35 +50,38 @@
 <body>
 <ul class="navbar">
 		<li style="font-family: 'Pacifico', cursive;font-size: 31px;color: white; margin-left: 10px; " ><a href="/Knjizara">Лексикограф</a></li>
-		<li th:if="${session.prijavljeniKorisnik == null}"><a href="prijava.html">prijava</a></li>
-		<li th:if="${session.prijavljeniKorisnik == null}" ><a href="registracija.html">Registracija</a></li>
-		<li><a href="Zanrovi">žanrovi</a></li>
-		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator==false}"><a href="Korpa">korpa</a></li>
+		<li th:if="${session.prijavljeniKorisnik == null}"><a th:text="#{index.prijava}" href="Korisnici/Prijava">prijava</a></li>
+		<li th:if="${session.prijavljeniKorisnik == null}" ><a th:text="#{index.registracija}" href="Korisnici/Registracija">Registracija</a></li>
+		<li><a th:text="#{index.zanrovi}" href="Zanrovi">žanrovi</a></li>
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == true}"><a th:text="#{index.komentari}"  href="Komentari">Komentari</a></li>
 		
-		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}"><a href="Korisnici">korisnici</a></li>		
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == true}"><a th:text="#{index.specijalniDatumi}"  href="SpecijalniDatum">Specijalni Datumi</a></li>
 		
-		<li><a>Komentari</a></li>
-</ul>
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == false}"><a th:text="#{index.korpa}"  href="Korpa">korpa</a></li>
+		
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}"><a th:text="#{index.korisnici}"  href="Korisnici">korisnici</a></li>		
+		</ul>
 
-		<div  style="background-color: white;">
-		<div th:unless="${session.prijavljeniKorisnik == null}">
-			<h3>Prijavljeni ste kao <a th:href="|Korisnici/Details?korisnickoIme=${session.prijavljeniKorisnik.korisnickoIme}|" th:text="${session.prijavljeniKorisnik.korisnickoIme}"></a>.
-
-					<ul>
-						<li><a href="Korisnici/Logout">odjava</a></li>
-					</ul>
-		</div>
 <div class="container" style="padding-bottom: 20px;">
-<h1>Korpica</h1>
+	<div style="float:right">
+		<span th:text="${#locale}"></span>
+		<span th:text="#{lang.change}"></span>:
+		<select id="locales" name="locales">
+		    <option value=""></option>
+		    <option value="ru" th:text="#{lang.ru}" th:selected="${#strings.equals(#locale.language,'ru')}"></option>
+		    <option value="sr" th:text="#{lang.sr}" th:selected="${#strings.equals(#locale.language,'sr')}"></option>
+		</select>
+	</div>	
+<h1 th:text="#{korpa.h1}">Korpa</h1>
 <hr>
 			<form method="get" style="margin: 20px;">
 			<table class="tabela table">
 				<tr>
-					<th>r. br.</th>
-					<th>Naziv</th>
-					<th>Broj Primeraka</th>
-					<th>Cena</th>
-					<th>Jedinicna Cena</th>
+					<th>#</th>
+					<th th:text="#{knjiga.naziv}">Naziv</th>
+					<th th:text="#{kupovinaDetalji.brojPrimeraka}">Broj Primeraka</th>
+					<th th:text="#{index.cena}">Cena</th>
+					<th th:text="#{kupovinaDetalji.jedinicna}">Jedinicna Cena</th>
 					<th></th>
 				</tr>
 				<tr th:each="itKupljenaKnjiga, status: ${kupljeneKnjige}">
@@ -81,7 +90,7 @@
 					<td th:text="${itKupljenaKnjiga.brojPrimeraka}"></td>
 					<td th:text="${itKupljenaKnjiga.cena}"></td>
 					<td th:text="${itKupljenaKnjiga.knjiga.cena}"></td>
-					<td><a th:href="|Korpa/Brisanje?kupljenaKnjigaID=${itKupljenaKnjiga.id}|">Brisanje</a></td>
+					<td><a th:text="#{korisnik.brisanje}" th:href="|Korpa/Brisanje?kupljenaKnjigaID=${itKupljenaKnjiga.id}|">Brisanje</a></td>
 					
 			</tr>
 			<tr><td></td>
@@ -93,8 +102,9 @@
 			</tr>
 			<tr>
 				<th>Sumarum</th>
-				<th>Ukupna Cena</th><td  th:text="${kupovina.ukupnaCena}"></td>
-				<th>Broj knjiga</th><td th:text="${kupovina.brojKnjiga}"></td>
+				<th th:text="#{korpa.ukupnaCena}">Ukupna Cena</th><td  th:text="${kupovina.ukupnaCena}"></td>
+				<th th:text="#{korpa.brojKnjiga}">Broj knjiga</th><td th:text="${kupovina.brojKnjiga}"></td>
+
 			
 					
 			</tr>
@@ -103,7 +113,7 @@
 		
 		</form>
 		
-			<button th:if="${kupovina.brojKnjiga > 0}" type="button" class="collapsible">Zavrsi Kupovinu</button>
+			<button th:if="${kupovina.brojKnjiga > 0}" type="button" class="collapsible" th:text="#{korpa.zavrsi}">Zavrsi Kupovinu</button>
 		<div class= "content">
 		
 		
@@ -116,10 +126,10 @@
 <!-- 			 <input type="hidden" id="ukupnaCena" name="ukupnaCena" th:value="${kupovina.ukupnaCena}">
  -->			
 			<table class="forma" th:each="itLojalti, status: ${lojalti}">
-				<tr th:if="${itLojalti.korisnik.korisnickoIme == session.prijavljeniKorisnik.korisnickoIme}"><th><td>Snizite cenu kupovini uz vasu Loyalty Karticu!</td></tr>
-				<tr th:if="${itLojalti.korisnik.korisnickoIme == session.prijavljeniKorisnik.korisnickoIme}"><th>Broj bodova:</th>
+				<tr th:if="${itLojalti.korisnik.korisnickoIme == session.prijavljeniKorisnik.korisnickoIme}"><th><td th:text="#{korpa.snizite}">Snizite cenu kupovini uz vasu Loyalty Karticu!</td></tr>
+				<tr th:if="${itLojalti.korisnik.korisnickoIme == session.prijavljeniKorisnik.korisnickoIme}"><th th:text="#{korisnici.brojPoena}">Broj bodova:</th>
 					
-					<td><label for="bodovi">Izaberite bodove</label>
+					<td><label for="bodovi" th:text="#{korpa.bodovi}" >Izaberite bodove</label>
 					
 					<select id="bodovi" name="brojBodova">
 					  <option selected value="0">0</option>
@@ -148,7 +158,7 @@
 				<tr th:if="${itLojalti.korisnik.korisnickoIme == session.prijavljeniKorisnik.korisnickoIme}"><th></th><td><input type="submit" value="Zavrsi kupovinu"/></td></tr>			
 			</table>
 			<table>
-			<tr th:if="${session.prijavljeniKorisnik.kartica == false}"><td><a class="btn btn-primary btn-lg" style="font-size: 15px;"  th:href="|Korpa/Dodavanje2?kupovina1=${kupovina.brojKnjiga}|">Zavrsi Kupovinu</a></td></tr>
+			<tr th:if="${session.prijavljeniKorisnik.kartica == false}"><td><a class="btn btn-primary btn-lg" style="font-size: 15px;" th:text="#{korpa.zavrsi}"  th:href="|Korpa/Dodavanje2?kupovina1=${kupovina.brojKnjiga}|">Zavrsi Kupovinu</a></td></tr>
 			</table>
 		</form>
 			
