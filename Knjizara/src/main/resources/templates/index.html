@@ -45,7 +45,8 @@
 		</select>
 	</div>		
 
-		<div  style="background-color: white;">
+	<div class="container">
+
 		<div th:unless="${session.prijavljeniKorisnik == null}">
 			<h3 th:text="#{index.PrijavljeniKao}" ></h3> <h3><a th:href="|Korisnici/Details?korisnickoIme=${session.prijavljeniKorisnik.korisnickoIme}|" th:text="${session.prijavljeniKorisnik.korisnickoIme}"></a></h3>.
 
@@ -114,6 +115,8 @@
 							<option th:each="itZanr: ${zanrovi}" th:value="${itZanr.id}" th:text="${itZanr.naziv}" th:selected="${#strings.equals(itZanr.id, param.zanrId)}"></option>
 						</select>
 					</th>
+				</tr>
+				<tr style="background-color: #044855; color: white;">
 					<th>
 						ex:<input type="number" min="0" th:value="${param.cenaOd}?: '200'" name="cenaOd"/><br/>
 						et:<input type="number" min="0" th:value="${param.cenaDo}?: '3000'" name="cenaDo"/>
@@ -171,8 +174,7 @@
 				</div>	 -->
 				
 				</div>
-					</div>
-				
+				</div>
 
 </body>
 </html>
