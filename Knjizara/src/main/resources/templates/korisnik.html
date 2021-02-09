@@ -10,13 +10,13 @@
 	<link rel="stylesheet" type="text/css" href="css/StiloviTabela.css"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="css/navbar.css"/>
-	<title>Korisnik</title>
+	<title th:text="#{korisnik.korisnik}">Korisnik</title>
 </head>
 <body>
 <ul class="navbar">
 		<li style="font-family: 'Pacifico', cursive;font-size: 31px;color: white; margin-left: 10px; " ><a href="/Knjizara">Лексикограф</a></li>
 		<li th:if="${session.prijavljeniKorisnik == null}"><a th:text="#{index.prijava}" href="prijava.html">prijava</a></li>
-		<li th:if="${session.prijavljeniKorisnik == null}" ><a th:text="#{index.registracija}" href="registracija.html">Registracija</a></li>
+		<li th:if="${session.prijavljeniKorisnik == null}" ><a th:text="#{index.registracija}" href="Korisnici/Registracija">Registracija</a></li>
 		<li><a th:text="#{index.zanrovi}" href="Zanrovi">žanrovi</a></li>
 		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == true}"><a th:text="#{index.komentari}"  href="Komentari">Komentari</a></li>
 		
@@ -59,7 +59,7 @@
 				<tr th:if="${session.prijavljeniKorisnik.administrator and session.prijavljeniKorisnik != korisnik and korisnik.blokiran != true}"><th th:text="#{korisnici.administrator}">administrator:</th><td><input type="checkbox" name="administrator" th:checked="${korisnik.administrator}"/></td></tr>
 				<tr th:if="${session.prijavljeniKorisnik.administrator and session.prijavljeniKorisnik != korisnik and korisnik.administrator == false}"><th th:text="#{korisnici.blokiran}">blokiran:</th><td th:if="${korisnik.administrator == false}"><input type="checkbox" name="blokiran" th:checked="${korisnik.blokiran}"/></td></tr>
 				
-				<tr><th></th><td><input type="submit" value="Izmeni"/></td></tr>
+				<tr th:if="${session.prijavljeniKorisnik.administrator and session.prijavljeniKorisnik != korisnik and korisnik.administrator}"><th></th><td><input type="submit" th:value="#{knjiga.izmena}"/></td></tr>
 			</table>
 		</form>
 <!-- 					<table class="tabela">

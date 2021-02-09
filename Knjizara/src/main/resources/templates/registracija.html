@@ -14,15 +14,15 @@
 </script>
 	<script src="js/lokacijaJS.js"></script>	
 	
-	<title>Registracija</title>
+	<title th:text="#{index.registracija}">Registracija</title>
 
 </head>
 <body>
 <ul class="navbar">
-		<li style="font-family: 'Pacifico', cursive;font-size: 31px;color: white; margin-left: 10px; " ><a href="/Knjizara">Лексикограф</a></li>
+		<li style="font-family: 'Pacifico', cursive;font-size: 31px;color: white; margin-left: 10px; " ><a href="/Knjizara">Ð›ÐµÐºÑ�Ð¸ÐºÐ¾Ð³Ñ€Ð°Ñ„</a></li>
 		<li th:if="${session.prijavljeniKorisnik == null}"><a th:text="#{index.prijava}" href="Korisnici/Prijava">prijava</a></li>
 		<li th:if="${session.prijavljeniKorisnik == null}" ><a th:text="#{index.registracija}" href="Korisnici/Registracija">Registracija</a></li>
-		<li><a th:text="#{index.zanrovi}" href="Zanrovi">žanrovi</a></li>
+		<li><a th:text="#{index.zanrovi}" href="Zanrovi">Å¾anrovi</a></li>
 		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == true}"><a th:text="#{index.komentari}"  href="Komentari">Komentari</a></li>
 		
 		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == true}"><a th:text="#{index.specijalniDatumi}"  href="SpecijalniDatum">Specijalni Datumi</a></li>
@@ -44,16 +44,16 @@
 	<div th:fragment="centralniDiv">
 		<form method="post" action="Korisnici/Register">
 			<table class="forma">
-			<tr><th th:text="#{korisnici.korisnicko}">korisničko ime:</th><td><input type="text" name="korisnickoIme"/></td></tr>
-			<tr><th th:text="#{registracija.lozinka}">lozinka:</th><td><input type="password" name="lozinka"/></td></tr>
-			<tr><th th:text="#{registracija.ponovljena}">ponovljena lozinka:</th><td><input type="password" name="ponovljenaLozinka"/></td></tr>
+			<tr><th th:text="#{korisnici.korisnicko}">korisniÄ�ko ime:</th><td><input type="text" name="korisnickoIme"/></td></tr>
+			<tr><th th:text="#{korisnici.lozinka}">lozinka:</th><td><input type="password" name="lozinka"/></td></tr>
+			<tr><th th:text="#{korisnici.ponovljena}">ponovljena lozinka:</th><td><input type="password" name="ponovljenaLozinka"/></td></tr>
 			<tr><th th:text="#{korisnik.ime}">Ime:</th><td><input type="text" name="ime"/></td></tr>
 			<tr><th th:text="#{korisnik.prezime}">Prezime:</th><td><input type="text" name="prezime"/></td></tr>
 			<tr><th th:text="#{korisnik.email}">e-mail:</th><td><input type="text" name="eMail"/></td></tr>
 			<tr><th th:text="#{korisnik.adresa}">Adresa:</th><td><input type="text" name="adresa"/></td></tr>
 			<tr><th th:text="#{korisnik.brojTelefona}">Broj Telefona:</th><td><input type="text" name="brojTelefona"/></td></tr>
 			<tr><th th:text="#{korisnik.datumRodj}">Datum rodjenja:</th><td><input type="date" th:value="2000-04-01" name="datumRodjenja"/></td></tr>
-			<tr><th></th><td><input type="submit" value="Registracija"/></td></tr>
+			<tr><th></th><td><input type="submit" th:value="#{index.registracija}"/></td></tr>
 			</table>
 		</form>
 		<p class="greska" th:text="${poruka}"></p>
