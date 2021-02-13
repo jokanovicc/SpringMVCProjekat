@@ -194,7 +194,7 @@ public class KnjigaKontroler implements ServletContextAware {
 		 */
 
 		if (naziv.equals("") || autor.equals("")) {
-			throw new Exception("Korisničko ime i autor ne smeju biti prazni!");
+			throw new Exception("Naziv i autor ne smeju biti prazni!");
 		}
 		if (izdavac.equals("") || kratakOpis.equals("")) {
 			throw new Exception("Izdavac i opis ne smeju biti prazni!");

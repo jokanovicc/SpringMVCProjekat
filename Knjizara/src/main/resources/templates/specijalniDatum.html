@@ -4,25 +4,41 @@
 	<meta charset="UTF-8">
 	<base th:href="@{/}">
 	<link rel="stylesheet" type="text/css" href="css/StiloviForma.css"/>
-	<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="css/tabela.css">
-	<link rel="stylesheet" type="text/css" href="css/glavno.css">
-	<link rel="stylesheet" type="text/css" href="css/StiloviTabela.css"/>
-	<script src="js/sorttable.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<link rel="stylesheet" type="text/css" href="css/navbar.css"/>
+			 <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="css/glavno.css">
+			<link rel="stylesheet" type="text/css" href="css/StiloviTabela.css"/>
+			<script src="webjars/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+</script>
+	<script src="js/lokacijaJS.js"></script>
 	
-	<title>Žanrovi</title>
+	<title th:text="#{specijalni.title}">Specijalni datum</title>
 </head>
 <body>
-
+<ul class="navbar">
+		<li style="font-family: 'Pacifico', cursive;font-size: 31px;color: white; margin-left: 10px; " ><a href="/Knjizara">Лексикограф</a></li>
+		<li th:if="${session.prijavljeniKorisnik == null}"><a th:text="#{index.prijava}" href="Korisnici/Prijava">prijava</a></li>
+		<li th:if="${session.prijavljeniKorisnik == null}" ><a th:text="#{index.registracija}" href="Korisnici/Registracija">Registracija</a></li>
+		<li><a th:text="#{index.zanrovi}" href="Zanrovi">žanrovi</a></li>
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == true}"><a th:text="#{index.komentari}"  href="Komentari">Komentari</a></li>
+		
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == true}"><a th:text="#{index.specijalniDatumi}"  href="SpecijalniDatum">Specijalni Datumi</a></li>
+		
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == false}"><a th:text="#{index.korpa}"  href="Korpa">korpa</a></li>
+		
+		<li th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}"><a th:text="#{index.korisnici}"  href="Korisnici">korisnici</a></li>		
+		</ul>
 <div class="container" style="padding: 100px;">
-<h1>Izveštavanje za uneti opseg datuma </h1>
+
+
 <hr>
 		<div style="margin-bottom: 100px;">
 			<table class="tabla tabela sortable" style="margin-bottom: 100px;">
 				<tr>
-					<th>Datum</th>
-					<th>Popust na taj Datum</th>
+					<th th:text="#{specijalni.datum}">Datum</th>
+					<th  th:text="#{specijalni.popust}">Popust na taj Datum</th>
 				</tr>
 				<tr th:each="itSpecijalni, status: ${specijalniDatumi}">
 					<td th:text="${itSpecijalni.datum}"></td>
@@ -40,10 +56,10 @@
 			<tr><th></th><td>
 			<form method="post" action="SpecijalniDatum/Dodavanje" th:if="${session.prijavljeniKorisnik != null}">
 			<table class="forma">
-				<tr><th><td>Dodavanje novog datuma</td></tr>
-				<tr><th>Datum:</th><td><input type="date" th:value="2021-01-25" required name="datum"/></td></tr>
-				<tr><th>Popust:</th><td><input type="number" max="100" min="1" th:value="1" required name="popust"/></td></tr>								
-				<tr><th></th><td><input type="submit" value="Dodaj"/></td></tr>
+				<tr><th><td  th:text="#{specijalni.dodavanje}">Dodavanje novog datuma</td></tr>
+				<tr><th  th:text="#{specijalni.popust}">Datum:</th><td><input type="date" th:value="2021-01-25" required name="datum"/></td></tr>
+				<tr><th>Popust u %:</th><td><input type="number" max="100" min="1" th:value="1" required name="popust"/></td></tr>								
+				<tr><th></th><td><input  th:value="#{specijalni.submit}" type="submit" value="Dodaj"/></td></tr>
 			
 			</table>
 		</form>

@@ -30,8 +30,8 @@
 		<div style="background-color: white;">
 
 
-	<div th:fragment="centralniDiv">
-		<form method="get">
+	<div th:fragment="centralniDiv" class="h-100 row align-items-center">
+		<form method="get" style="padding: 10%;">
 			<table class="tabela">
 				<caption th:text="#{index.korisnici}">Korisnici</caption>
 				<tr>
@@ -56,8 +56,8 @@
 			
 			<thead style="background-color: #044855; color: white;" th:if="${itLojalti.odobrena == false}">
 				<tr>
-					<th th:text="#{korisnici.brojPoena}">Broj Poena</th>
-					<th th:text="#{korisnici.popust}">Popust koji ste ostvarili</th>
+					<th th:text="#{korisnici.korisnicko}">Broj Poena</th>
+					<th>ID</th>
 				</tr>
 			</thead>
 			 <tbody>

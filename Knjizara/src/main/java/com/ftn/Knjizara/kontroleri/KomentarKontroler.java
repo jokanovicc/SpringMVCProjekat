@@ -83,8 +83,7 @@ public class KomentarKontroler {
 		
 		komentar.setStatus(StatusKomentara.nijeOdobren);
 		komentarService.update(komentar);
-		response.sendRedirect(baseURL);
-
+		response.sendRedirect(baseURL + "/Komentari");
 		
 		
 
@@ -114,7 +113,7 @@ public class KomentarKontroler {
 		
 		
 		komentarService.update(komentar);
-		response.sendRedirect(baseURL);
+		response.sendRedirect(baseURL + "/Komentari");
 
 	}
 	
@@ -145,12 +144,24 @@ public class KomentarKontroler {
 					}
 					
 					
+					
+					
 					if (jelKupio(korisnik) == false) {
 						throw new Exception("Ne mozete komentarisati knjigu koju niste kupili");
 					}
 					if (jelKomantarisao(korisnik,knjiga) == false) {
 						throw new Exception("Ne mozete 2 puta komentarisati istu knjigu!");
 					}
+					
+					if (opis.equals("")) {
+						throw new Exception("Morate uneti opis");
+					}
+					
+					
+					if (ocena == null) {
+						throw new Exception("Morate uneti ocenu");
+					}
+					
 					
 					
 					Komentar komentar = new Komentar(1L, opis, ocena, datum, korisnik, knjiga, StatusKomentara.naCekanju);

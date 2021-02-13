@@ -96,12 +96,12 @@
 				</td>
 			</tr>
 			<tr>
-			<tr><th th:text="#{knjiga.cena}">cena:</th><td th:text="${knjiga.cena}"></td>
+			<tr><th th:text="#{index.cena}">cena:</th><td th:text="${knjiga.cena}"></td>
 			<tr th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == false}">
 				<td></td>
 				<tr><th th:text="#{knjiga.kupi}">Kupi:</th><td  th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == false}">
 					<form method="post" action="Korpa" name="formaKorpa">
-						<input type="number" min="0" th:max="${knjiga.kolicina}" required name="brojKnjiga"/>&nbsp;
+						<input type="number" min="1" th:max="${knjiga.kolicina}" required name="brojKnjiga"/>&nbsp;
 						<input type="hidden" name="knjigaId" th:value="${knjiga.id}" />
 						<input type="hidden" name="korisnickoIme" th:value="${session.prijavljeniKorisnik.korisnickoIme}"/>
 						<input type="submit" th:value="#{knjiga.korpa}"/>
@@ -110,7 +110,7 @@
 			</tr>
 						<tr>
 				<td></td>
-				<tr th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == false}"><th>Lista Zelja:</th><td  th:if="${session.prijavljeniKorisnik != null}">
+				<tr th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator == false}"><th  th:text="#{knjiga.zelja}">Lista Zelja:</th><td  th:if="${session.prijavljeniKorisnik != null}">
 					<form method="post" action="Korisnici/ListaZelja" name="formaListaZelja">
 						<input type="hidden" name="knjigaId" th:value="${knjiga.id}" />
 						<input type="hidden" name="korisnickoIme" th:value="${session.prijavljeniKorisnik.korisnickoIme}"/>
@@ -125,7 +125,7 @@
 						<form method="post" action="EditKolicina" th:if="${session.prijavljeniKorisnik != null and session.prijavljeniKorisnik.administrator}">
 			<input type="hidden" name="id" th:value="${knjiga.id}"/>
 			<table class="forma">
-				<tr><th th:text="#{knjiga.poruci}">Poruci:</th><td><input type="number" required name="kolicina"/></td></tr>
+				<tr><th th:text="#{knjiga.poruci}">Poruci:</th><td><input type="number" min="1" required name="kolicina"/></td></tr>
 				<tr><th></th><td><input type="submit" th:value="#{knjiga.poruci}"/></td></tr>
 			</table>
 		</form>
@@ -163,8 +163,8 @@
 					<form method="post" action="Komentari/Komentarisi" name="komentarisanje">
 						<input type="hidden" name="knjigaId" th:value="${knjiga.id}" />
 						<input type="hidden" name="korisnickoIme" th:value="${session.prijavljeniKorisnik.korisnickoIme}"/>
-						<input type="text" name="opis" required />
-						<input type="number" min="1" max="5" required name="ocena" />
+						<input type="text" name="opis" />
+						<input type="number" min="1" max="5" value="3" name="ocena" />
 						<input type="submit" th:value="#{knjiga.komentarisi}"/>
 						<h3 class="greska" th:text="${poruka}"></h3>
 						

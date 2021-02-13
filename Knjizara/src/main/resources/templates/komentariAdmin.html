@@ -49,8 +49,8 @@
 					<td th:text="${itKomentar.korisnik.korisnickoIme}"></td>
 					<td th:text="${itKomentar.knjiga.naziv}"></td>
 					<td th:text="${itKomentar.tekstKomentara}"></td>
-					<td><a th:href="|Komentari/OdobriKomentar?id=${itKomentar.id}|">Odobri</a></td>			
-					<td><a th:href="|Komentari/OdbijiKomentar?id=${itKomentar.id}|">Odbiji</a></td>
+					<td><a th:text="#{#{korisnici.odobri}}" th:href="|Komentari/OdobriKomentar?id=${itKomentar.id}|">Odobri</a></td>			
+					<td><a th:text="#{komentari.odbiji}" th:href="|Komentari/OdbijiKomentar?id=${itKomentar.id}|">Odbiji</a></td>
 					
 				</tr>
 			</table>

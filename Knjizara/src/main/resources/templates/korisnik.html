@@ -42,11 +42,11 @@
 	</div>	
 	
 	
-		<form method="post" action="Korisnici/Edit" style="margin-left: 30%;">
+		<form method="post" action="Korisnici/Edit" style="margin-left: 30%; padding: 2%;" >
 			<input type="hidden" name="korisnickoIme" th:value="${korisnik.korisnickoIme}"/>
 			<table class="forma">
 				<caption th:text="#{korisnik.korisnik}">Korisnik</caption>
-				<tr><th th:text="#{korisnik.korisnicko}">korisničko ime:</th><td readonly th:text="${korisnik.korisnickoIme}"></td></tr>
+				<tr><th th:text="#{korisnici.korisnicko}">korisničko ime:</th><td readonly th:text="${korisnik.korisnickoIme}"></td></tr>
 				<tr><th th:text="#{korisnik.email}">e-mail:</th><td><input type="text" readonly name="eMail" th:value="${korisnik.eMail}"/></td></tr>
 				<tr><th th:text="#{korisnik.ime}">Ime:</th><td><input type="text" readonly name="ime" th:value="${korisnik.ime}"/></td></tr>
 				<tr><th th:text="#{korisnik.prezime}">Prezime:</th><td><input type="text" readonly name="prezime" th:value="${korisnik.prezime}"/></td></tr>
@@ -59,7 +59,7 @@
 				<tr th:if="${session.prijavljeniKorisnik.administrator and session.prijavljeniKorisnik != korisnik and korisnik.blokiran != true}"><th th:text="#{korisnici.administrator}">administrator:</th><td><input type="checkbox" name="administrator" th:checked="${korisnik.administrator}"/></td></tr>
 				<tr th:if="${session.prijavljeniKorisnik.administrator and session.prijavljeniKorisnik != korisnik and korisnik.administrator == false}"><th th:text="#{korisnici.blokiran}">blokiran:</th><td th:if="${korisnik.administrator == false}"><input type="checkbox" name="blokiran" th:checked="${korisnik.blokiran}"/></td></tr>
 				
-				<tr th:if="${session.prijavljeniKorisnik.administrator and session.prijavljeniKorisnik != korisnik and korisnik.administrator}"><th></th><td><input type="submit" th:value="#{knjiga.izmena}"/></td></tr>
+				<tr th:if="${session.prijavljeniKorisnik.administrator and session.prijavljeniKorisnik != korisnik and session.prijavljeniKorisnik.administrator }"><th></th><td><input type="submit" th:value="#{knjiga.izmena}"/></td></tr>
 			</table>
 		</form>
 <!-- 					<table class="tabela">
@@ -88,10 +88,10 @@
 			
 			<div class="row">
 			
-			<div class="col">
+			<div class="col-lg-6">
 			
 			<h3 th:text="#{korisnik.kupovine}">Kupovine</h3>
-			<table class="table" style="width: 700px; margin-left: 100px;" th:if="${korisnik.administrator == false}">
+			<table class="table" style="width: 450px; margin-left: 100px;" th:if="${korisnik.administrator == false}">
 			<thead style="background-color: #044855; color: white;">
 				<tr>
 					<th>#</th>
@@ -111,9 +111,9 @@
 			
 			</div>
 			
- 	<div class="col">
+ 	<div class="col-lg-6">
 			<h3 th:text="#{korisnik.listaZelja}" style="width: 100px;">Liste Zelja</h3>
-			<table class="table" style="width: 700px; margin-bottom: 100px;">
+			<table class="table" style="width: 450px; margin-bottom: 100px;">
 			<thead style="background-color: #044855; color: white;">
 				<tr>
 					<th>#</th>
